@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>슬림환 단계 찾기 테스트</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      background: var(--slim-dark-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .standalone-quiz-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+    .slim-quiz-modal {
+      animation: none;
+      box-shadow: 0 12px 40px rgba(255,145,185,0.15);
+      border: 1px solid rgba(255,145,185,0.15);
+    }
+    .slim-quiz-close {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="standalone-quiz-wrapper">
+    <div class="slim-quiz-modal" id="slim-quiz-modal">
+      <div class="slim-quiz-progress">
+        <div class="slim-quiz-progress-bar" id="slim-quiz-bar" style="width:0%"></div>
+      </div>
+      
+      <!-- Intro -->
+      <div class="slim-quiz-step active" data-step="intro">
+        <div class="slim-quiz-intro">
+          <div class="slim-quiz-badge">SLIM TEST</div>
+          <h2>나에게 맞는<br>슬림환 단계는?</h2>
+          <p>무조건 강한 약보다는 <strong>내 몸 단계에 맞는 약</strong>을 먹을 때 가장 잘 빠집니다.<br>간단한 설문으로 나에게 가장 잘 맞는 단계를 찾아보세요.</p>
+          <button class="slim-quiz-start-btn" id="slim-quiz-start">테스트 시작하기 →</button>
+        </div>
+      </div>
+
+      <!-- Q1 -->
+      <div class="slim-quiz-step" data-step="q1">
+        <div class="slim-quiz-qnum">Q1 <span>/ 5</span></div>
+        <h3 class="slim-quiz-question">나는 커피를 마시면 잠이 안 온다</h3>
+        <div class="slim-quiz-options">
+          <label class="slim-quiz-option"><input type="radio" name="sq1" value="1"><span class="slim-quiz-option-inner"><span class="sq-num">1</span>잠이 안 와서 커피를 한 잔도 못 마신다</span></label>
+          <label class="slim-quiz-option"><input type="radio" name="sq1" value="2"><span class="slim-quiz-option-inner"><span class="sq-num">2</span>아침에 한 잔 정도는 괜찮다</span></label>
+          <label class="slim-quiz-option"><input type="radio" name="sq1" value="3"><span class="slim-quiz-option-inner"><span class="sq-num">3</span>저녁에 마셔도 잠이 잘 온다</span></label>
+          <label class="slim-quiz-option"><input type="radio" name="sq1" value="4"><span class="slim-quiz-option-inner"><span class="sq-num">4</span>커피를 하루에 서너 잔 이상 마신다</span></label>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="slim-quiz-step" data-step="q2">
+        <div class="slim-quiz-qnum">Q2 <span>/ 5</span></div>
+        <h3 class="slim-quiz-question">나는 다른 다이어트를 해 본 적이 있다</h3>
+        <div class="slim-quiz-options">
+          <label class="slim-quiz-option"><input type="radio" name="sq2" value="1"><span class="slim-quiz-option-inner"><span class="sq-num">1</span>다이어트가 처음이다</span></label>
+          <label class="slim-quiz-option"><input type="radio" name="sq2" value="2"><span class="slim-quiz-option-inner"><span class="sq-num">2</span>식이조절과 운동으로 다이어트를 해 보았다</span></label>
+          <label class="slim-quiz-option"><input type="radio" name="sq2" value="3"><span class="slim-quiz-option-inner"><span class="sq-num">3</span>한약, 양약 다이어트를 해 본 적이 있다</span></label>
+          <label class="slim-quiz-option"><input type="radio" name="sq2" value="4"><span class="slim-quiz-option-inner"><span class="sq-num">4</span>위고비·마운자로도 해 봤다</span></label>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="slim-quiz-step" data-step="q3">
+        <div class="slim-quiz-qnum">Q3 <span>/ 5</span></div>
+        <h3 class="slim-quiz-question">나는 평소에 변비가 있는 편이다</h3>
+        <div class="slim-quiz-options">
+          <label class="slim-quiz-option"><input type="radio" name="sq3" value="1"><span class="slim-quiz-option-inner"><span class="sq-num">1</span>변비가 심해서 변비약을 항상 먹어야 한다</span></label>
+          <label class="slim-quiz-option"><input type="radio" name="sq3" value="2"><span class="slim-quiz-option-inner"><span class="sq-num">2</span>3일 이상 못 보지만 변비약은 먹지 않는다</span></label>
+          <label class="slim-quiz-option"><input type="radio" name="sq3" value="3"><span class="slim-quiz-option-inner"><span class="sq-num">3</span>1~2일에 한 번, 가끔 변비가 있다</span></label>
+          <label class="slim-quiz-option"><input type="radio" name="sq3" value="4"><span class="slim-quiz-option-inner"><span class="sq-num">4</span>변비가 뭐예요?</span></label>
+        </div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="slim-quiz-step" data-step="q4">
+        <div class="slim-quiz-qnum">Q4 <span>/ 5</span></div>
+        <h3 class="slim-quiz-question">나는 식욕 조절을 잘 하는 편이다</h3>
+        <div class="slim-quiz-options">
+          <label class="slim-quiz-option"><input type="radio" name="sq4" value="1"><span class="slim-quiz-option-inner"><span class="sq-num">1</span>안 먹으려고 마음먹으면 안 먹을 수 있다</span></label>
+          <label class="slim-quiz-option"><input type="radio" name="sq4" value="2"><span class="slim-quiz-option-inner"><span class="sq-num">2</span>가끔 배부르게 먹고 싶을 때가 있다</span></label>
+          <label class="slim-quiz-option"><input type="radio" name="sq4" value="3"><span class="slim-quiz-option-inner"><span class="sq-num">3</span>식욕 조절이 스스로는 힘들다</span></label>
+          <label class="slim-quiz-option"><input type="radio" name="sq4" value="4"><span class="slim-quiz-option-inner"><span class="sq-num">4</span>다이어트 약을 먹어도 식욕 조절이 잘 안 된 적이 있다</span></label>
+        </div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="slim-quiz-step" data-step="q5">
+        <div class="slim-quiz-qnum">Q5 <span>/ 5</span></div>
+        <h3 class="slim-quiz-question">나는 빼고 싶은 몸무게가</h3>
+        <div class="slim-quiz-options">
+          <label class="slim-quiz-option"><input type="radio" name="sq5" value="1"><span class="slim-quiz-option-inner"><span class="sq-num">1</span>5킬로그램 미만</span></label>
+          <label class="slim-quiz-option"><input type="radio" name="sq5" value="2"><span class="slim-quiz-option-inner"><span class="sq-num">2</span>5 ~ 10킬로그램</span></label>
+          <label class="slim-quiz-option"><input type="radio" name="sq5" value="3"><span class="slim-quiz-option-inner"><span class="sq-num">3</span>10 ~ 20킬로그램</span></label>
+          <label class="slim-quiz-option"><input type="radio" name="sq5" value="4"><span class="slim-quiz-option-inner"><span class="sq-num">4</span>20킬로그램 이상</span></label>
+        </div>
+      </div>
+
+      <!-- Result -->
+      <div class="slim-quiz-step" data-step="result">
+        <div class="slim-quiz-result">
+          <div class="slim-quiz-result-badge" id="sqr-badge"></div>
+          <h2 class="slim-quiz-result-title" id="sqr-title"></h2>
+          <p class="slim-quiz-result-desc" id="sqr-desc"></p>
+          <div class="slim-quiz-result-score">총점: <strong id="sqr-score"></strong>점</div>
+          <div class="slim-quiz-result-actions">
+            <a href="http://pf.kakao.com/_kdxdxan/chat" target="_blank" class="slim-quiz-cta-btn primary">💬 카톡 상담하기</a>
+            <a href="index.html#funnel-slimhwan" class="slim-quiz-cta-btn secondary" onclick="alert('메인 페이지로 이동합니다. 메인 페이지에서 비대면 진료 접수 버튼을 눌러주세요.');">🏠 메인으로 돌아가기</a>
+          </div>
+          <button class="slim-quiz-retry" id="sqr-retry">다시 테스트하기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const quizOverlay = document.getElementById('slim-quiz-modal');
+      const quizBar = document.getElementById('slim-quiz-bar');
+      const quizSteps = quizOverlay.querySelectorAll('.slim-quiz-step');
+      const stepOrder = ['intro', 'q1', 'q2', 'q3', 'q4', 'q5', 'result'];
+
+      function showQuizStep(stepName) {
+        quizSteps.forEach(s => s.classList.remove('active'));
+        const target = quizOverlay.querySelector(`[data-step="${stepName}"]`);
+        if (target) target.classList.add('active');
+        const idx = stepOrder.indexOf(stepName);
+        quizBar.style.width = (idx / (stepOrder.length - 1) * 100) + '%';
+      }
+
+      function resetQuiz() {
+        quizOverlay.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+        showQuizStep('intro');
+      }
+
+      // Start
+      const quizStartBtn = document.getElementById('slim-quiz-start');
+      if (quizStartBtn) {
+        quizStartBtn.addEventListener('click', () => showQuizStep('q1'));
+      }
+
+      // Auto-advance
+      for (let i = 1; i <= 5; i++) {
+        const radios = quizOverlay.querySelectorAll(`input[name="sq${i}"]`);
+        radios.forEach(radio => {
+          radio.addEventListener('change', () => {
+            setTimeout(() => {
+              if (i < 5) {
+                showQuizStep('q' + (i + 1));
+              } else {
+                calculateResult();
+              }
+            }, 300);
+          });
+        });
+      }
+
+      function calculateResult() {
+        let total = 0;
+        for (let i = 1; i <= 5; i++) {
+          const checked = quizOverlay.querySelector(`input[name="sq${i}"]:checked`);
+          if (checked) total += parseInt(checked.value);
+        }
+
+        const badge = document.getElementById('sqr-badge');
+        const title = document.getElementById('sqr-title');
+        const desc = document.getElementById('sqr-desc');
+        const score = document.getElementById('sqr-score');
+
+        score.textContent = total;
+        badge.className = 'slim-quiz-result-badge';
+
+        if (total <= 7) {
+          badge.classList.add('sqr-level-1');
+          badge.textContent = '1단계 추천';
+          title.textContent = '초보 다이어터 체질';
+          desc.textContent = '가벼운 다이어트 약으로도 쉽게 살이 잘 빠질 수 있는 복 받은 체질이네요! 몸에 부담이 가장 적은 1단계 슬림환으로 시작해 보세요.';
+        } else if (total <= 12) {
+          badge.classList.add('sqr-level-2');
+          badge.textContent = '2단계 추천';
+          title.textContent = '비기너 다이어터 체질';
+          desc.textContent = '일반적으로 가장 많이 시작하는 단계예요. 다이어트를 처음 시작한다면 효과도 좋고 몸에 부담도 적은 2단계 슬림환을 추천합니다.';
+        } else if (total <= 17) {
+          badge.classList.add('sqr-level-3');
+          badge.textContent = '3단계 추천';
+          title.textContent = '세미프로 다이어터 체질';
+          desc.textContent = '다이어트 경험도 있고, 몸도 튼튼한 당신! 강력하고 효과가 좋은 3단계 슬림환으로 속도를 내 보세요.';
+        } else {
+          badge.classList.add('sqr-level-4');
+          badge.textContent = '4단계 추천';
+          title.textContent = '프로 다이어터 체질';
+          desc.textContent = '어떠한 다이어트 방법도 이겨낸 당신! 다이어트의 끝판왕 4단계 슬림환에 도전해 보세요.';
+        }
+
+        showQuizStep('result');
+      }
+
+      // Retry
+      const retryBtn = document.getElementById('sqr-retry');
+      if (retryBtn) {
+        retryBtn.addEventListener('click', () => resetQuiz());
+      }
+    });
+  </script>
+</body>
+</html>

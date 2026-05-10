@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>비대면 진료 신청</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      background: var(--bg-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    .standalone-survey-wrapper {
+      width: 100%;
+      max-width: 600px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      position: relative;
+    }
+    /* We reuse .survey-header, .survey-body, .survey-step from style.css */
+    .survey-close {
+      display: none; /* No close button needed */
+    }
+    .survey-header {
+      padding: 32px 32px 24px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-light);
+    }
+    .survey-title {
+      font-family: var(--font-serif);
+      font-size: 1.6rem;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .survey-progress {
+      height: 6px;
+      background: var(--border-light);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: var(--primary);
+      transition: width 0.3s ease;
+    }
+    .survey-body {
+      padding: 32px;
+      max-height: calc(100vh - 200px);
+      overflow-y: auto;
+    }
+    .survey-step {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+    .survey-step.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="standalone-survey-wrapper">
+    <div class="survey-header">
+      <h2 class="survey-title">슬림환 비대면 진료 신청</h2>
+      <div class="survey-progress">
+        <div class="progress-bar" id="survey-progress-bar" style="width: 33%;"></div>
+      </div>
+    </div>
+
+    <div class="survey-body">
+      <!-- Step 1: Base Info -->
+      <div class="survey-step active" id="survey-step-1">
+        <div class="form-group">
+          <label>성함 <span class="req">*</span></label>
+          <input type="text" id="sq-name" class="form-input" required placeholder="예) 홍길동">
+        </div>
+        <div class="form-group">
+          <label>연락처 <span class="req">*</span></label>
+          <input type="tel" id="sq-phone" class="form-input" required placeholder="010-1234-5678">
+        </div>
+        <div class="form-group">
+          <label>주민번호 앞 6자리 <span class="req">*</span></label>
+          <input type="text" id="sq-jumin" class="form-input" required maxlength="6" placeholder="YYMMDD">
+        </div>
+        <div class="form-group" style="padding-bottom:10px;">
+          <label>슬림환 처방이 처음이신가요? <span class="req">*</span></label>
+          <div class="radio-card-group">
+            <label class="radio-card"><input type="radio" name="sq-is-first" value="처음입니다"> <span class="rc-label">처음입니다</span></label>
+            <label class="radio-card"><input type="radio" name="sq-is-first" value="처방 받은 적이 있습니다"> <span class="rc-label">처방 받은 적이 있습니다</span></label>
+          </div>
+        </div>
+        <div class="survey-actions">
+          <a href="index.html#funnel-slimhwan" class="btn-ghost" style="text-align:center; display:block; margin-bottom:12px; text-decoration:none;">취소 (돌아가기)</a>
+          <button type="button" class="btn-primary w-100 btn-next" data-next="auto">다음 (Next)</button>
+        </div>
+        <div id="step-1-error" class="form-error"></div>
+      </div>
+
+      <!-- Step 2: New Patient (처음입니다) -->
+      <div class="survey-step" id="survey-step-new">
+        <h3 class="step-title">사전 문진 (초진)</h3>
+        <div class="form-group">
+          <label>키와 몸무게 <span class="req">*</span></label>
+          <div class="input-row">
+            <input type="number" id="sq-height" class="form-input" placeholder="현재 키 (cm)">
+            <input type="number" id="sq-weight" class="form-input" placeholder="현재 몸무게 (kg)">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>목표 몸무게 <span class="req">*</span></label>
+          <input type="number" id="sq-goal-weight" class="form-input" placeholder="목표 (kg)">
+        </div>
+        <div class="form-group">
+          <label>식사 패턴 <span class="req">*</span></label>
+          <div class="radio-card-group flex-col">
+            <label class="radio-card"><input type="radio" name="sq-meal" value="하루 한 끼"> <span class="rc-label">하루 한 끼</span></label>
+            <label class="radio-card"><input type="radio" name="sq-meal" value="하루 두 끼"> <span class="rc-label">하루 두 끼</span></label>
+            <label class="radio-card"><input type="radio" name="sq-meal" value="하루 세 끼"> <span class="rc-label">하루 세 끼</span></label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>식욕 <span class="req">*</span></label>
+          <div class="radio-card-group flex-col">
+            <label class="radio-card"><input type="radio" name="sq-appetite" value="배고픔을 참기 힘들다"> <span class="rc-label">배고픔을 참기 힘들다</span></label>
+            <label class="radio-card"><input type="radio" name="sq-appetite" value="배고픔을 잘 참는 편이다"> <span class="rc-label">배고픔을 잘 참는 편이다</span></label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>음주 횟수 <span class="req">*</span></label>
+          <div class="radio-card-group flex-col">
+            <label class="radio-card"><input type="radio" name="sq-alcohol" value="거의 마시지 않는다"> <span class="rc-label">거의 마시지 않는다</span></label>
+            <label class="radio-card"><input type="radio" name="sq-alcohol" value="주 1-2회"> <span class="rc-label">주 1-2회</span></label>
+            <label class="radio-card"><input type="radio" name="sq-alcohol" value="주 5회 이상"> <span class="rc-label">주 5회 이상</span></label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>수면 상태 <span class="req">*</span></label>
+          <div class="radio-card-group flex-col">
+            <label class="radio-card"><input type="radio" name="sq-sleep" value="잠을 잘 자는 편 이다"> <span class="rc-label">잠을 잘 자는 편 이다</span></label>
+            <label class="radio-card"><input type="radio" name="sq-sleep" value="잠을 잘 못 잔다"> <span class="rc-label">잠을 잘 못 잔다</span></label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>현재 복용 중인 약 <small>(해당하는 항목을 모두 골라주세요. 없을 경우 선택하지 않아도 됩니다.)</small></label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" name="sq-meds" value="혈압약"> 혈압약</label>
+            <label><input type="checkbox" name="sq-meds" value="당뇨약"> 당뇨약</label>
+            <label><input type="checkbox" name="sq-meds" value="콜레스테롤/고지혈증 약"> 콜레스테롤/고지혈증 약</label>
+            <label><input type="checkbox" name="sq-meds" value="호르몬제"> 호르몬제</label>
+            <label><input type="checkbox" name="sq-meds" value="진통/소염제"> 진통/소염제</label>
+            <label><input type="checkbox" name="sq-meds" value="정신과약"> 정신과약</label>
+            <label><input type="checkbox" name="sq-meds" value="기타"> 기타</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>연락 가능하신 시간대 <span class="req">*</span></label>
+          <select id="sq-calltime-new" class="form-input">
+            <option value="">옵션을 선택해 주세요</option>
+            <option value="오후 01:00">오후 01:00</option>
+            <option value="오후 01:30">오후 01:30</option>
+            <option value="오후 06:30">오후 06:30</option>
+            <option value="오후 07:00">오후 07:00</option>
+            <option value="오후 07:30">오후 07:30</option>
+            <option value="오후 08:00">오후 08:00</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>택배 받으실 주소 <span class="req">*</span></label>
+          <input type="text" id="sq-address" class="form-input" placeholder="(예: 대구 달서구 조암로 24, 101동 303호)">
+        </div>
+        <div class="form-group">
+          <label>소개 해주신 분 성함 <small>(없으면 비워 놓으셔도 됩니다)</small></label>
+          <input type="text" id="sq-referrer" class="form-input" placeholder="">
+        </div>
+
+        <div class="survey-actions multi">
+          <button type="button" class="btn-ghost btn-prev" data-target="survey-step-1">이전</button>
+          <button type="button" class="btn-primary btn-submit" data-type="초진">제출하기 (Submit)</button>
+        </div>
+        <div id="step-new-error" class="form-error"></div>
+      </div>
+
+      <!-- Step 3: Returning Patient (처방 받은 적이 있습니다) -->
+      <div class="survey-step" id="survey-step-returning">
+        <h3 class="step-title">재진 신청</h3>
+        <div class="form-group">
+          <label>처방 받으시려는 슬림환 개월 수 <span class="req">*</span></label>
+          <select id="sq-months" class="form-input">
+            <option value="">옵션을 선택해 주세요</option>
+            <option value="1개월">1개월</option>
+            <option value="2개월">2개월</option>
+            <option value="3개월">3개월</option>
+            <option value="4개월">4개월</option>
+            <option value="5개월">5개월</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>전화 통화 여부 <span class="req">*</span><br><small style="color:var(--text-tertiary); font-weight:400;">슬림환 단계를 바꾸실 때는 전화 통화가 필요합니다.</small></label>
+          <div class="radio-card-group flex-col">
+            <label class="radio-card"><input type="radio" name="sq-need-call" value="통화 원해요~"> <span class="rc-label">통화 원해요~</span></label>
+            <label class="radio-card"><input type="radio" name="sq-need-call" value="괜찮아요~"> <span class="rc-label">괜찮아요~</span></label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>연락 가능하신 시간대 <span class="req">*</span></label>
+          <select id="sq-calltime-ret" class="form-input">
+            <option value="">시간에 맞춰서 전화 드립니다</option>
+            <option value="오후 01:00">오후 01:00</option>
+            <option value="오후 01:30">오후 01:30</option>
+            <option value="오후 06:30">오후 06:30</option>
+            <option value="오후 07:00">오후 07:00</option>
+            <option value="오후 07:30">오후 07:30</option>
+            <option value="오후 08:00">오후 08:00</option>
+          </select>
+        </div>
+
+        <div class="survey-actions multi">
+          <button type="button" class="btn-ghost btn-prev" data-target="survey-step-1">이전</button>
+          <button type="button" class="btn-primary btn-submit" data-type="재진">제출하기 (Submit)</button>
+        </div>
+        <div id="step-ret-error" class="form-error"></div>
+      </div>
+
+      <!-- Step 4: Thank you -->
+      <div class="survey-step" id="survey-step-thanks" style="text-align:center; padding: 40px 0;">
+        <div style="font-size:3rem; margin-bottom:16px;">🎉</div>
+        <h3 style="font-family:var(--font-serif); font-size:1.6rem; color:var(--text-primary); margin-bottom:12px;">응답 해주셔서 감사합니다!</h3>
+        <p style="color:var(--text-secondary); line-height:1.8; margin-bottom:32px;">곧 연락 드리도록 하겠습니다.<br>슬림환은 전화 상담 이후 택배로 배송됩니다.<br>결제 계좌는 문자로 다시 연락드립니다.</p>
+        <a href="index.html#funnel-slimhwan" class="btn-primary w-100" style="display:inline-block; text-decoration:none;">메인으로 돌아가기</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const step1 = document.getElementById('survey-step-1');
+      const stepNew = document.getElementById('survey-step-new');
+      const stepRet = document.getElementById('survey-step-returning');
+      const stepThanks = document.getElementById('survey-step-thanks');
+      const progressBar = document.getElementById('survey-progress-bar');
+      const wrapper = document.querySelector('.standalone-survey-wrapper');
+
+      function switchSurveyStep(targetStepEl, progressPct) {
+        wrapper.querySelectorAll('.survey-step').forEach(el => el.classList.remove('active'));
+        targetStepEl.classList.add('active');
+        progressBar.style.width = progressPct + '%';
+      }
+
+      // Step 1 -> Step 2
+      if (step1) {
+        const btnNext = step1.querySelector('.btn-next');
+        if (btnNext) {
+          btnNext.addEventListener('click', () => {
+            const name = document.getElementById('sq-name').value;
+            const phone = document.getElementById('sq-phone').value;
+            const jumin = document.getElementById('sq-jumin').value;
+            const isFirstNode = document.querySelector('input[name="sq-is-first"]:checked');
+            const errEl = document.getElementById('step-1-error');
+
+            if (!name || !phone || !jumin || !isFirstNode) {
+              errEl.textContent = '모든 필수 항목(*)을 입력해 주세요.';
+              return;
+            }
+            errEl.textContent = '';
+
+            if (isFirstNode.value === '처음입니다') {
+              switchSurveyStep(stepNew, 66);
+            } else {
+              switchSurveyStep(stepRet, 66);
+            }
+          });
+        }
+
+        wrapper.querySelectorAll('.btn-prev').forEach(btn => {
+          btn.addEventListener('click', () => {
+            switchSurveyStep(step1, 33);
+          });
+        });
+
+        wrapper.querySelectorAll('.btn-submit').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            submitSurveyData(btn.dataset.type);
+          });
+        });
+      }
+
+      function submitSurveyData(type) {
+        const baseData = {
+          date: new Date().toISOString(),
+          status: 'pending',
+          type: type,
+          name: document.getElementById('sq-name').value,
+          phone: document.getElementById('sq-phone').value,
+          jumin: document.getElementById('sq-jumin').value,
+          isFirst: document.querySelector('input[name="sq-is-first"]:checked').value
+        };
+
+        let detailData = {};
+        let errEl;
+
+        if (type === '초진') {
+          errEl = document.getElementById('step-new-error');
+          const height = document.getElementById('sq-height').value;
+          const weight = document.getElementById('sq-weight').value;
+          const goal = document.getElementById('sq-goal-weight').value;
+          const meal = document.querySelector('input[name="sq-meal"]:checked')?.value;
+          const appetite = document.querySelector('input[name="sq-appetite"]:checked')?.value;
+          const alcohol = document.querySelector('input[name="sq-alcohol"]:checked')?.value;
+          const sleep = document.querySelector('input[name="sq-sleep"]:checked')?.value;
+
+          let meds = [];
+          document.querySelectorAll('input[name="sq-meds"]:checked').forEach(cb => meds.push(cb.value));
+
+          const callTime = document.getElementById('sq-calltime-new').value;
+          const address = document.getElementById('sq-address').value;
+          const referrer = document.getElementById('sq-referrer').value;
+
+          if (!height || !weight || !goal || !meal || !appetite || !alcohol || !sleep || !callTime || !address) {
+            errEl.textContent = '모든 필수 항목(*)을 입력해 주세요.';
+            return;
+          }
+          detailData = { height, weight, goal, meal, appetite, alcohol, sleep, meds: meds.join(', '), callTime, address, referrer };
+        } else {
+          errEl = document.getElementById('step-ret-error');
+          const months = document.getElementById('sq-months').value;
+          const needCall = document.querySelector('input[name="sq-need-call"]:checked')?.value;
+          const callTime = document.getElementById('sq-calltime-ret').value;
+
+          if (!months || !needCall || (needCall === '통화 원해요~' && !callTime)) {
+            errEl.textContent = '모든 필수 항목(*)을 입력해 주세요. (통화를 원하시면 시간도 선택해주세요)';
+            return;
+          }
+          detailData = { months, needCall, callTime, address: '기존 기록 참조', meds: '기존 기록 참조' };
+        }
+
+        errEl.textContent = '';
+
+        const payload = { ...baseData, detail: detailData, id: Date.now().toString() };
+        
+        try {
+          let crmData = JSON.parse(localStorage.getItem('crm_data') || '[]');
+          crmData.unshift(payload);
+          localStorage.setItem('crm_data', JSON.stringify(crmData));
+        } catch(e) {
+          console.warn("로컬 저장소를 사용할 수 없습니다.");
+        }
+
+        const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1495753739058020362/F6_msauhGwM1CCQgH8-K8j2VRnm6p-VQ0wPc1wMBXFtxxDt6Cppg71uNqusP1qfnvHT9';
+
+        let discordEmbed = {
+          title: `🚨 신규 [${type}] 진료 신청 접수!`,
+          color: type === '초진' ? 15548997 : 5793266,
+          fields: [
+            { name: "👤 기본 정보", value: `• 이름: **${baseData.name}**\n• 연락처: ${baseData.phone}\n• 생년월일: ${baseData.jumin}`, inline: false },
+          ]
+        };
+
+        let detailStr = "";
+        if (type === '초진') {
+          detailStr += `• 키/몸무게: ${detailData.height}cm / ${detailData.weight}kg\n`;
+          detailStr += `• 목표 감량: ${detailData.goal}kg\n`;
+          detailStr += `• 식사/식욕: ${detailData.meal} / ${detailData.appetite}\n`;
+          detailStr += `• 음주/수면: ${detailData.alcohol} / ${detailData.sleep}\n`;
+          detailStr += `• 복용약: ${detailData.meds || '없음'}\n`;
+          detailStr += `• 통화시간: ${detailData.callTime}\n`;
+          detailStr += `• 배송주소: ${detailData.address}\n`;
+          if (detailData.referrer) detailStr += `• 소개자: ${detailData.referrer}`;
+        } else {
+          detailStr += `• 희망 개월수: ${detailData.months}\n`;
+          detailStr += `• 통화 여부: ${detailData.needCall}\n`;
+          if (detailData.callTime) detailStr += `• 통화시간: ${detailData.callTime}`;
+        }
+
+        discordEmbed.fields.push({
+          name: "📋 상세 문진 내용",
+          value: detailStr,
+          inline: false
+        });
+
+        if (DISCORD_WEBHOOK_URL !== '여기에_디스코드_웹훅_URL을_입력하세요') {
+          fetch(DISCORD_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              username: "내몸에 온 한방연구소 알리미",
+              embeds: [discordEmbed]
+            })
+          }).catch(err => console.error("Discord Webhook Error:", err));
+        }
+
+        switchSurveyStep(stepThanks, 100);
+      }
+    });
+  </script>
+</body>
+</html>

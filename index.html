@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>내몸에 온 한방연구소 | 자연의 처방, 건강한 변화</title>
+  <meta name="description"
+    content="10년간 68,710일분 처방된 검증된 한약. 식욕 억제와 칼로리 소비를 동시에 해결하는 슬림환, 쾌변의 정석 쾌변환. 김민부한의원 부설 내몸에 온 한방연구소.">
+
+  <!-- Open Graph Meta Tags for AI & Social Sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="내몸에 온 한방연구소 | 오직 자연의 성분으로 맞춤 처방">
+  <meta property="og:description" content="10년 노하우로 68,710일분 처방! 슬림환(다이어트), 쾌변환(장 건강), 든ː잠(수면 케어) - 김민부한의원 부설">
+  <meta property="og:image" content="https://www.example.com/assets/images/logo_transparent.png">
+
+  <!-- Schema.org JSON-LD structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "MedicalClinic",
+        "name": "김민부한의원 부설 내몸에 온 한방연구소",
+        "description": "10년간 68,710일분 처방된 검증된 한약 연구 및 처방. 슬림환, 쾌변환, 든ː잠 등 1:1 맞춤 자연 한약 처방.",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "달서구 조암로 24 한신메디타워 4층",
+          "addressLocality": "대구광역시",
+          "addressCountry": "KR"
+        },
+        "telephone": "+82-53-641-1275",
+        "medicalSpecialty": "TraditionalKoreanMedicine"
+      },
+      {
+        "@type": "Product",
+        "name": "슬림환",
+        "description": "식욕 제어와 자연스러운 대사량 증가를 돕는 다이어트 처방 한약",
+        "brand": { "@type": "Brand", "name": "내몸에 온 한방연구소" }
+      },
+      {
+        "@type": "Product",
+        "name": "쾌변환",
+        "description": "도인, 아마인 등 천연 한약재 성분으로 쾌변을 돕는 장 건강 솔루션",
+        "offers": {
+          "@type": "Offer",
+          "price": "3000",
+          "priceCurrency": "KRW",
+          "availability": "https://schema.org/InStock",
+          "priceValidUntil": "2026-12-31"
+        }
+      },
+      {
+        "@type": "Product",
+        "name": "든ː잠",
+        "description": "수면 유도뿐만 아니라 자율신경 균형을 돕고 진액을 보충하는 안심 수면 보약",
+        "brand": { "@type": "Brand", "name": "내몸에 온 한방연구소" }
+      }
+    ]
+  }
+  </script>
+
+  <link rel="icon" href="assets/images/logo_icon.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- ==========================================
+       NAVIGATION 
+       ========================================== -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="#funnel-clinic" class="nav-logo" data-target="funnel-clinic" style="gap: 14px;">
+        <img src="assets/images/logo_icon.png" alt="로고 아이콘" style="height: 54px; width: 54px; object-fit: contain;">
+        <div style="display:flex; flex-direction:column; justify-content:center;">
+          <span class="nav-logo-text" style="font-size: 1.25rem;">내몸에 온 한방연구소</span>
+          <span style="font-size: 0.75rem; color: rgba(255,255,255,0.6); margin-top:-2px; line-height:1;">김민부한의원 부설</span>
+        </div>
+      </a>
+      <div class="nav-menu" id="nav-menu">
+        <a href="#funnel-slimhwan" class="nav-link tab-btn active" data-target="funnel-slimhwan">슬림환</a>
+        <a href="#funnel-kwaebyeon" class="nav-link tab-btn" data-target="funnel-kwaebyeon">쾌변환</a>
+        <a href="#funnel-dunjam" class="nav-link tab-btn" data-target="funnel-dunjam">든ː잠</a>
+        <a href="community.html" class="nav-link">커뮤니티</a>
+        <a href="#funnel-clinic" class="nav-link tab-btn" data-target="funnel-clinic">김민부한의원</a>
+        <a href="http://pf.kakao.com/_kdxdxan/chat" target="_blank" class="nav-cta">💬 카톡 상담</a>
+      </div>
+      <button class="nav-toggle" id="nav-toggle" aria-label="메뉴 열기" onclick="document.getElementById('mobile-menu').classList.toggle('active'); this.classList.toggle('active'); document.body.style.overflow = this.classList.contains('active') ? 'hidden' : '';">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu-overlay" id="mobile-menu">
+    <div class="mobile-menu-list">
+      <a href="#funnel-slimhwan" class="mobile-link tab-btn active" data-target="funnel-slimhwan">슬림환</a>
+      <a href="#funnel-kwaebyeon" class="mobile-link tab-btn" data-target="funnel-kwaebyeon">쾌변환</a>
+      <a href="#funnel-dunjam" class="mobile-link tab-btn" data-target="funnel-dunjam">든ː잠</a>
+      <a href="community.html" class="mobile-link">커뮤니티</a>
+      <a href="#funnel-clinic" class="mobile-link tab-btn" data-target="funnel-clinic">김민부한의원</a>
+      <a href="http://pf.kakao.com/_kdxdxan/chat" target="_blank" class="btn-primary" style="margin-top:16px;">💬 카톡 상담</a>
+    </div>
+  </div>
+
+  <main id="main-content">
+    <h1 class="visually-hidden">내몸에 온 한방연구소 - 자연의 처방, 건강한 변화 (슬림환, 쾌변환)</h1>
+    <!-- 🟩🟩🟩🟩🟩 1. 슬림환 퍼널 🟩🟩🟩🟩🟩 -->
+    <div id="funnel-slimhwan" class="funnel-view active-view">
+
+      <!-- Hook -->
+      <section class="hero-hook" style="background: var(--slim-dark-bg);">
+        <div class="hero-hook-content">
+          <div class="hero-eyebrow" style="color: var(--slim-rose);">DIET CLINIC</div>
+          <h2 class="hero-main-copy">내일은 조금 더<br><span class="em" style="background: var(--slim-pink-gradient); -webkit-background-clip: text;">가벼워질 수</span> 있을까?</h2>
+          <div class="hero-sub-lines">
+            <p class="hero-sub-line">다이어트를 결심하고 매일밤 반복되는 후회.</p>
+            <p class="hero-sub-line">바쁜 일상 속 운동할 시간은 없고, 식욕은 통제되지 않습니다.</p>
+          </div>
+          <p class="hero-question">"더 이상 무리한 방법으로 몸을 혹사시키지 마세요."</p>
+          <div class="hero-scroll-indicator"><span>SCROLL</span>
+            <div class="scroll-arrow" style="border-color: var(--slim-rose);"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Agitation -->
+      <section class="problem-section" style="background: var(--slim-dark-bg-2);">
+        <div class="container">
+          <div class="problem-header fade-in">
+            <div class="problem-label" style="color: var(--slim-rose);">THE PROBLEM</div>
+            <h2 class="problem-title">굶기만 하는 다이어트,<br>요요만 부를 뿐입니다.</h2>
+          </div>
+          <div class="problem-cards">
+            <div class="problem-card fade-in">
+              <div class="problem-card-icon">🥗</div>
+              <div class="problem-card-title">극단적 식단</div>
+              <div class="problem-card-desc">근육량 감소와 대사 저하로 살이 더 잘 찌는 체질로 변합니다.</div>
+            </div>
+            <div class="problem-card fade-in fade-in-delay-1">
+              <div class="problem-card-icon">💊</div>
+              <div class="problem-card-title">화학적 식욕억제</div>
+              <div class="problem-card-desc">심박수 증가, 불면증 등 일상을 해치는 부작용이 따릅니다.</div>
+            </div>
+            <div class="problem-card fade-in fade-in-delay-2">
+              <div class="problem-card-icon">😰</div>
+              <div class="problem-card-title">운동 강박</div>
+              <div class="problem-card-desc">피곤한 몸으로 억지로 하는 운동은 스트레스 호르몬을 유발합니다.</div>
+            </div>
+          </div>
+          <div class="problem-divider fade-in">
+            <p class="problem-answer">필요한 것은 <span class="accent" style="color: var(--slim-rose);">식욕 제어</span>와<br><span class="accent" style="color: var(--slim-rose);">자연스러운 대사량
+                증가</span>입니다.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Solution -->
+      <section class="solution-section" style="background: var(--slim-rose-bg);">
+        <div class="container">
+          <div class="solution-transition fade-in">
+            <div class="solution-transition-label" style="color: var(--slim-pink);">SOLUTION</div>
+            <h2 class="solution-transition-title">건강한 다이어트의 정석,<br><span class="em" style="background: var(--slim-pink-gradient); -webkit-background-clip: text;">슬림환</span></h2>
+            <p class="solution-transition-desc" style="max-width: 650px;">
+              <strong style="color: var(--slim-pink); font-size: 1.15rem;">"10년간 총 1.2톤의 체중을 줄이고, 그 중 체지방만 1.1톤입니다."</strong><br><br>
+              누적 68,710일분 처방 노하우. 자연 원료로 빚은 슬림환은 환자 개개인의 몸 상태에 맞는 맞춤형 처방으로 체수분을 지키며 체지방 연소를 돕습니다.
+            </p>
+          </div>
+
+          <div class="product-block fade-in">
+            <div class="product-visual">
+              <img src="assets/images/slimhwan.jpg" alt="슬림환 다이어트 한약">
+              <div class="float-badge" style="background: var(--slim-pink-gradient); box-shadow: 0 8px 24px rgba(255,145,185,0.35);">
+                <div class="float-badge-number"><span class="counter" data-target="68710">0</span></div>
+                <div class="float-badge-label">일분 누적 처방</div>
+              </div>
+            </div>
+            <div class="product-info">
+              <div class="product-tag" style="background: var(--slim-pink-light); color: var(--slim-pink);">💊 다이어트 처방</div>
+              <h3 class="product-name">슬림환 효과와 안정성</h3>
+              <p class="product-hook" style="margin-bottom: 16px; border-color: var(--slim-pink);">다이어트의 핵심 성분인 <strong>마황의 함량</strong>을 <strong>FDA 1일 섭취 기준에 맞춰서 철저하게 처방</strong>합니다. 오랫동안 장복해도 몸에 전혀 무리가 없는 안전한 다이어트입니다.</p>
+              
+              <div style="background: var(--bg-secondary); padding: 16px 20px; border-radius: var(--radius-sm); margin-bottom: 24px; font-size: 0.9rem; line-height: 1.7; border: 1px solid var(--border-light); color:var(--text-secondary);">
+                <p style="margin-bottom: 8px;"><strong style="color:var(--text-primary);">총 4단계 맞춤 처방:</strong> 슬림환은 약효 강도에 따라 총 4단계로 세분화되어 있습니다.</p>
+                <p>처음 다이어트 한약을 드시는 분부터 다른 다이어트 약을 복용하여 내성이 생긴 분까지, <strong>내 몸 상태와 경험에 따른 세밀한 단계별 맞춤 처방</strong>이 가능하여 부작용 걱정 없이 확실한 효과를 냅니다.</p>
+              </div>
+              
+              <div class="feature-chips" style="margin-top:20px;">
+                <span class="feature-chip">🔥 가만히 있어도 유산소 효과</span>
+                <span class="feature-chip">🍽️ 자연스러운 포만감 형성</span>
+                <span class="feature-chip">💧 독소 및 노폐물 배출</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="final-cta">
+        <div class="container">
+          <div class="final-cta-content fade-in">
+            <h2 class="final-cta-title">슬림환, 카톡으로 간편하게 시작하세요</h2>
+            <p class="final-cta-desc">원장님과의 비대면 진료를 통해 택배로 안전하게 받아보실 수 있습니다.</p>
+            <div class="final-cta-buttons">
+              <a href="quiz.html" target="_blank" id="btn-open-quiz" class="btn-white" style="background: var(--slim-pink-gradient); color:#fff; display:inline-block; text-align:center; text-decoration:none;">🧪 나에게 맞는 단계 찾기</a>
+              <a href="http://pf.kakao.com/_kdxdxan/chat" target="_blank" class="btn-outline-white">💬 카톡 상담하기</a>
+              <a href="survey.html" target="_blank" id="btn-open-survey" class="btn-outline-white" style="display:inline-block; text-align:center; text-decoration:none;">📱 비대면 진료 접수</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- 🟩🟩🟩🟩🟩 2. 쾌변환 퍼널 🟩🟩🟩🟩🟩 -->
+    <div id="funnel-kwaebyeon" class="funnel-view">
+
+      <!-- Hook -->
+      <section class="hero-hook">
+        <div class="hero-hook-content">
+          <div class="hero-eyebrow">DIGESTIVE CARE</div>
+          <h2 class="hero-main-copy">꽉 막힌 속,<br><span class="em">내일 아침엔 가볍게 웃으세요!</span></h2>
+          <div class="hero-sub-lines">
+            <p class="hero-sub-line">쾌변의 정석, 김민부한의원 쾌변환</p>
+          </div>
+          <div class="hero-scroll-indicator"><span>SCROLL</span>
+            <div class="scroll-arrow"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Agitation -->
+      <section class="problem-section">
+        <div class="container">
+          <div class="problem-header fade-in">
+            <h2 class="problem-title">강한 변비약에 의존할수록<br>장은 더 무기력해집니다.</h2>
+          </div>
+          <div class="problem-cards">
+            <div class="problem-card fade-in">
+              <div class="problem-card-icon">⚡</div>
+              <div class="problem-card-title">강제 배출의 부작용</div>
+              <div class="problem-card-desc">장점막을 자극해 억지로 쥐어짜내는 약은 극심한 복통을 유발합니다.</div>
+            </div>
+            <div class="problem-card fade-in fade-in-delay-1">
+              <div class="problem-card-icon">🔄</div>
+              <div class="problem-card-title">만성 내성</div>
+              <div class="problem-card-desc">점점 약효가 듣지 않아 알약 개수만 늘어나는 악순환.</div>
+            </div>
+            <div class="problem-card fade-in fade-in-delay-2">
+              <div class="problem-card-icon">📉</div>
+              <div class="problem-card-title">장 무기력증</div>
+              <div class="problem-card-desc">화학적 자극에만 의존하게 되어, 장이 스스로 연동운동을 하는 자연스러운 힘을 잃게 됩니다.</div>
+            </div>
+          </div>
+          <div class="problem-divider fade-in">
+            <p class="problem-answer">한의학에서는 장에 <span class="accent">기름칠</span>을 하고<br>수분을 채우는 <span
+                class="accent">윤장(潤腸)</span>을 중시합니다.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Solution -->
+      <section class="solution-section">
+        <div class="container">
+          <div class="solution-transition fade-in">
+            <div class="solution-transition-label">SOLUTION</div>
+            <h2 class="solution-transition-title">쾌변의 정석,<br><span class="em">쾌변환</span>
+            </h2>
+            <p class="solution-transition-desc" style="max-width: 650px;">
+              <strong>"억지로 쥐어짜지 않습니다."</strong><br><br>
+              쾌변환은 도인, 아마인이 메마른 장에 수분과 기름칠을 더해 변을 부드럽게 만들고,<br>견우자, 대황이 장의 막힌 기운을 뚫어 배 속에 찬 가스와 노폐물을 자연스럽고 시원하게 배출해 줍니다.
+            </p>
+          </div>
+
+          <div class="product-block reverse fade-in">
+            <div class="product-info">
+              <div class="product-tag">🍃 장 건강 솔루션</div>
+              <h3 class="product-name">김민부한의원 쾌변환</h3>
+              <p class="product-hook" style="margin-bottom:16px;"><strong>이런 분들에게 쾌변환이 필요합니다</strong></p>
+              
+              <ul style="list-style-type: none; margin-bottom: 24px;">
+                <li style="margin-bottom: 8px; display:flex; align-items:center; gap:8px;">
+                   <span style="font-weight:bold;">✓</span> 급성 변비로 고생하시는 분
+                </li>
+                <li style="margin-bottom: 8px; display:flex; align-items:center; gap:8px;">
+                   <span style="font-weight:bold;">✓</span> 복부 팽만, 복통, 잦은 방귀로 불편하신 분
+                </li>
+                <li style="margin-bottom: 8px; display:flex; align-items:center; gap:8px;">
+                   <span style="font-weight:bold;">✓</span> 다이어트 중 배변 활동이 원활하지 않은 분
+                </li>
+              </ul>
+              
+              <div style="padding: 16px 20px; border-radius: var(--radius-sm); margin-bottom: 24px; font-size: 0.9rem; line-height: 1.7; border: 1px solid var(--border-light);">
+                <p><strong>복용법:</strong> 1일 1~3회, 충분한 물과 함께 복용하세요.</p>
+                <p style="color: #ea580c; margin-top: 4px;"><strong>주의:</strong> 평소 위장이 매우 약하신 분은 복용 전 상담해 주세요.</p>
+              </div>
+              <div class="price-tag"><span class="price-amount">3,000</span><span
+                  class="price-unit">원 / 1일분(3포)</span></div>
+            </div>
+            <div class="product-visual">
+              <img src="assets/images/kwaebyeon.png" alt="쾌변환">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="final-cta">
+        <div class="container">
+          <div class="final-cta-content fade-in">
+            <h2 class="final-cta-title">막힌 속, 오늘 바로 풀어내세요</h2>
+            <div class="final-cta-buttons">
+              <a href="http://pf.kakao.com/_kdxdxan/chat" target="_blank" class="btn-white">빠른 카톡 상담</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 🟩🟩🟩🟩🟩 3. 든ː잠 퍼널 🟩🟩🟩🟩🟩 -->
+    <div id="funnel-dunjam" class="funnel-view">
+
+      <!-- Hook -->
+      <section class="hero-hook" style="background:#0F172A;">
+        <div class="hero-hook-content">
+          <div class="hero-eyebrow" style="color:#A78BFA;">SLEEP CARE</div>
+          <h2 class="hero-main-copy">오늘 밤도 뒤척이다<br><span class="em"
+              style="background: linear-gradient(135deg, #A78BFA 0%, #7C3AED 100%); -webkit-background-clip: text;">새벽을
+              맞이하셨나요?</span></h2>
+          <div class="hero-sub-lines">
+            <p class="hero-sub-line">자야 한다는 강박이 오히려 잠을 쫓아내는 밤.</p>
+            <p class="hero-sub-line">수면제의 인위적인 마취가 아닌, 진정한 숙면이 필요합니다.</p>
+          </div>
+          <div class="hero-scroll-indicator"><span>SCROLL</span>
+            <div class="scroll-arrow" style="border-color:#A78BFA;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Agitation -->
+      <section class="problem-section" style="background:#1E293B;">
+        <div class="container">
+          <div class="problem-header fade-in">
+            <h2 class="problem-title" style="color:#F1F5F9;">수면제에 의존할수록<br>스스로 잠들 힘을 잃게 됩니다.</h2>
+          </div>
+          <div class="problem-cards">
+            <div class="problem-card fade-in" style="background:#0F172A; border-color:#334155;">
+              <div class="problem-card-icon">💊</div>
+              <div class="problem-card-title" style="color:#F8FAFC;">수면제 내성</div>
+              <div class="problem-card-desc" style="color:#CBD5E1;">점점 용량을 늘려야만 잠에 들 수 있는 악순환이 시작됩니다.</div>
+            </div>
+            <div class="problem-card fade-in fade-in-delay-1" style="background:#0F172A; border-color:#334155;">
+              <div class="problem-card-icon">🤕</div>
+              <div class="problem-card-title" style="color:#F8FAFC;">무거운 아침</div>
+              <div class="problem-card-desc" style="color:#CBD5E1;">억지로 재운 잠은 잔 것 같지 않고 아침 내내 멍함과 피로감을 남깁니다.</div>
+            </div>
+            <div class="problem-card fade-in fade-in-delay-2" style="background:#0F172A; border-color:#334155;">
+              <div class="problem-card-icon">🔥</div>
+              <div class="problem-card-title" style="color:#F8FAFC;">자율신경 불균형</div>
+              <div class="problem-card-desc" style="color:#CBD5E1;">스트레스로 교감신경이 과항진되면 뇌가 깨어있어 깊은 잠에 들지 못합니다.</div>
+            </div>
+          </div>
+          <div class="problem-divider fade-in">
+            <p class="problem-answer" style="color:#CBD5E1;">필요한 것은 <span style="color:#A78BFA;">교감신경을 낮추고</span><br><span style="color:#A78BFA;">부교감신경을 높여주는</span> 근본적인 관리입니다.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Solution -->
+      <section class="solution-section" style="background:#0F172A;">
+        <div class="container">
+          <div class="solution-transition fade-in">
+            <div class="solution-transition-label" style="color:#A78BFA;">SOLUTION</div>
+            <h2 class="solution-transition-title" style="color:#F1F5F9;">자율신경 관리 처방,<br><span class="em"
+                style="background: linear-gradient(135deg, #A78BFA 0%, #7C3AED 100%); -webkit-background-clip: text;">든ː잠</span>
+            </h2>
+            <p class="solution-transition-desc" style="max-width: 650px; color:#CBD5E1;">
+              <strong style="color: #A78BFA; font-size: 1.15rem;">"천연 안심 약재와 보약의 기능을 더해 잠의 질을 근본적으로 개선합니다."</strong><br><br>
+              산조인, 합환피, 야교등, 당귀, 숙지황, 황련, 육계 등의 순한 생약 성분이 스트레스로 과열된 심장과 뇌를 식혀주고, 부족한 진액을 보충하여 몸과 마음이 스스로 편안하게 잠들 수 있는 상태를 만들어 줍니다.
+            </p>
+          </div>
+
+          <!-- 주요 약재 정보 -->
+          <div class="herb-info-section fade-in" style="margin: 80px 0;">
+            <div style="text-align:center; margin-bottom:48px;">
+              <div style="color:#A78BFA; font-size:0.85rem; font-weight:600; letter-spacing:3px; text-transform:uppercase; margin-bottom:12px;">KEY INGREDIENTS</div>
+              <h3 style="color:#F1F5F9; font-size:1.8rem; font-weight:700; line-height:1.4;">심장과 자율신경을 위한 보약</h3>
+              <p style="color:#94A3B8; margin-top:12px; max-width:580px; margin-left:auto; margin-right:auto; line-height:1.7;">
+                '든ː잠'은 수면 유도뿐만 아니라 몸의 부족한 기운을 채워주는<br>보약 성분이 함께 구성되어 건강하게 잠들 수 있도록 돕습니다.
+              </p>
+            </div>
+            <div class="herb-cards" style="display:grid; grid-template-columns: repeat(2, 1fr); gap:20px; max-width:800px; margin:0 auto;">
+              
+              <div class="herb-card" style="background:rgba(167,139,250,0.06); border:1px solid rgba(167,139,250,0.15); border-radius:16px; padding:28px 24px;">
+                <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+                  <img src="assets/images/herb_sanjoin.png" alt="산조인 야교등" style="width:48px; height:48px; border-radius:50%; object-fit:cover; border:2px solid rgba(167,139,250,0.2);">
+                  <h4 style="color:#A78BFA; font-size:1.05rem; font-weight:700;">산조인 / 야교등</h4>
+                </div>
+                <p style="color:#CBD5E1; font-size:0.9rem; line-height:1.75;">심장을 안정시키고 기혈 순환을 도와 자연스러운 입면을 유도하는 대표적인 <strong style="color:#E2D9F3;">안신(安神)</strong> 약재입니다.</p>
+              </div>
+
+              <div class="herb-card" style="background:rgba(167,139,250,0.06); border:1px solid rgba(167,139,250,0.15); border-radius:16px; padding:28px 24px;">
+                <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+                  <img src="assets/images/herb_hapwhanpi.png" alt="합환피" style="width:48px; height:48px; border-radius:50%; object-fit:cover; border:2px solid rgba(167,139,250,0.2);">
+                  <h4 style="color:#A78BFA; font-size:1.05rem; font-weight:700;">합환피</h4>
+                </div>
+                <p style="color:#CBD5E1; font-size:0.9rem; line-height:1.75;"><strong style="color:#E2D9F3;">'마음을 즐겁게 한다'</strong>고 알려진 약재로, 스트레스와 우울감을 완화하여 마음을 평온하게 해줍니다.</p>
+              </div>
+
+              <div class="herb-card" style="background:rgba(167,139,250,0.06); border:1px solid rgba(167,139,250,0.15); border-radius:16px; padding:28px 24px;">
+                <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+                  <img src="assets/images/herb_danggui.png" alt="당귀 숙지황" style="width:48px; height:48px; border-radius:50%; object-fit:cover; border:2px solid rgba(167,139,250,0.2);">
+                  <h4 style="color:#A78BFA; font-size:1.05rem; font-weight:700;">당귀 / 숙지황</h4>
+                </div>
+                <p style="color:#CBD5E1; font-size:0.9rem; line-height:1.75;">피를 생성하고 정기를 보충하는 핵심 <strong style="color:#E2D9F3;">보약</strong> 약재입니다. 소모된 진액을 채워 몸의 자생력을 높여줍니다.</p>
+              </div>
+
+              <div class="herb-card" style="background:rgba(167,139,250,0.06); border:1px solid rgba(167,139,250,0.15); border-radius:16px; padding:28px 24px;">
+                <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+                  <img src="assets/images/herb_hwangryeon.png" alt="황련 육계" style="width:48px; height:48px; border-radius:50%; object-fit:cover; border:2px solid rgba(167,139,250,0.2);">
+                  <h4 style="color:#A78BFA; font-size:1.05rem; font-weight:700;">황련 / 육계</h4>
+                </div>
+                <p style="color:#CBD5E1; font-size:0.9rem; line-height:1.75;">심장의 열은 내리고 아랫배는 따뜻하게 하여, 자율신경의 균형(<strong style="color:#E2D9F3;">수승화강</strong>)을 잡아 깊은 잠을 돕습니다.</p>
+              </div>
+
+
+            </div>
+          </div>
+
+          <div class="product-block reverse fade-in">
+            <div class="product-info">
+              <div class="product-tag" style="color:#A78BFA; background:rgba(167,139,250,0.1);">🌙 수면 기능 개선</div>
+              <h3 class="product-name" style="color:var(--text-primary);">내몸에 온 든ː잠</h3>
+              <p class="product-hook" style="border-color:#7C3AED; margin-bottom:16px; color:var(--text-primary);"><strong>이런 분들에게 '든ː잠'이 필요합니다</strong></p>
+              
+              <ul style="list-style-type: none; margin-bottom: 24px;">
+                <li style="margin-bottom: 8px; color: var(--text-secondary); display:flex; align-items:flex-start; gap:8px;">
+                   <span style="color:#7C3AED; font-weight:bold; flex-shrink:0;">✓</span> 잠이 잘 오지 않아 수면제 복용을 고민 중이신 분
+                </li>
+                <li style="margin-bottom: 8px; color: var(--text-secondary); display:flex; align-items:flex-start; gap:8px;">
+                   <span style="color:#7C3AED; font-weight:bold; flex-shrink:0;">✓</span> 눕고 나서 잠들 때까지 시간이 오래 걸리는 분
+                </li>
+                <li style="margin-bottom: 8px; color: var(--text-secondary); display:flex; align-items:flex-start; gap:8px;">
+                   <span style="color:#7C3AED; font-weight:bold; flex-shrink:0;">✓</span> 자다가 자주 깨거나, 꿈을 너무 많이 꾸는 분
+                </li>
+                <li style="margin-bottom: 8px; color: var(--text-secondary); display:flex; align-items:flex-start; gap:8px;">
+                   <span style="color:#7C3AED; font-weight:bold; flex-shrink:0;">✓</span> 밤새 잠을 설쳐 아침에 일어날 때 몸이 무거운 분
+                </li>
+                <li style="margin-bottom: 8px; color: var(--text-secondary); display:flex; align-items:flex-start; gap:8px;">
+                   <span style="color:#7C3AED; font-weight:bold; flex-shrink:0;">✓</span> 수면제를 드셔도 잠을 오래 유지하지 못하는 분
+                </li>
+              </ul>
+              
+              <div style="background: var(--bg-secondary); padding: 16px 20px; border-radius: var(--radius-sm); margin-bottom: 24px; font-size: 0.9rem; line-height: 1.7; border: 1px solid var(--border-light); color:var(--text-secondary);">
+                <p style="margin-bottom: 8px;"><strong style="color:var(--text-primary);">복용 방법:</strong> 본 약은 '환' 제형입니다. 물과 함께 편하게 삼켜 복용하세요.</p>
+                <p style="margin-bottom: 8px;"><strong style="color:var(--text-primary);">잠들기 전:</strong> 취침 1~2시간 전에 반드시 복용 (자율신경 휴식 모드 전환)</p>
+                <p style="margin-bottom: 8px;"><strong style="color:var(--text-primary);">집중 관리:</strong> 불편함이 심할 때는 식사와 상관없이 하루 3회 복용</p>
+                <p style="margin-bottom: 8px;"><strong style="color:var(--text-primary);">예방 및 관리:</strong> 수면 패턴 개선 후에도 하루 1회 보약처럼 꾸준히 복용 (자생력 증가)</p>
+                <p style="color: #7C3AED; margin-top: 12px; font-weight: 600;">※ 초등학생 이상이라면 누구나 안심하고 복용할 수 있습니다.</p>
+              </div>
+            </div>
+            <div class="product-visual">
+              <img src="assets/images/danjamon.jpg" alt="든ː잠">
+              <div class="feature-chips" style="margin-top:20px; justify-content:center;">
+                <span class="feature-chip" style="background:var(--bg-secondary); color:var(--text-secondary); border:1px solid var(--border-light);">🌱 안심 복용</span>
+                <span class="feature-chip" style="background:var(--bg-secondary); color:var(--text-secondary); border:1px solid var(--border-light);">✨ 순한 천연 약재 (내성 걱정 NO)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Details & Guides -->
+      <section class="guide-section" style="background:#1E293B; padding: 80px 0;">
+        <div class="container">
+          <div class="grid-2-col" style="display:grid; grid-template-columns:1fr 1fr; gap:32px;">
+            
+            <div class="guide-card fade-in" style="background:#0F172A; padding:32px; border-radius:16px; border:1px solid #334155;">
+              <h3 style="color:#F8FAFC; margin-bottom:20px; font-size:1.25rem; display:flex; align-items:center; gap:8px;"><span style="font-size:1.5rem;">💊</span> 수면제 병행 가이드</h3>
+              <p style="color:#CBD5E1; margin-bottom:16px;">현재 수면제를 드시고 계신 분들도 병행이 가능합니다.</p>
+              <ul style="list-style-type: none; color:#CBD5E1; line-height:1.7;">
+                <li style="margin-bottom:12px;"><strong>초기:</strong> 수면제와 '든ː잠'을 함께 복용하여 수면의 질을 안정시킵니다.</li>
+                <li><strong>이후:</strong> 잠드는 것이 편해지고 수면의 질이 개선되면, 수면제를 조금씩 천천히 줄여나가는 방법으로 조절하세요.</li>
+              </ul>
+            </div>
+
+            <div class="guide-card fade-in fade-in-delay-1" style="background:#0F172A; padding:32px; border-radius:16px; border:1px solid #334155;">
+              <h3 style="color:#F8FAFC; margin-bottom:20px; font-size:1.25rem; display:flex; align-items:center; gap:8px;"><span style="font-size:1.5rem;">💡</span> 생활 습관 가이드</h3>
+              <ul style="list-style-type: none; color:#CBD5E1; line-height:1.7;">
+                <li style="margin-bottom:12px;"><strong>☕ 카페인 주의:</strong> 카페인은 교감신경을 자극합니다. 커피는 반드시 디카페인으로 드세요.</li>
+                <li style="margin-bottom:12px;"><strong>🍔 식단 관리:</strong> 술과 기름진 튀김류는 몸에 열을 만들어 숙면을 방해하므로 최대한 삼가주세요.</li>
+                <li><strong>📱 빛 조절:</strong> 취침 1시간 전부터 스마트폰 사용을 줄이고 조명을 어둡게 하면 효과가 극대화됩니다.</li>
+              </ul>
+            </div>
+
+
+
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="final-cta" style="background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);">
+        <div class="container">
+          <div class="final-cta-content fade-in">
+            <h2 class="final-cta-title" style="color:#F8FAFC;">편안한 밤, 다시 찾을 수 있습니다</h2>
+            <div class="final-cta-buttons">
+              <a href="http://pf.kakao.com/_kdxdxan/chat" target="_blank" class="btn-white" style="color:#6D28D9;">빠른 카톡 상담</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 🟩🟩🟩🟩🟩 4. 한방연구소 퍼널 (브랜드/신뢰성) 🟩🟩🟩🟩🟩 -->
+    <div id="funnel-clinic" class="funnel-view">
+
+      <!-- Hook -->
+      <section class="hero-hook" style="background:var(--primary-gradient);">
+        <div class="hero-hook-content">
+          <div class="hero-eyebrow" style="color:white; opacity:0.8;">OUR INSTITUTE</div>
+          <h2 class="hero-main-copy" style="color:var(--dark-bg);"><span
+              style="font-size:0.6em; display:block; margin-bottom:10px; color:rgba(26,36,54,0.7); font-weight:600;">김민부한의원
+              부설</span>10년의 노하우, <br>데이터로 증명하는 <span style="font-weight:900;">내몸에 온</span></h2>
+          <p class="hero-question" style="color:rgba(26,36,54,0.8);">"가장 올바른 자연의 처방으로 건강한 변화를 돕겠습니다."</p>
+          <div class="hero-scroll-indicator"><span style="color:rgba(26,36,54,0.6);">SCROLL</span>
+            <div class="scroll-arrow" style="border-color:var(--dark-bg);"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Trust / Stats -->
+      <section class="trust-section" style="padding-top:120px;">
+        <div class="container">
+          <div class="ceo-message fade-in" style="background: white; padding: 48px; border-radius: 16px; box-shadow: var(--shadow-md); margin-bottom: 40px; font-size: 1.05rem; line-height: 1.8; color: var(--text-secondary); word-break: keep-all; position: relative;">
+            <div style="font-size: 3rem; color: rgba(0,0,0,0.05); position: absolute; top: 20px; left: 30px; line-height: 1; font-family: serif;">"</div>
+            <p style="margin-bottom: 20px;">20여 년간 한의사로 진료를 하며, 저는 오랜 시간 검증되어 온 한약 처방들의 힘을 가까이에서 지켜봐 왔습니다.<br>
+            몸이 지쳐 있을 때, 잠을 이루지 못할 때, 오래된 불편으로 일상이 무너질 때.<br>
+            잘 맞는 처방 하나가 사람의 하루를 얼마나 달라지게 만드는지 수없이 경험했습니다.</p>
+            
+            <p style="margin-bottom: 20px;">그래서 늘 마음 한편에는 같은 생각이 있었습니다.</p>
+            
+            <p style="margin-bottom: 20px; font-weight: 600; color: var(--text-primary); font-size: 1.2rem; text-align: center; margin: 40px 0; padding: 20px 0; border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">‘이 좋은 처방들이 조금 더 쉽게 사람들의 일상 가까이 갈 수는 없을까.’</p>
+            
+            <p style="margin-bottom: 20px;">하지만 현실은 그렇지 못한 경우가 많았습니다.<br>
+            효과는 만족하지만 가격이 부담스럽고, 한약 특유의 형태 때문에 꾸준히 챙겨 먹기 어렵다는 이야기를 진료실에서 자주 듣게 되었습니다.</p>
+            
+            <p style="margin-bottom: 20px;">좋은 처방이라는 건 결국, 몸이 필요로 할 때 부담 없이 가까이할 수 있어야 한다고 생각했습니다.<br>
+            그래서 저는 한약이 가진 본질은 그대로 지키되, 현대의 생활 방식 안에서 조금 더 편안하게 스며들 수 있는 방법을 고민하기 시작했습니다.</p>
+            
+            <p style="margin-bottom: 20px;">오랜 시간 사랑받아 온 처방들을 바탕으로,<br>
+            먹기 편한 형태로 바꾸고,<br>
+            휴대와 복용의 불편함은 줄이고,<br>
+            많은 분들이 일상 속에서 자주 겪는 고민들에 보다 현실적으로 닿을 수 있도록.</p>
+            
+            <p style="margin-bottom: 20px; font-weight: 700; color: var(--primary); font-size: 1.15rem;">그 고민 끝에 탄생한 것이 ‘내 몸에 온 한방 연구소’입니다.</p>
+            
+            <p style="margin-bottom: 20px;">거창하고 어려운 한약이 아니라,<br>
+            바쁜 하루 속에서도 자연스럽게 곁에 둘 수 있는 한방.<br>
+            누군가 특별히 아프기 전에, 스스로를 돌보는 작은 습관처럼 가까워질 수 있는 한방을 만들고 싶었습니다.</p>
+            
+            <p style="margin-bottom: 30px;">오랜 시간 검증된 좋은 처방이 현실의 문턱 앞에서 멀어지지 않도록.<br>
+            보다 많은 사람들이 자신의 몸을 편안하게 돌볼 수 있도록.</p>
+            
+            <p style="margin-bottom: 0; font-weight: 600; color: var(--text-primary);">그 마음으로 오늘도 한약을 연구하고 있습니다.</p>
+          </div>
+
+          <div class="doctor-profile fade-in">
+            <div class="doctor-avatar">👨‍⚕️</div>
+            <div>
+              <div class="doctor-name">김민부 대표원장 / 연구소장</div>
+              <div class="doctor-quote">"환자 개개인의 증상 이면에 있는 근본 원인을 파악하여, 몸에 무리가 가지 않는 바른 처방을 고집합니다."</div>
+              <ul class="doctor-history" style="list-style-type: none; padding-left: 0; margin-top: 16px; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+                <li>대구한의대학교 한의학과 졸업</li>
+                <li>(전)달서구 한의사회 학술이사</li>
+                <li>대한 약침학회 학술위원</li>
+                <li>대한 약침학회 대의원</li>
+                <li>대한 척추신경추나의학회 정회원</li>
+                <li>대한 약침학회 정회원</li>
+                <li>대한 한방소아과학회 정회원</li>
+                <li>대한 한방 알레르기 및 면역학회 정회원</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Clinic Info & Map -->
+      <section class="clinic-section">
+        <div class="container">
+          <div class="clinic-header fade-in">
+            <h2 class="clinic-title">오시는 길 & 진료 안내</h2>
+          </div>
+          <div class="clinic-grid">
+            <div class="clinic-cards">
+              <div class="clinic-card fade-in">
+                <div class="clinic-card-icon">📍</div>
+                <div>
+                  <div class="clinic-card-title">주소</div>
+                  <div class="clinic-card-content">대구 달서구 조암로 24 한신메디타워 4층</div>
+                </div>
+              </div>
+              <div class="clinic-card fade-in">
+                <div class="clinic-card-icon">🕐</div>
+                <div>
+                  <div class="clinic-card-title">진료 시간</div>
+                  <div class="clinic-card-content">
+                    <div class="hours-table">
+                      <div class="hours-row"><span class="hours-day">월화수금</span><span class="hours-time">10:00 -
+                          19:00</span></div>
+                      <div class="hours-row"><span class="hours-day">목 요 일</span><span class="hours-time">14:00 -
+                          19:00</span></div>
+                      <div class="hours-row"><span class="hours-day">토 요 일</span><span class="hours-time">10:00 -
+                          14:00</span></div>
+                    </div>
+                    <div class="hours-note">점심시간 12:30 - 14:00 (일/공휴일 휴진)</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="clinic-map fade-in">
+              <div class="map-overlay">
+                <img src="assets/images/naver_map_static.png" alt="김민부한의원 네이버 지도"
+                  style="width:100%; height:100%; object-fit:cover;">
+                <div class="map-buttons-overlay">
+                  <a href="https://naver.me/xwmL0cU8" target="_blank" rel="noopener" class="btn-map-naver">
+                    <span class="map-icon">N</span>네이버 지도로 보기
+                  </a>
+                  <a href="https://map.kakao.com/link/search/대구 김민부한의원" target="_blank" rel="noopener"
+                    class="btn-map-kakao">
+                    <span class="map-icon">K</span>카카오 맵으로 보기
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 🟩🟩🟩🟩🟩 5. 관리자 페이지 (Admin & CRM) 🟩🟩🟩🟩🟩 -->
+    <div id="funnel-admin" class="funnel-view" style="background:#F1F5F9; min-height:100vh;">
+      <section class="admin-dashboard-section" id="admin-dash-view" style="display:block; padding:100px 24px 40px;">
+        <div class="container" style="max-width:1200px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:32px;">
+            <h2 style="font-family:var(--font-serif); font-size:2rem; font-weight:700;">내몸에 온 CRM</h2>
+            <button id="btn-admin-logout" class="btn-ghost" style="padding:8px 16px;">로그아웃</button>
+          </div>
+
+          <div id="admin-tabs"
+            style="display:flex; gap:12px; margin-bottom:32px; border-bottom:1px solid #E2E8F0; padding-bottom:1px;">
+            <button class="admin-tab-btn active" data-tab="crm">예약/CRM 관리</button>
+            <button class="admin-tab-btn" data-tab="blog">블로그 관리</button>
+          </div>
+
+          <!-- Tab 1: CRM -->
+          <div id="admin-tab-crm" class="admin-tab-pane active">
+            <div class="admin-stats"
+              style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px; margin-bottom:40px;">
+              <div style="background:white; padding:24px; border-radius:12px; box-shadow:0 2px 4px rgba(0,0,0,0.04);">
+                <div style="font-size:0.85rem; color:var(--text-tertiary); margin-bottom:8px;">총 접수 건수</div>
+                <div id="stat-total" style="font-size:2rem; font-weight:700; color:var(--primary);">0</div>
+              </div>
+              <div style="background:white; padding:24px; border-radius:12px; box-shadow:0 2px 4px rgba(0,0,0,0.04);">
+                <div style="font-size:0.85rem; color:var(--text-tertiary); margin-bottom:8px;">오늘 신규 (대기)</div>
+                <div id="stat-pending" style="font-size:2rem; font-weight:700; color:#EAB308;">0</div>
+              </div>
+            </div>
+
+            <div style="background:white; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.05); overflow:hidden;">
+              <div style="overflow-x:auto;">
+                <table class="crm-table"
+                  style="width:100%; border-collapse:collapse; text-align:left; min-width:800px;">
+                  <thead style="background:#F8FAFC; border-bottom:1px solid #E2E8F0;">
+                    <tr>
+                      <th style="padding:16px; font-weight:600; font-size:0.9rem; color:var(--text-secondary);">No.</th>
+                      <th style="padding:16px; font-weight:600; font-size:0.9rem; color:var(--text-secondary);">접수일시
+                      </th>
+                      <th style="padding:16px; font-weight:600; font-size:0.9rem; color:var(--text-secondary);">유형</th>
+                      <th style="padding:16px; font-weight:600; font-size:0.9rem; color:var(--text-secondary);">환자명</th>
+                      <th style="padding:16px; font-weight:600; font-size:0.9rem; color:var(--text-secondary);">상태</th>
+                      <th style="padding:16px; font-weight:600; font-size:0.9rem; color:var(--text-secondary);">작업</th>
+                    </tr>
+                  </thead>
+                  <tbody id="crm-table-body">
+                    <!-- Data will be injected here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 2: Blog Management -->
+          <div id="admin-tab-blog" class="admin-tab-pane">
+            <div style="display:grid; grid-template-columns: 1fr 1.5fr; gap:32px;">
+              <!-- Write Form -->
+              <div style="background:white; padding:32px; border-radius:12px; box-shadow:var(--shadow-md);">
+                <h3 style="margin-bottom:24px; border-bottom:1px solid #F1F5F9; padding-bottom:12px;">새 칼럼 작성</h3>
+                <div class="form-group">
+                  <label>카테고리</label>
+                  <select id="blog-input-cat" class="form-input">
+                    <option value="다이어트">다이어트</option>
+                    <option value="장건강">장건강</option>
+                    <option value="수면케어">수면케어</option>
+                    <option value="연구소소식">연구소 소식</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>제목</label>
+                  <input type="text" id="blog-input-title" class="form-input" placeholder="칼럼 제목을 입력하세요">
+                </div>
+                <div class="form-group">
+                  <label>썸네일 이미지 업로드 (최대 3MB 권장)</label>
+                  <input type="file" id="blog-input-file" class="form-input" accept="image/*">
+                  <div id="blog-file-preview" style="margin-top:12px; display:none;">
+                    <img src=""
+                      style="width:100%; height:120px; object-fit:cover; border-radius:8px; border:1px solid var(--border);">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>본문 내용</label>
+                  <textarea id="blog-input-content" class="form-input" style="height:300px; resize:none;"
+                    placeholder="내용을 입력하세요."></textarea>
+                </div>
+                <button id="btn-save-post" class="btn-primary w-100">발행하기 (Publish)</button>
+              </div>
+
+              <!-- List -->
+              <div style="background:white; padding:32px; border-radius:12px; box-shadow:var(--shadow-md);">
+                <h3 style="margin-bottom:24px; border-bottom:1px solid #F1F5F9; padding-bottom:12px;">발행된 칼럼 목록</h3>
+                <div id="admin-blog-list" style="display:flex; flex-direction:column; gap:16px;">
+                  <!-- Posts injected here -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Admin Detail View Modal -->
+      <dialog id="crm-detail-modal" class="survey-modal">
+        <div class="survey-modal-overlay"></div>
+        <div class="survey-modal-content" style="max-width:600px;">
+          <button id="crm-detail-close" class="survey-close" aria-label="닫기">✕</button>
+          <div class="survey-header">
+            <h2 class="survey-title">상세 문진 답변</h2>
+          </div>
+          <div class="survey-body" id="crm-detail-content" style="padding-bottom:20px;">
+            <!-- Detail injected via JS -->
+          </div>
+        </div>
+      </dialog>
+    </div>
+  </main>
+
+  <!-- ==========================================
+       SURVEY MODAL (CRM FORM)
+       ========================================== -->
+
+
+  <!-- ==========================================
+       FLOATING BOTTOM BAR & FOOTER (공통 영역) 
+       ========================================== -->
+  <div class="floating-bar" id="floating-bar">
+    <div class="container">
+      <div class="floating-bar-text" id="floating-text">
+        <span style="font-size:0.75rem; color:var(--text-tertiary); display:block; margin-bottom:-4px;">김민부한의원 부설</span>
+        <strong>내몸에 온 한방연구소</strong> · 10년간 68,710일분 처방
+      </div>
+      <div class="floating-bar-actions">
+        <a href="http://pf.kakao.com/_kdxdxan/chat" target="_blank" class="btn-sm btn-sm-primary">💬 카톡 상담/문의</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo" style="display:block; margin-bottom:12px;">
+            <img src="assets/images/logo_transparent.png" alt="내몸에 온 한방연구소"
+              style="height: 180px; object-fit: contain; margin-left: -15px;">
+          </div>
+          <p style="margin-top:10px;">자연의 처방으로 건강한 변화를 돕습니다.</p>
+          <div style="font-size: 0.8rem; margin-top: 15px; line-height: 1.6; color: rgba(255,255,255,0.4);">
+            김민부한의원 | 대표자: 김민부<br>
+            사업자번호: 647-95-00260
+          </div>
+        </div>
+        <div>
+          <div class="footer-section-title">처방 안내</div>
+          <ul class="footer-links">
+            <li><a href="#funnel-slimhwan" class="footer-tab-link" data-target="funnel-slimhwan">슬림환</a></li>
+            <li><a href="#funnel-kwaebyeon" class="footer-tab-link" data-target="funnel-kwaebyeon">쾌변환</a></li>
+            <li><a href="#funnel-dunjam" class="footer-tab-link" data-target="funnel-dunjam">든ː잠</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-section-title">연락처</div>
+          <ul class="footer-contact">
+            <li><span>📍</span> 대구 달서구 조암로 24 한신메디타워 4층</li>
+            <li><a href="http://pf.kakao.com/_kdxdxan/chat" target="_blank"><span>💬</span> 카카오톡 상담 연결</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copyright">© 2026 김민부한의원. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- KakaoTalk Floating Chat Button -->
+  <a href="http://pf.kakao.com/_kdxdxan/chat" target="_blank" class="kakao-chat-btn" id="kakao-chat-btn"
+    aria-label="카카오톡 채팅 상담">
+    <div class="kakao-chat-icon">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path
+          d="M12 3C6.477 3 2 6.477 2 10.75c0 2.768 1.86 5.176 4.672 6.544l-.994 3.652c-.084.308.28.528.536.36l4.29-2.82c.484.07 1 .114 1.496.114 5.523 0 10-3.477 10-7.75S17.523 3 12 3z" />
+      </svg>
+    </div>
+    <span class="kakao-chat-label">카톡상담</span>
+  </a>
+
+
+
+  <script src="js/main.js"></script>
+</body>
+
+</html>
