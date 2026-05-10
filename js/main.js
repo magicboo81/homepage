@@ -195,6 +195,23 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(update);
   }
 
+  // ==========================================
+  // SCROLL INDICATOR CLICK → SCROLL DOWN ONE SCREEN
+  // ==========================================
+  function initScrollIndicators() {
+    document.querySelectorAll('.hero-scroll-indicator').forEach(indicator => {
+      indicator.style.cursor = 'pointer';
+      // To prevent duplicate listeners if called multiple times
+      if (!indicator.dataset.scrollInit) {
+        indicator.dataset.scrollInit = 'true';
+        indicator.addEventListener('click', () => {
+          window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+        });
+      }
+    });
+  }
+  initScrollIndicators();
+
   // Mobile Menu Toggle (Now handled via HTML inline onclick for maximum reliability)
   const navToggle = document.getElementById('nav-toggle');
   const mobileMenu = document.getElementById('mobile-menu');

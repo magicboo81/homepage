@@ -900,6 +900,13 @@ button { border:none; background:none; cursor:pointer; font-family:inherit; }
   gap: 8px;
   animation: fadeUp 0.8s ease 0.8s forwards;
   opacity:0;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.hero-scroll-indicator:hover {
+  opacity: 0.8;
+  transform: translateY(4px);
 }
 
 .hero-scroll-indicator span {
