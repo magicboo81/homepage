@@ -1188,7 +1188,7 @@ button { border:none; background:none; cursor:pointer; font-family:inherit; }
 
 /* Price tag */
 .price-tag { display: flex; align-items: baseline; gap: 8px; margin-bottom: 28px; }
-.price-amount { font-family: var(--font-num); font-size: 2rem; font-weight: 700; color: var(--primary); }
+.price-amount { font-family: var(--font-num); font-size: 2rem; font-weight: 500; color: var(--primary); }
 .price-unit { font-size: 0.9rem; color: var(--text-tertiary); }
 
 /* Buttons */
@@ -1322,6 +1322,8 @@ button { border:none; background:none; cursor:pointer; font-family:inherit; }
 /* ============================================
    RESPONSIVE
    ============================================ */
+.grid-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+
 @media (max-width: 1024px) {
   .hero-main-copy { font-size: 2.6rem; }
   .product-block { grid-template-columns: 1fr; gap: 40px; padding: 40px; }
@@ -1347,6 +1349,7 @@ button { border:none; background:none; cursor:pointer; font-family:inherit; }
   .floating-bar .container { flex-direction: column; gap: 8px; text-align: center; }
   .floating-bar-actions { width: 100%; }
   .floating-bar .btn-sm { flex: 1; justify-content: center; }
+  .grid-2-col { grid-template-columns: 1fr; }
 }
 
 /* ============================================

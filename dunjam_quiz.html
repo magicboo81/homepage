@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>든ː잠 수면 상태 테스트</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      background: #0F172A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .standalone-quiz-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+    .slim-quiz-modal {
+      animation: none;
+      background: #1E293B;
+      box-shadow: 0 12px 40px rgba(167,139,250,0.15);
+      border: 1px solid rgba(167,139,250,0.15);
+    }
+    .slim-quiz-close {
+      display: none;
+    }
+    
+    /* Dunjam Theme Overrides */
+    .slim-quiz-progress-bar { background: linear-gradient(90deg, #A78BFA, #7C3AED) !important; }
+    .slim-quiz-badge { background: linear-gradient(135deg, #A78BFA, #7C3AED) !important; color: white !important; }
+    .slim-quiz-start-btn { background: linear-gradient(135deg, #A78BFA, #7C3AED) !important; }
+    .slim-quiz-qnum { color: #A78BFA !important; }
+    .slim-quiz-option-inner:hover { border-color: rgba(167,139,250,0.3) !important; background: rgba(167,139,250,0.05) !important; }
+    .slim-quiz-option input:checked + .slim-quiz-option-inner { border-color: #A78BFA !important; background: rgba(167,139,250,0.12) !important; color: white !important;}
+    .slim-quiz-option input:checked + .slim-quiz-option-inner .sq-num { background: #A78BFA !important; color: white !important; }
+    .slim-quiz-result-score strong { color: #A78BFA !important; }
+    .slim-quiz-cta-btn.primary { background: linear-gradient(135deg, #A78BFA, #7C3AED) !important; color: white !important;}
+    .slim-quiz-retry:hover { color: #A78BFA !important; }
+  </style>
+</head>
+<body>
+  <div class="standalone-quiz-wrapper">
+    <div class="slim-quiz-modal" id="slim-quiz-modal">
+      <div class="slim-quiz-progress">
+        <div class="slim-quiz-progress-bar" id="slim-quiz-bar" style="width:0%"></div>
+      </div>
+      
+      <!-- Intro -->
+      <div class="slim-quiz-step active" data-step="intro">
+        <div class="slim-quiz-intro">
+          <div class="slim-quiz-badge">SLEEP TEST</div>
+          <h2>나의 수면 상태는 어떤가?<br>나에게 맞는 든ː잠의 단계는?</h2>
+          <p>간단한 설문으로 현재의 수면 상태를 점검하고<br>나에게 가장 잘 맞는 수면 케어 단계를 찾아보세요.</p>
+          <button class="slim-quiz-start-btn" id="slim-quiz-start">테스트 시작하기 →</button>
+        </div>
+      </div>
+
+      <!-- Questions will be injected here via JS to save space -->
+      <div id="questions-container"></div>
+
+      <!-- Result -->
+      <div class="slim-quiz-step" data-step="result">
+        <div class="slim-quiz-result">
+          <div class="slim-quiz-result-badge" id="sqr-badge"></div>
+          <h2 class="slim-quiz-result-title" id="sqr-title"></h2>
+          <p class="slim-quiz-result-desc" id="sqr-desc" style="white-space: pre-line;"></p>
+          <div class="slim-quiz-result-score">총점: <strong id="sqr-score"></strong>점</div>
+          <div class="slim-quiz-result-actions">
+            <a href="http://pf.kakao.com/_kdxdxan/chat" target="_blank" class="slim-quiz-cta-btn primary">💬 카톡 상담하기</a>
+            <a href="index.html#funnel-dunjam" class="slim-quiz-cta-btn secondary">🏠 든ː잠 페이지로 돌아가기</a>
+          </div>
+          <button class="slim-quiz-retry" id="sqr-retry">다시 테스트하기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      "나는 잠을 못 자는 날이 1주일에 1번 이상이다",
+      "나는 자다가 한번 이상은 깬다",
+      "나는 잠이 드는데 30분 이상 걸린다",
+      "나는 수면제나 수면 유도제를 먹어본 적이 있거나 지금도 먹는다",
+      "나는 자고 일어나도 개운하지 않고 잠이 빨리 깨지 않는다.",
+      "나는 자다가 한번 깨면 다시 잠들기 어렵다",
+      "나는 조금만 신경쓰는 일이 있으면 잠이 오지 않는다",
+      "나는 잠을 못 잘까봐 커피나 카페인 관련 음료를 마시지 못한다",
+      "나는 잘 때 꿈을 많이 꾸고 그 꿈이 아침까지 생각이 난다",
+      "나는 잠을 푹 자 보는 것이 소원이다"
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('questions-container');
+      
+      // Inject Questions
+      questions.forEach((q, index) => {
+        const stepNum = index + 1;
+        const html = `
+          <div class="slim-quiz-step" data-step="q${stepNum}">
+            <div class="slim-quiz-qnum">Q${stepNum} <span>/ 10</span></div>
+            <h3 class="slim-quiz-question">${q}</h3>
+            <div class="slim-quiz-options">
+              <label class="slim-quiz-option"><input type="radio" name="sq${stepNum}" value="1"><span class="slim-quiz-option-inner"><span class="sq-num">O</span>예</span></label>
+              <label class="slim-quiz-option"><input type="radio" name="sq${stepNum}" value="0"><span class="slim-quiz-option-inner"><span class="sq-num">X</span>아니오</span></label>
+            </div>
+          </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+      });
+
+      const quizOverlay = document.getElementById('slim-quiz-modal');
+      const quizBar = document.getElementById('slim-quiz-bar');
+      const quizSteps = quizOverlay.querySelectorAll('.slim-quiz-step');
+      const stepOrder = ['intro', ...questions.map((_, i) => 'q' + (i + 1)), 'result'];
+
+      function showQuizStep(stepName) {
+        quizSteps.forEach(s => s.classList.remove('active'));
+        const target = quizOverlay.querySelector(`[data-step="${stepName}"]`);
+        if (target) target.classList.add('active');
+        const idx = stepOrder.indexOf(stepName);
+        quizBar.style.width = (idx / (stepOrder.length - 1) * 100) + '%';
+      }
+
+      function resetQuiz() {
+        quizOverlay.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+        showQuizStep('intro');
+      }
+
+      // Start
+      const quizStartBtn = document.getElementById('slim-quiz-start');
+      if (quizStartBtn) {
+        quizStartBtn.addEventListener('click', () => showQuizStep('q1'));
+      }
+
+      // Auto-advance
+      for (let i = 1; i <= 10; i++) {
+        const radios = quizOverlay.querySelectorAll(`input[name="sq${i}"]`);
+        radios.forEach(radio => {
+          radio.addEventListener('change', () => {
+            setTimeout(() => {
+              if (i < 10) {
+                showQuizStep('q' + (i + 1));
+              } else {
+                calculateResult();
+              }
+            }, 300);
+          });
+        });
+      }
+
+      function calculateResult() {
+        let total = 0;
+        for (let i = 1; i <= 10; i++) {
+          const checked = quizOverlay.querySelector(`input[name="sq${i}"]:checked`);
+          if (checked) total += parseInt(checked.value);
+        }
+
+        const badge = document.getElementById('sqr-badge');
+        const title = document.getElementById('sqr-title');
+        const desc = document.getElementById('sqr-desc');
+        const score = document.getElementById('sqr-score');
+
+        score.textContent = total;
+        badge.className = 'slim-quiz-result-badge';
+        // Reset colors
+        badge.style.background = '';
+        badge.style.color = '';
+
+        if (total <= 2) {
+          badge.style.background = 'rgba(34,197,94,0.15)';
+          badge.style.color = '#4ade80';
+          badge.textContent = '안심 단계';
+          title.textContent = '건강한 수면 상태';
+          desc.textContent = '잠에 대해서는 걱정이 없군요!\n지금 컨디션 잘 유지하셔서 건강한 수면 생활을 하세요!';
+        } else if (total <= 6) {
+          badge.style.background = 'rgba(251,146,60,0.15)';
+          badge.style.color = '#fb923c';
+          badge.textContent = '주의 단계';
+          title.textContent = '가벼운 수면 문제 상태';
+          desc.textContent = '잠이 건강에 영향을 줄 수 있는 단계입니다.\n든ː잠 1단계로 수면의 질을 좀 더 높여 보세요!';
+        } else {
+          badge.style.background = 'rgba(239,68,68,0.15)';
+          badge.style.color = '#f87171';
+          badge.textContent = '관리 요망 단계';
+          title.textContent = '심각한 수면 문제 상태';
+          desc.textContent = '잠 때문에 건강을 해칠 수 있는 단계입니다. 수면상태를 개선 하는 것이 건강에 가장 중요한 문제일 것 같아요.\n든ː잠 2단계로 수면 리듬 개선에 도움을 받아보시길 권해드립니다!';
+        }
+
+        showQuizStep('result');
+      }
+
+      // Retry
+      const retryBtn = document.getElementById('sqr-retry');
+      if (retryBtn) {
+        retryBtn.addEventListener('click', () => resetQuiz());
+      }
+    });
+  </script>
+</body>
+</html>
