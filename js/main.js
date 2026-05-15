@@ -216,9 +216,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const navToggle = document.getElementById('nav-toggle');
   const mobileMenu = document.getElementById('mobile-menu');
 
-
-
-
+  // 모바일 화면일 경우 첫 접속 시 햄버거 메뉴 자동 열기
+  if (window.innerWidth <= 768 && navToggle && !navToggle.classList.contains('active')) {
+    setTimeout(() => {
+      navToggle.click();
+    }, 100);
+  }
 
   // ==========================================
   // ADMIN DASHBOARD LOGIC
