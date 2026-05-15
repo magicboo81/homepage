@@ -217,10 +217,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const mobileMenu = document.getElementById('mobile-menu');
 
   // 모바일 화면일 경우 첫 접속 시 햄버거 메뉴 자동 열기
-  if (window.innerWidth <= 768 && navToggle && !navToggle.classList.contains('active')) {
+  if (window.innerWidth <= 768) {
+    // switchTab 등에 의해 닫히는 것을 방지하기 위해 약간의 딜레이 후 명시적으로 클래스 추가
     setTimeout(() => {
-      navToggle.click();
-    }, 100);
+      if (mobileMenu) mobileMenu.classList.add('active');
+      if (navToggle) navToggle.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }, 300);
   }
 
   // ==========================================
