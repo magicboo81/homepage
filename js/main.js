@@ -235,9 +235,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const crmDetailModal = document.getElementById('crm-detail-modal');
-  document.getElementById('crm-detail-close').addEventListener('click', () => {
-    crmDetailModal.classList.remove('active');
-  });
+  const crmDetailCloseBtn = document.getElementById('crm-detail-close');
+  if (crmDetailCloseBtn) {
+    crmDetailCloseBtn.addEventListener('click', () => {
+      crmDetailModal.classList.remove('active');
+    });
+  }
 
   window.openCrmDetail = function (id) {
     const cd = JSON.parse(localStorage.getItem('crm_data') || '[]');
@@ -323,21 +326,30 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // ADMIN TAB SWITCHING
+  // ADMIN TAB SWITCHING (Event Delegation)
   // ==========================================
-  document.querySelectorAll('.admin-tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
+  const adminTabsContainer = document.getElementById('admin-tabs');
+  if (adminTabsContainer) {
+    adminTabsContainer.addEventListener('click', (e) => {
+      const btn = e.target.closest('.admin-tab-btn');
+      if (!btn) return;
       const targetTab = btn.dataset.tab;
+      if (!targetTab) return;
+
+      const targetPane = document.getElementById(`admin-tab-${targetTab}`);
+      if (!targetPane) return;
+
       document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.admin-tab-pane').forEach(p => p.classList.remove('active'));
 
       btn.classList.add('active');
-      document.getElementById(`admin-tab-${targetTab}`).classList.add('active');
+      targetPane.classList.add('active');
 
       if (targetTab === 'blog') renderAdminBlogList();
       if (targetTab === 'crm') renderCrmTable();
+      if (targetTab === 'traffic' && typeof renderTrafficDashboard === 'function') renderTrafficDashboard();
     });
-  });
+  }
 
   // ==========================================
   // BLOG / COMMUNITY LOGIC
@@ -411,7 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.openBlogDetail = function (id) {
     const posts = JSON.parse(localStorage.getItem('blog_posts') || '[]');
     const p = posts.find(item => item.id === id);
-    if (!p) return;
+    if (!p || !blogDetailContent || !blogDetailModal) return;
 
     blogDetailContent.innerHTML = `
         <span class="blog-read-cat">${p.category}</span>
@@ -427,7 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
     blogDetailModal.classList.add('active');
   };
 
-  if (blogDetailClose) {
+  if (blogDetailClose && blogDetailModal) {
     blogDetailClose.addEventListener('click', () => {
       blogDetailModal.classList.remove('active');
     });

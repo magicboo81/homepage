@@ -655,8 +655,9 @@
 
           <div id="admin-tabs"
             style="display:flex; gap:12px; margin-bottom:32px; border-bottom:1px solid #E2E8F0; padding-bottom:1px;">
-            <button class="admin-tab-btn active" data-tab="crm">예약/CRM 관리</button>
-            <button class="admin-tab-btn" data-tab="blog">블로그 관리</button>
+            <button class="admin-tab-btn active" data-tab="crm" onclick="switchAdminTab('crm', this)">예약/CRM 관리</button>
+            <button class="admin-tab-btn" data-tab="traffic" onclick="switchAdminTab('traffic', this)">📊 트래픽 분석</button>
+            <button class="admin-tab-btn" data-tab="blog" onclick="switchAdminTab('blog', this)">블로그 관리</button>
           </div>
 
           <!-- Tab 1: CRM -->
@@ -737,6 +738,154 @@
                 <div id="admin-blog-list" style="display:flex; flex-direction:column; gap:16px;">
                   <!-- Posts injected here -->
                 </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 3: Traffic Analytics -->
+          <div id="admin-tab-traffic" class="admin-tab-pane">
+            <!-- Traffic Stats Summary Cards -->
+            <div class="traffic-stats-grid">
+              <div class="traffic-stat-card">
+                <div class="traffic-stat-icon" style="background:rgba(99,102,241,0.12); color:#6366F1;">👁️</div>
+                <div class="traffic-stat-info">
+                  <div class="traffic-stat-label">오늘 방문</div>
+                  <div class="traffic-stat-value" id="traffic-today">0</div>
+                </div>
+              </div>
+              <div class="traffic-stat-card">
+                <div class="traffic-stat-icon" style="background:rgba(16,185,129,0.12); color:#10B981;">📈</div>
+                <div class="traffic-stat-info">
+                  <div class="traffic-stat-label">총 방문수</div>
+                  <div class="traffic-stat-value" id="traffic-total">0</div>
+                </div>
+              </div>
+              <div class="traffic-stat-card">
+                <div class="traffic-stat-icon" style="background:rgba(245,158,11,0.12); color:#F59E0B;">🔗</div>
+                <div class="traffic-stat-info">
+                  <div class="traffic-stat-label">유입 채널</div>
+                  <div class="traffic-stat-value" id="traffic-channels">0</div>
+                </div>
+              </div>
+              <div class="traffic-stat-card">
+                <div class="traffic-stat-icon" style="background:rgba(239,68,68,0.12); color:#EF4444;">📱</div>
+                <div class="traffic-stat-info">
+                  <div class="traffic-stat-label">모바일 비율</div>
+                  <div class="traffic-stat-value" id="traffic-mobile">0%</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Date Filter -->
+            <div class="traffic-filter-bar">
+              <div class="traffic-filter-group">
+                <button class="traffic-filter-btn active" data-range="7">7일</button>
+                <button class="traffic-filter-btn" data-range="30">30일</button>
+                <button class="traffic-filter-btn" data-range="all">전체</button>
+              </div>
+              <button id="btn-export-traffic" class="traffic-export-btn">📥 CSV 내보내기</button>
+            </div>
+
+            <!-- Main Grid: Chart + Source Breakdown -->
+            <div class="traffic-main-grid">
+              <!-- Daily Visit Chart -->
+              <div class="traffic-chart-card">
+                <div class="traffic-card-header">
+                  <h3>📊 일별 방문 추이</h3>
+                </div>
+                <div class="traffic-chart-container">
+                  <canvas id="traffic-daily-chart" width="700" height="280"></canvas>
+                </div>
+              </div>
+
+              <!-- Source Breakdown -->
+              <div class="traffic-source-card">
+                <div class="traffic-card-header">
+                  <h3>🔍 유입 경로 분석</h3>
+                </div>
+                <div class="traffic-source-chart-wrap">
+                  <canvas id="traffic-source-chart" width="220" height="220"></canvas>
+                </div>
+                <div id="traffic-source-legend" class="traffic-source-legend">
+                  <!-- Legend items injected by JS -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Secondary Grid: Pages + Referrers + UTM -->
+            <div class="traffic-secondary-grid">
+              <!-- Top Pages -->
+              <div class="traffic-panel">
+                <div class="traffic-card-header">
+                  <h3>📄 인기 페이지</h3>
+                </div>
+                <div id="traffic-top-pages" class="traffic-list">
+                  <!-- Injected -->
+                </div>
+              </div>
+
+              <!-- Top Referrers -->
+              <div class="traffic-panel">
+                <div class="traffic-card-header">
+                  <h3>🌐 유입 사이트 TOP</h3>
+                </div>
+                <div id="traffic-referrers" class="traffic-list">
+                  <!-- Injected -->
+                </div>
+              </div>
+
+              <!-- UTM Campaign Performance -->
+              <div class="traffic-panel">
+                <div class="traffic-card-header">
+                  <h3>🎯 UTM 캠페인 성과</h3>
+                </div>
+                <div id="traffic-utm" class="traffic-list">
+                  <!-- Injected -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Device & Browser -->
+            <div class="traffic-device-grid">
+              <div class="traffic-panel">
+                <div class="traffic-card-header">
+                  <h3>📱 디바이스 분포</h3>
+                </div>
+                <div id="traffic-devices" class="traffic-bar-list">
+                  <!-- Injected -->
+                </div>
+              </div>
+              <div class="traffic-panel">
+                <div class="traffic-card-header">
+                  <h3>🕐 시간대별 방문</h3>
+                </div>
+                <div class="traffic-chart-container" style="height:200px;">
+                  <canvas id="traffic-hourly-chart" width="500" height="180"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Visitor Log -->
+            <div class="traffic-panel" style="margin-top:24px;">
+              <div class="traffic-card-header">
+                <h3>🕒 최근 방문자 기록</h3>
+                <button id="btn-clear-traffic" class="traffic-clear-btn">🗑️ 기록 초기화</button>
+              </div>
+              <div style="overflow-x:auto;">
+                <table class="traffic-log-table">
+                  <thead>
+                    <tr>
+                      <th>방문일시</th>
+                      <th>페이지</th>
+                      <th>유입 경로</th>
+                      <th>디바이스</th>
+                      <th>UTM 캠페인</th>
+                    </tr>
+                  </thead>
+                  <tbody id="traffic-log-body">
+                    <!-- Injected -->
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -829,7 +978,29 @@
 
 
 
-  <script src="js/main.js?v=1.3"></script>
+  <script src="js/main.js?v=1.4"></script>
+  <script src="js/traffic.js?v=1.1"></script>
+  <script>
+    // Admin 탭 전환 함수 (inline onclick에서 호출)
+    function switchAdminTab(tabName, clickedBtn) {
+      var pane = document.getElementById('admin-tab-' + tabName);
+      if (!pane) return;
+
+      // 모든 탭 버튼에서 active 제거
+      var btns = document.querySelectorAll('.admin-tab-btn');
+      for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+      // 모든 탭 패널에서 active 제거
+      var panes = document.querySelectorAll('.admin-tab-pane');
+      for (var j = 0; j < panes.length; j++) panes[j].classList.remove('active');
+
+      clickedBtn.classList.add('active');
+      pane.classList.add('active');
+
+      if (tabName === 'traffic' && typeof renderTrafficDashboard === 'function') {
+        renderTrafficDashboard();
+      }
+    }
+  </script>
   <script>
     // 모바일 첫 접속 시 햄버거 메뉴 자동 열기
     // window.onload는 모든 리소스(main.js 포함) 로딩 완료 후 가장 마지막에 실행됨
