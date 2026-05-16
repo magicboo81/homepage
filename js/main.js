@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showAdminDash();
       }
     } else {
-      switchTab('funnel-slimhwan');
+      switchTab('funnel-clinic');
     }
   });
 
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
       showAdminDash();
     }
   } else {
-    switchTab('funnel-slimhwan');
+    switchTab('funnel-clinic');
   }
 
   const kakaoChatBtn = document.getElementById('kakao-chat-btn');
@@ -224,8 +224,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnAdminLogout = document.getElementById('btn-admin-logout');
   if (btnAdminLogout) {
     btnAdminLogout.addEventListener('click', () => {
-      switchTab('funnel-slimhwan');
-      history.pushState(null, null, '#funnel-slimhwan');
+      switchTab('funnel-clinic');
+      history.pushState(null, null, '#funnel-clinic');
     });
   }
 

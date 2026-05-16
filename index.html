@@ -79,11 +79,11 @@
         </div>
       </a>
       <div class="nav-menu" id="nav-menu">
-        <a href="#funnel-slimhwan" class="nav-link tab-btn active" data-target="funnel-slimhwan">슬림환</a>
+        <a href="#funnel-slimhwan" class="nav-link tab-btn" data-target="funnel-slimhwan">슬림환</a>
         <a href="#funnel-kwaebyeon" class="nav-link tab-btn" data-target="funnel-kwaebyeon">쾌변환</a>
         <a href="#funnel-dunjam" class="nav-link tab-btn" data-target="funnel-dunjam">든ː잠</a>
         <a href="community.html" class="nav-link">커뮤니티</a>
-        <a href="#funnel-clinic" class="nav-link tab-btn" data-target="funnel-clinic">김민부한의원</a>
+        <a href="#funnel-clinic" class="nav-link tab-btn active" data-target="funnel-clinic">김민부한의원</a>
         <a href="http://pf.kakao.com/_kdxdxan/chat" target="_blank" class="nav-cta">💬 카톡 상담</a>
       </div>
       <button class="nav-toggle" id="nav-toggle" aria-label="메뉴 열기" onclick="document.getElementById('mobile-menu').classList.toggle('active'); this.classList.toggle('active'); document.body.style.overflow = this.classList.contains('active') ? 'hidden' : '';">
@@ -95,11 +95,11 @@
   <!-- Mobile Menu -->
   <div class="mobile-menu-overlay" id="mobile-menu">
     <div class="mobile-menu-list">
-      <a href="#funnel-slimhwan" class="mobile-link tab-btn active" data-target="funnel-slimhwan">슬림환</a>
+      <a href="#funnel-slimhwan" class="mobile-link tab-btn" data-target="funnel-slimhwan">슬림환</a>
       <a href="#funnel-kwaebyeon" class="mobile-link tab-btn" data-target="funnel-kwaebyeon">쾌변환</a>
       <a href="#funnel-dunjam" class="mobile-link tab-btn" data-target="funnel-dunjam">든ː잠</a>
       <a href="community.html" class="mobile-link">커뮤니티</a>
-      <a href="#funnel-clinic" class="mobile-link tab-btn" data-target="funnel-clinic">김민부한의원</a>
+      <a href="#funnel-clinic" class="mobile-link tab-btn active" data-target="funnel-clinic">김민부한의원</a>
       <a href="http://pf.kakao.com/_kdxdxan/chat" target="_blank" class="btn-primary" style="margin-top:16px;">💬 카톡 상담</a>
     </div>
   </div>
@@ -107,7 +107,7 @@
   <main id="main-content">
     <h1 class="visually-hidden">내몸에 온 한방연구소 - 자연의 처방, 건강한 변화 (슬림환, 쾌변환)</h1>
     <!-- 🟩🟩🟩🟩🟩 1. 슬림환 퍼널 🟩🟩🟩🟩🟩 -->
-    <div id="funnel-slimhwan" class="funnel-view active-view">
+    <div id="funnel-slimhwan" class="funnel-view">
 
       <!-- Hook -->
       <section class="hero-hook" style="background: var(--slim-dark-bg);">
@@ -519,7 +519,7 @@
     </div>
 
     <!-- 🟩🟩🟩🟩🟩 4. 한방연구소 퍼널 (브랜드/신뢰성) 🟩🟩🟩🟩🟩 -->
-    <div id="funnel-clinic" class="funnel-view">
+    <div id="funnel-clinic" class="funnel-view active-view" style="display:block; opacity:1;">
 
       <!-- Hook -->
       <section class="hero-hook" style="background:var(--primary-gradient);">
@@ -1001,22 +1001,7 @@
       }
     }
   </script>
-  <script>
-    // 모바일 첫 접속 시 햄버거 메뉴 자동 열기
-    // window.onload는 모든 리소스(main.js 포함) 로딩 완료 후 가장 마지막에 실행됨
-    window.addEventListener('load', function() {
-      // 모바일 화면인지 확인 (nav-toggle 버튼이 실제로 화면에 보이는지로 판단)
-      var toggle = document.getElementById('nav-toggle');
-      var menu = document.getElementById('mobile-menu');
-      if (toggle && menu && window.getComputedStyle(toggle).display !== 'none') {
-        setTimeout(function() {
-          menu.classList.add('active');
-          toggle.classList.add('active');
-          document.body.style.overflow = 'hidden';
-        }, 50); // 딜레이 최소화
-      }
-    });
-  </script>
+
 </body>
 
 </html>
