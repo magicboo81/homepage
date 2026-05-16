@@ -71,6 +71,7 @@
           <p class="slim-quiz-result-desc" id="sqr-desc" style="white-space: pre-line;"></p>
           <div class="slim-quiz-result-score">총점: <strong id="sqr-score"></strong>점</div>
           <div class="slim-quiz-result-actions">
+            <button class="slim-quiz-cta-btn secondary" onclick="shareQuiz('https://www.mybodyon.co.kr/dunjam_quiz.html')">🔗 설문조사 공유하기</button>
             <a href="http://pf.kakao.com/_kdxdxan/chat" target="_blank" class="slim-quiz-cta-btn primary">💬 카톡 상담하기</a>
             <a href="index.html#funnel-dunjam" class="slim-quiz-cta-btn secondary">🏠 든ː잠 페이지로 돌아가기</a>
           </div>
@@ -200,6 +201,21 @@
         retryBtn.addEventListener('click', () => resetQuiz());
       }
     });
+
+    function shareQuiz(url) {
+      if (navigator.share) {
+        navigator.share({
+          title: '든ː잠 수면 상태 테스트',
+          url: url
+        }).catch(console.error);
+      } else {
+        navigator.clipboard.writeText(url).then(() => {
+          alert('설문조사 링크가 복사되었습니다!');
+        }).catch(err => {
+          console.error('클립보드 복사 실패:', err);
+        });
+      }
+    }
   </script>
 </body>
 </html>
