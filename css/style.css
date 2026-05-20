@@ -576,9 +576,9 @@
 .slim-quiz-result { text-align: center; }
 .slim-quiz-result-badge {
   display: inline-block;
-  padding: 8px 24px;
+  padding: 10px 28px;
   border-radius: 30px;
-  font-size: 0.85rem;
+  font-size: 1.15rem;
   font-weight: 800;
   letter-spacing: 1px;
   margin-bottom: 20px;
