@@ -544,6 +544,7 @@
   color: #cbd5e1;
   font-size: 0.95rem;
   transition: all 0.25s ease;
+  word-break: keep-all;
 }
 .slim-quiz-option-inner:hover {
   border-color: rgba(255,145,185,0.3);
