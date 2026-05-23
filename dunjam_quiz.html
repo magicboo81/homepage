@@ -1,221 +1,2295 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>든ː잠 수면 상태 테스트</title>
-  <link rel="stylesheet" href="css/style.css">
-  <style>
-    body {
-      background: #0F172A;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-    }
-    .standalone-quiz-wrapper {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      padding: 20px;
-    }
-    .slim-quiz-modal {
-      animation: none;
-      background: #1E293B;
-      box-shadow: 0 12px 40px rgba(167,139,250,0.15);
-      border: 1px solid rgba(167,139,250,0.15);
-    }
-    .slim-quiz-close {
-      display: none;
-    }
-    
-    /* Dunjam Theme Overrides */
-    .slim-quiz-progress-bar { background: linear-gradient(90deg, #A78BFA, #7C3AED) !important; }
-    .slim-quiz-badge { background: linear-gradient(135deg, #A78BFA, #7C3AED) !important; color: white !important; }
-    .slim-quiz-start-btn { background: linear-gradient(135deg, #A78BFA, #7C3AED) !important; }
-    .slim-quiz-qnum { color: #A78BFA !important; }
-    .slim-quiz-option-inner:hover { border-color: rgba(167,139,250,0.3) !important; background: rgba(167,139,250,0.05) !important; }
-    .slim-quiz-option input:checked + .slim-quiz-option-inner { border-color: #A78BFA !important; background: rgba(167,139,250,0.12) !important; color: white !important;}
-    .slim-quiz-option input:checked + .slim-quiz-option-inner .sq-num { background: #A78BFA !important; color: white !important; }
-    .slim-quiz-result-score strong { color: #A78BFA !important; }
-    .slim-quiz-cta-btn.primary { background: linear-gradient(135deg, #A78BFA, #7C3AED) !important; color: white !important;}
-    .slim-quiz-retry:hover { color: #A78BFA !important; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>든ː잠 수면 상태 테스트 (PSQI) - 내몸에 온 한방연구소</title>
+    <meta name="description" content="지난 한 달간의 수면 양상을 평가하는 글로벌 표준 척도(PSQI)로 수면 상태를 진단하고 한방 케어 가이드와 보고서를 인쇄하세요.">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --bg-primary: #05070c;
+            --bg-secondary: #0b0f19;
+            --card-bg: rgba(15, 23, 42, 0.55);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #38bdf8;
+            --accent-indigo: #6366f1;
+            --accent-purple: #a855f7;
+            --accent-rose: #f43f5e;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --card-glow: rgba(99, 102, 241, 0.15);
+            --font-sans: 'Outfit', 'Noto Sans KR', sans-serif;
+            --transition-fast: 0.2s ease;
+            --transition-normal: 0.3s ease;
+        }
+
+        /* Base resets & styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.05) 0%, transparent 60%);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar styles */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--card-border);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .header-badge {
+            background: linear-gradient(90deg, rgba(99, 102, 241, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: var(--accent-blue);
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 30%, #a855f7 70%, #6366f1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Cards (Glassmorphism) */
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Views Management */
+        .view {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        /* Welcome View */
+        #welcome-view {
+            text-align: center;
+            max-width: 600px;
+            margin: 4rem auto;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .welcome-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            filter: drop-shadow(0 0 15px var(--accent-indigo));
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .welcome-info {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            text-align: left;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .welcome-info ul {
+            list-style-type: none;
+        }
+
+        .welcome-info li {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .welcome-info li::before {
+            content: "✦";
+            position: absolute;
+            left: 0;
+            color: var(--accent-purple);
+        }
+
+        .input-group {
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .input-label {
+            display: block;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.6rem;
+            font-size: 1rem;
+        }
+
+        .text-input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1rem 1.2rem;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-family: var(--font-sans);
+            transition: var(--transition-fast);
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: var(--accent-indigo);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--accent-indigo) 0%, var(--accent-purple) 100%);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            color: var(--text-secondary);
+            box-shadow: none;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+            box-shadow: none;
+        }
+
+        /* Survey View Layout */
+        .survey-progress-container {
+            margin-bottom: 2rem;
+        }
+
+        .progress-track {
+            background: rgba(255, 255, 255, 0.05);
+            height: 6px;
+            border-radius: 10px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-indigo), var(--accent-purple));
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        .survey-section {
+            display: none;
+        }
+
+        .survey-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            border-left: 4px solid var(--accent-indigo);
+            padding-left: 0.8rem;
+        }
+
+        /* Form Questions styling */
+        .question-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: var(--transition-fast);
+        }
+
+        .question-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .question-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .question-number {
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--accent-blue);
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            white-space: nowrap;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .question-subtext {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        /* Time & Number inputs in questions */
+        .answer-input-wrapper {
+            padding-left: 2.8rem;
+        }
+
+        .time-inputs {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .time-select-group {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        select.time-select {
+            background: #0f172a;
+            border: 1px solid var(--card-border);
+            color: var(--text-primary);
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: var(--font-sans);
+            cursor: pointer;
+            min-width: 80px;
+            transition: var(--transition-fast);
+        }
+
+        select.time-select:focus {
+            outline: none;
+            border-color: var(--accent-indigo);
+        }
+
+        .input-suffix {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .numeric-input {
+            background: #0f172a;
+            border: 1px solid var(--card-border);
+            color: var(--text-primary);
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 100px;
+            font-family: var(--font-sans);
+            text-align: right;
+            transition: var(--transition-fast);
+        }
+
+        .numeric-input:focus {
+            outline: none;
+            border-color: var(--accent-indigo);
+        }
+
+        /* Radio Choice Matrix/Grid */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.8rem;
+        }
+
+        .option-btn {
+            position: relative;
+            background: #0f172a;
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 0.8rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80px;
+        }
+
+        .option-btn:hover {
+            border-color: var(--accent-indigo);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .option-btn input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .option-score {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+
+        .option-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .option-btn.selected {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%);
+            border-color: var(--accent-indigo);
+            box-shadow: 0 0 12px rgba(99, 102, 241, 0.15);
+        }
+
+        .option-btn.selected .option-score {
+            color: var(--accent-blue);
+        }
+
+        .option-btn.selected .option-label {
+            color: var(--text-primary);
+        }
+
+        /* Navigation buttons */
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+
+        /* Result Dashboard */
+        .results-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+            .options-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Gauge Chart */
+        .score-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .gauge-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+
+        .gauge-svg {
+            transform: rotate(-90deg);
+        }
+
+        .gauge-track {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.05);
+            stroke-width: 14px;
+        }
+
+        .gauge-fill {
+            fill: none;
+            stroke: url(#gauge-grad);
+            stroke-width: 14px;
+            stroke-linecap: round;
+            stroke-dasharray: 565.48; /* 2 * PI * r (r = 90) */
+            stroke-dashoffset: 565.48;
+            transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .gauge-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .gauge-value {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1;
+            font-family: 'Outfit', sans-serif;
+            color: var(--text-primary);
+        }
+
+        .gauge-max {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .result-status {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            padding: 0.4rem 1.5rem;
+            border-radius: 50px;
+            display: inline-block;
+        }
+
+        .status-good {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-poor {
+            background: rgba(244, 63, 94, 0.15);
+            color: var(--accent-rose);
+            border: 1px solid rgba(244, 63, 94, 0.3);
+        }
+
+        .result-desc {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* Component progress list */
+        .components-card {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+        }
+
+        .components-card h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 0.6rem;
+        }
+
+        .component-item {
+            margin-bottom: 1.2rem;
+        }
+
+        .component-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .component-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .component-name {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .component-score {
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+
+        .component-bar-container {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .component-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 4px;
+            transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .score-0 { background: var(--success); width: 0%; }
+        .score-1 { background: #84cc16; width: 33.3%; }
+        .score-2 { background: var(--warning); width: 66.6%; }
+        .score-3 { background: var(--accent-rose); width: 100%; }
+
+        /* Detailed analysis */
+        .detailed-table-container {
+            margin-top: 2.5rem;
+        }
+
+        .detailed-table-container h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .response-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+        }
+
+        .response-table th, .response-table td {
+            padding: 1rem;
+            text-align: left;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .response-table th {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .response-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .response-table td.center {
+            text-align: center;
+        }
+
+        .response-table tr.poor-score-row {
+            background: rgba(244, 63, 94, 0.03);
+        }
+
+        .badge-score {
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .badge-score.score-0-bg { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .badge-score.score-1-bg { background: rgba(132, 204, 22, 0.15); color: #84cc16; }
+        .badge-score.score-2-bg { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .badge-score.score-3-bg { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); }
+
+        /* Quick actions */
+        .actions-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Disclaimer text */
+        .disclaimer {
+            margin-top: 3rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        /* Responsive updates */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            .glass-card {
+                padding: 1.5rem;
+            }
+            .answer-input-wrapper {
+                padding-left: 0;
+                margin-top: 1rem;
+            }
+            .time-inputs {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            .actions-container {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Severity Scale Styles */
+        .severity-scale-container {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .severity-scale-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .scale-header-title {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .normal-range-info {
+            color: var(--text-secondary);
+        }
+
+        .normal-range-info strong {
+            color: var(--success);
+        }
+
+        .severity-bar-wrapper {
+            position: relative;
+            width: 100%;
+            height: 14px;
+            margin: 2.5rem 0 1.5rem 0;
+        }
+
+        .severity-bar {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .severity-segment {
+            height: 100%;
+            position: relative;
+        }
+
+        .severity-segment.normal {
+            background: var(--success);
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+        }
+
+        .severity-segment.warning-seg {
+            background: var(--warning);
+        }
+
+        .severity-segment.severe {
+            background: #f97316; /* Orange */
+        }
+
+        .severity-segment.critical {
+            background: var(--accent-rose);
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        .severity-marker {
+            position: absolute;
+            top: -30px;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: left 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 10;
+        }
+
+        #severity-marker-val {
+            background: var(--text-primary);
+            color: #05070c;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            line-height: 1;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            white-space: nowrap;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .severity-marker-pin {
+            width: 3px;
+            height: 24px;
+            background: var(--text-primary);
+            margin-top: 3px;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+            border-radius: 2px;
+        }
+
+        .severity-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-align: center;
+            line-height: 1.4;
+            padding: 0 0.5rem;
+        }
+
+        .severity-labels span {
+            flex: 1;
+        }
+        .severity-labels span:nth-child(1) { text-align: left; }
+        .severity-labels span:nth-child(2) { text-align: center; }
+        .severity-labels span:nth-child(3) { text-align: center; }
+        .severity-labels span:nth-child(4) { text-align: right; }
+
+        #guideline-list li {
+            position: relative;
+            padding-left: 1.2rem;
+            margin-bottom: 0.2rem;
+        }
+
+        #guideline-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0.2rem;
+            color: var(--accent-indigo);
+            font-weight: bold;
+        }
+
+        /* Print Styling */
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            :root {
+                --bg-primary: #ffffff;
+                --bg-secondary: #ffffff;
+                --text-primary: #000000;
+                --text-secondary: #333333;
+                --text-muted: #666666;
+            }
+            
+            body {
+                background: #ffffff !important;
+                color: #000000 !important;
+                font-size: 12pt;
+            }
+
+            .container {
+                padding: 0;
+                max-width: 100%;
+            }
+
+            header {
+                margin-bottom: 1.5rem;
+            }
+            
+            .header-badge, .btn, .button-row, .actions-container, .survey-progress-container, .disclaimer {
+                display: none !important;
+            }
+
+            .glass-card {
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                backdrop-filter: none !important;
+                margin-bottom: 0 !important;
+            }
+            
+            .glass-card::before {
+                display: none;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 1.5rem !important;
+                margin-bottom: 1.5rem !important;
+                page-break-inside: avoid;
+            }
+
+            .score-card, .components-card {
+                background: transparent !important;
+                border: 1px solid #ccc !important;
+                padding: 1rem !important;
+            }
+            
+            .gauge-track {
+                stroke: #eee !important;
+            }
+            
+            .gauge-fill {
+                stroke: #333 !important;
+            }
+
+            .gauge-value {
+                color: #000000 !important;
+            }
+
+            .result-status {
+                color: #000 !important;
+                border: 1px solid #000 !important;
+                background: transparent !important;
+                font-size: 1.1rem !important;
+                margin-top: 0.5rem !important;
+            }
+
+            .detailed-table-container {
+                margin-top: 1.5rem !important;
+                page-break-before: auto;
+            }
+            
+            .response-table {
+                border: 1px solid #000 !important;
+                background: transparent !important;
+            }
+            
+            .response-table th, .response-table td {
+                border-bottom: 1px solid #000 !important;
+                color: #000 !important;
+                padding: 6px 10px !important;
+            }
+
+            .response-table th {
+                background: #f0f0f0 !important;
+            }
+
+            .badge-score {
+                background: transparent !important;
+                border: none !important;
+                color: #000 !important;
+                padding: 0 !important;
+                font-size: 10pt;
+            }
+
+            .response-table tr.poor-score-row {
+                background: #fafafa !important;
+            }
+            
+            .print-header {
+                display: block !important;
+                border-bottom: 2px solid #000;
+                padding-bottom: 0.5rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .print-header-meta {
+                display: flex;
+                justify-content: space-between;
+                font-size: 0.95rem;
+                margin-top: 0.5rem;
+            }
+
+            /* Print styling for severity scale */
+            .severity-scale-container {
+                border: 1px solid #ccc !important;
+                background: transparent !important;
+                margin-top: 1.5rem !important;
+                padding: 1rem !important;
+                page-break-inside: avoid;
+            }
+            
+            .severity-bar {
+                border: 1px solid #777 !important;
+            }
+            
+            #severity-marker-val {
+                background: #000 !important;
+                color: #fff !important;
+                border: 1px solid #000 !important;
+                font-size: 9pt !important;
+                padding: 1px 4px !important;
+            }
+            
+            .severity-marker-pin {
+                background: #000 !important;
+                height: 20px !important;
+            }
+
+            .severity-labels {
+                font-size: 8pt !important;
+                color: #333 !important;
+            }
+            
+            .explanation-box {
+                border-top: 1px solid #ccc !important;
+                margin-top: 1.5rem !important;
+                padding-top: 1rem !important;
+                page-break-inside: avoid;
+            }
+            
+            .guideline-box {
+                border: 1px solid #ccc !important;
+                background: transparent !important;
+                padding: 1rem !important;
+                border-radius: 8px !important;
+                margin-top: 1rem !important;
+            }
+            
+            #guideline-list li {
+                color: #333 !important;
+            }
+        }
+
+        .print-header {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-  <div class="standalone-quiz-wrapper">
-    <div class="slim-quiz-modal" id="slim-quiz-modal">
-      <div class="slim-quiz-progress">
-        <div class="slim-quiz-progress-bar" id="slim-quiz-bar" style="width:0%"></div>
-      </div>
-      
-      <!-- Intro -->
-      <div class="slim-quiz-step active" data-step="intro">
-        <div class="slim-quiz-intro">
-          <div class="slim-quiz-badge">SLEEP TEST</div>
-          <h2>나의 수면 상태는 어떤가?<br>나에게 맞는 든ː잠의 단계는?</h2>
-          <p>간단한 설문으로 현재의 수면 상태를 점검하고<br>나에게 가장 잘 맞는 수면 케어 단계를 찾아보세요.</p>
-          <button class="slim-quiz-start-btn" id="slim-quiz-start">테스트 시작하기 →</button>
+    <!-- Print Report Header (Visible only when printing) -->
+    <div class="print-header">
+        <h1 style="font-size: 20pt; text-align: center; margin-bottom: 5px; color: #000;">든ː잠 수면 상태 테스트 결과 보고서 (PSQI)</h1>
+        <p style="text-align: center; font-size: 10pt; color: #666; margin-bottom: 15px;">내몸에 온 한방연구소</p>
+        <div class="print-header-meta">
+            <div><strong>피검자 성함:</strong> <span id="print-user-name">홍길동</span></div>
+            <div><strong>검사 일자:</strong> <span id="print-test-date">2026-05-23</span></div>
         </div>
-      </div>
-
-      <!-- Questions will be injected here via JS to save space -->
-      <div id="questions-container"></div>
-
-      <!-- Result -->
-      <div class="slim-quiz-step" data-step="result">
-        <div class="slim-quiz-result">
-          <div class="slim-quiz-result-badge" id="sqr-badge"></div>
-          <h2 class="slim-quiz-result-title" id="sqr-title"></h2>
-          <p class="slim-quiz-result-desc" id="sqr-desc" style="white-space: pre-line;"></p>
-          <div class="slim-quiz-result-score">총점: <strong id="sqr-score"></strong>점</div>
-          <div class="slim-quiz-result-actions">
-            <button class="slim-quiz-cta-btn secondary" onclick="shareQuiz('https://www.mybodyon.co.kr/dunjam_quiz.html')">🔗 친구에게 공유하기</button>
-            <a href="http://pf.kakao.com/_kdxdxan/chat" target="_blank" class="slim-quiz-cta-btn primary">💬 카톡 상담하기</a>
-            <a href="index.html#funnel-dunjam" class="slim-quiz-cta-btn secondary">🏠 든ː잠 페이지로 돌아가기</a>
-          </div>
-          <button class="slim-quiz-retry" id="sqr-retry">다시 테스트하기</button>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <script>
-    const questions = [
-      "나는 잠을 못 자는 날이 1주일에 1번 이상이다",
-      "나는 자다가 한번 이상은 깬다",
-      "나는 잠이 드는데 30분 이상 걸린다",
-      "나는 수면제나 수면 유도제를 먹어본 적이 있거나 지금도 먹는다",
-      "나는 자고 일어나도 개운하지 않고 잠이 빨리 깨지 않는다.",
-      "나는 자다가 한번 깨면 다시 잠들기 어렵다",
-      "나는 조금만 신경쓰는 일이 있으면 잠이 오지 않는다",
-      "나는 잠을 못 잘까봐 커피나 카페인 관련 음료를 마시지 못한다",
-      "나는 잘 때 꿈을 많이 꾸고 그 꿈이 아침까지 생각이 난다",
-      "나는 잠을 푹 자 보는 것이 소원이다"
-    ];
+    <div class="container">
+        <!-- Main Header -->
+        <header>
+            <span class="header-badge">내몸에 온 한방연구소</span>
+            <h1>든ː잠 수면 상태 테스트</h1>
+            <p>글로벌 표준 수면 질 척도(PSQI) 기반 수면 건강 진단</p>
+        </header>
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const container = document.getElementById('questions-container');
-      
-      // Inject Questions
-      questions.forEach((q, index) => {
-        const stepNum = index + 1;
-        const html = `
-          <div class="slim-quiz-step" data-step="q${stepNum}">
-            <div class="slim-quiz-qnum">Q${stepNum} <span>/ 10</span></div>
-            <h3 class="slim-quiz-question">${q}</h3>
-            <div class="slim-quiz-options">
-              <label class="slim-quiz-option"><input type="radio" name="sq${stepNum}" value="1"><span class="slim-quiz-option-inner"><span class="sq-num">O</span>예</span></label>
-              <label class="slim-quiz-option"><input type="radio" name="sq${stepNum}" value="0"><span class="slim-quiz-option-inner"><span class="sq-num">X</span>아니오</span></label>
+        <!-- Welcome View -->
+        <div id="welcome-view" class="view glass-card active">
+            <div class="welcome-icon">🌙</div>
+            <h2>나의 수면 점수와 케어 단계는?</h2>
+            <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                본 설문은 지난 한 달간의 평균적인 수면 건강 상태를 정밀 분석합니다.<br>
+                총 19개의 자가 보고 문항으로 구성되어 있으며 약 5분이 소요됩니다.
+            </p>
+            
+            <div class="welcome-info">
+                <h3>테스트 안내</h3>
+                <ul>
+                    <li>성함을 입력하시면 결과를 카카오톡으로 상담받거나 인쇄하실 수 있습니다.</li>
+                    <li>모든 질문은 <strong>지난 한 달 동안의 경험</strong>을 기준으로 답변해 주세요.</li>
+                    <li>주관식 문항(시간, 분)은 최대한 정확하게 입력해 주세요.</li>
+                </ul>
             </div>
-          </div>
-        `;
-        container.insertAdjacentHTML('beforeend', html);
-      });
 
-      const quizOverlay = document.getElementById('slim-quiz-modal');
-      const quizBar = document.getElementById('slim-quiz-bar');
-      const quizSteps = quizOverlay.querySelectorAll('.slim-quiz-step');
-      const stepOrder = ['intro', ...questions.map((_, i) => 'q' + (i + 1)), 'result'];
+            <div class="input-group">
+                <label for="user-name" class="input-label">성함을 입력해 주세요</label>
+                <input type="text" id="user-name" class="text-input" placeholder="예: 홍길동" autocomplete="off" required>
+            </div>
 
-      function showQuizStep(stepName) {
-        quizSteps.forEach(s => s.classList.remove('active'));
-        const target = quizOverlay.querySelector(`[data-step="${stepName}"]`);
-        if (target) target.classList.add('active');
-        const idx = stepOrder.indexOf(stepName);
-        quizBar.style.width = (idx / (stepOrder.length - 1) * 100) + '%';
-      }
+            <button type="button" id="btn-start" class="btn">
+                테스트 시작하기 
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+        </div>
 
-      function resetQuiz() {
-        quizOverlay.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
-        showQuizStep('intro');
-      }
+        <!-- Survey View -->
+        <form id="survey-view" class="view glass-card" novalidate>
+            <!-- Progress -->
+            <div class="survey-progress-container">
+                <div class="progress-track">
+                    <div id="progress-bar" class="progress-bar"></div>
+                </div>
+                <div class="progress-labels">
+                    <span id="progress-step-text">1단계: 주관식 문항</span>
+                    <span id="progress-percent">0%</span>
+                </div>
+            </div>
 
-      // Start
-      const quizStartBtn = document.getElementById('slim-quiz-start');
-      if (quizStartBtn) {
-        quizStartBtn.addEventListener('click', () => showQuizStep('q1'));
-      }
+            <!-- SECTION 1: 주관식 문항 -->
+            <div id="section-1" class="survey-section active">
+                <div class="section-title">
+                    <span>1단계. 주관식 수면 습관 문항</span>
+                </div>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.95rem;">
+                    지난 한 달 동안 수면 패턴에 관한 구체적인 수치를 작성하는 문항입니다.
+                </p>
 
-      // Auto-advance
-      for (let i = 1; i <= 10; i++) {
-        const radios = quizOverlay.querySelectorAll(`input[name="sq${i}"]`);
-        radios.forEach(radio => {
-          radio.addEventListener('change', () => {
-            setTimeout(() => {
-              if (i < 10) {
-                showQuizStep('q' + (i + 1));
-              } else {
-                calculateResult();
-              }
-            }, 300);
-          });
+                <!-- Q1 -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">Q1</span>
+                        <div class="question-text">지난 한 달 동안, 밤에 주로 몇 시에 잠자리에 들었습니까?</div>
+                    </div>
+                    <div class="answer-input-wrapper">
+                        <div class="time-inputs">
+                            <div class="time-select-group">
+                                <select id="q1-hour" class="time-select" required>
+                                    <option value="" disabled selected>시</option>
+                                    <script>
+                                        for(let i=0; i<24; i++) {
+                                            document.write(`<option value="${i}">${String(i).padStart(2, '0')}</option>`);
+                                        }
+                                    </script>
+                                </select>
+                                <span class="input-suffix">시</span>
+                            </div>
+                            <div class="time-select-group">
+                                <select id="q1-minute" class="time-select" required>
+                                    <option value="" disabled selected>분</option>
+                                    <script>
+                                        for(let i=0; i<60; i+=5) {
+                                            document.write(`<option value="${i}">${String(i).padStart(2, '0')}</option>`);
+                                        }
+                                    </script>
+                                </select>
+                                <span class="input-suffix">분</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">Q2</span>
+                        <div class="question-text">지난 한 달 동안, 밤에 잠들기까지 몇 분이나 걸렸습니까?</div>
+                    </div>
+                    <div class="answer-input-wrapper">
+                        <div class="time-inputs">
+                            <input type="number" id="q2-value" class="numeric-input" min="0" max="600" placeholder="0" required>
+                            <span class="input-suffix">분</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">Q3</span>
+                        <div class="question-text">지난 한 달 동안, 아침에 주로 몇 시에 깼습니까?</div>
+                    </div>
+                    <div class="answer-input-wrapper">
+                        <div class="time-inputs">
+                            <div class="time-select-group">
+                                <select id="q3-hour" class="time-select" required>
+                                    <option value="" disabled selected>시</option>
+                                    <script>
+                                        for(let i=0; i<24; i++) {
+                                            document.write(`<option value="${i}">${String(i).padStart(2, '0')}</option>`);
+                                        }
+                                    </script>
+                                </select>
+                                <span class="input-suffix">시</span>
+                            </div>
+                            <div class="time-select-group">
+                                <select id="q3-minute" class="time-select" required>
+                                    <option value="" disabled selected>분</option>
+                                    <script>
+                                        for(let i=0; i<60; i+=5) {
+                                            document.write(`<option value="${i}">${String(i).padStart(2, '0')}</option>`);
+                                        }
+                                    </script>
+                                </select>
+                                <span class="input-suffix">분</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q4 -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">Q4</span>
+                        <div class="question-text">지난 한 달 동안, 밤에 실제로 잔 시간은 몇 시간입니까?</div>
+                        <span class="question-subtext" style="display: block; width: 100%; font-size: 0.85rem;">(침대에 단순히 누워있던 시간과 다를 수 있음)</span>
+                    </div>
+                    <div class="answer-input-wrapper">
+                        <div class="time-inputs">
+                            <input type="number" id="q4-value" class="numeric-input" min="0.1" max="24" step="0.1" placeholder="7.0" required>
+                            <span class="input-suffix">시간</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: 객관식 수면 방해 문항 (Q5) -->
+            <div id="section-2" class="survey-section">
+                <div class="section-title">
+                    <span>2단계. 수면 방해 문항 (Q5)</span>
+                </div>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.95rem;">
+                    <strong>[보기]</strong> 지난 한 달간 아래의 항목 때문에 수면에 방해를 받은 적이 얼마나 자주 있었습니까?
+                </p>
+
+                <!-- 5-a -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">Q5-a</span>
+                        <div class="question-text">30분 이내에 잠들 수 없다.</div>
+                    </div>
+                    <div class="answer-input-wrapper">
+                        <div class="options-grid">
+                            <label class="option-btn"><span class="option-score">0점</span><span class="option-label">없음</span><input type="radio" name="q5a" value="0" required></label>
+                            <label class="option-btn"><span class="option-score">1점</span><span class="option-label">주 1회 미만</span><input type="radio" name="q5a" value="1"></label>
+                            <label class="option-btn"><span class="option-score">2점</span><span class="option-label">주 1~2회</span><input type="radio" name="q5a" value="2"></label>
+                            <label class="option-btn"><span class="option-score">3점</span><span class="option-label">주 3회 이상</span><input type="radio" name="q5a" value="3"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5-b -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">Q5-b</span>
+                        <div class="question-text">한밤중이나 새벽에 깬다.</div>
+                    </div>
+                    <div class="answer-input-wrapper">
+                        <div class="options-grid">
+                            <label class="option-btn"><span class="option-score">0점</span><span class="option-label">없음</span><input type="radio" name="q5b" value="0" required></label>
+                            <label class="option-btn"><span class="option-score">1점</span><span class="option-label">주 1회 미만</span><input type="radio" name="q5b" value="1"></label>
+                            <label class="option-btn"><span class="option-score">2점</span><span class="option-label">주 1~2회</span><input type="radio" name="q5b" value="2"></label>
+                            <label class="option-btn"><span class="option-score">3점</span><span class="option-label">주 3회 이상</span><input type="radio" name="q5b" value="3"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5-c -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">Q5-c</span>
+                        <div class="question-text">화장실에 가기 위해 깨야 한다.</div>
+                    </div>
+                    <div class="answer-input-wrapper">
+                        <div class="options-grid">
+                            <label class="option-btn"><span class="option-score">0점</span><span class="option-label">없음</span><input type="radio" name="q5c" value="0" required></label>
+                            <label class="option-btn"><span class="option-score">1점</span><span class="option-label">주 1회 미만</span><input type="radio" name="q5c" value="1"></label>
+                            <label class="option-btn"><span class="option-score">2점</span><span class="option-label">주 1~2회</span><input type="radio" name="q5c" value="2"></label>
+                            <label class="option-btn"><span class="option-score">3점</span><span class="option-label">주 3회 이상</span><input type="radio" name="q5c" value="3"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5-d -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">Q5-d</span>
+                        <div class="question-text">숨을 편하게 쉴 수 없다.</div>
+                    </div>
+                    <div class="answer-input-wrapper">
+                        <div class="options-grid">
+                            <label class="option-btn"><span class="option-score">0점</span><span class="option-label">없음</span><input type="radio" name="q5d" value="0" required></label>
+                            <label class="option-btn"><span class="option-score">1점</span><span class="option-label">주 1회 미만</span><input type="radio" name="q5d" value="1"></label>
+                            <label class="option-btn"><span class="option-score">2점</span><span class="option-label">주 1~2회</span><input type="radio" name="q5d" value="2"></label>
+                            <label class="option-btn"><span class="option-score">3점</span><span class="option-label">주 3회 이상</span><input type="radio" name="q5d" value="3"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5-e -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">Q5-e</span>
+                        <div class="question-text">소리를 지르거나 심하게 기침을 한다.</div>
+                    </div>
+                    <div class="answer-input-wrapper">
+                        <div class="options-grid">
+                            <label class="option-btn"><span class="option-score">0점</span><span class="option-label">없음</span><input type="radio" name="q5e" value="0" required></label>
+                            <label class="option-btn"><span class="option-score">1점</span><span class="option-label">주 1회 미만</span><input type="radio" name="q5e" value="1"></label>
+                            <label class="option-btn"><span class="option-score">2점</span><span class="option-label">주 1~2회</span><input type="radio" name="q5e" value="2"></label>
+                            <label class="option-btn"><span class="option-score">3점</span><span class="option-label">주 3회 이상</span><input type="radio" name="q5e" value="3"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5-f -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">Q5-f</span>
+                        <div class="question-text">추위를 너무 느낀다.</div>
+                    </div>
+                    <div class="answer-input-wrapper">
+                        <div class="options-grid">
+                            <label class="option-btn"><span class="option-score">0점</span><span class="option-label">없음</span><input type="radio" name="q5f" value="0" required></label>
+                            <label class="option-btn"><span class="option-score">1점</span><span class="option-label">주 1회 미만</span><input type="radio" name="q5f" value="1"></label>
+                            <label class="option-btn"><span class="option-score">2점</span><span class="option-label">주 1~2회</span><input type="radio" name="q5f" value="2"></label>
+                            <label class="option-btn"><span class="option-score">3점</span><span class="option-label">주 3회 이상</span><input type="radio" name="q5f" value="3"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5-g -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">Q5-g</span>
+                        <div class="question-text">더위를 너무 느낀다.</div>
+                    </div>
+                    <div class="answer-input-wrapper">
+                        <div class="options-grid">
+                            <label class="option-btn"><span class="option-score">0점</span><span class="option-label">없음</span><input type="radio" name="q5g" value="0" required></label>
+                            <label class="option-btn"><span class="option-score">1점</span><span class="option-label">주 1회 미만</span><input type="radio" name="q5g" value="1"></label>
+                            <label class="option-btn"><span class="option-score">2점</span><span class="option-label">주 1~2회</span><input type="radio" name="q5g" value="2"></label>
+                            <label class="option-btn"><span class="option-score">3점</span><span class="option-label">주 3회 이상</span><input type="radio" name="q5g" value="3"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5-h -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">Q5-h</span>
+                        <div class="question-text">나쁜 꿈(악몽)을 꾼다.</div>
+                    </div>
+                    <div class="answer-input-wrapper">
+                        <div class="options-grid">
+                            <label class="option-btn"><span class="option-score">0점</span><span class="option-label">없음</span><input type="radio" name="q5h" value="0" required></label>
+                            <label class="option-btn"><span class="option-score">1점</span><span class="option-label">주 1회 미만</span><input type="radio" name="q5h" value="1"></label>
+                            <label class="option-btn"><span class="option-score">2점</span><span class="option-label">주 1~2회</span><input type="radio" name="q5h" value="2"></label>
+                            <label class="option-btn"><span class="option-score">3점</span><span class="option-label">주 3회 이상</span><input type="radio" name="q5h" value="3"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5-i -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">Q5-i</span>
+                        <div class="question-text">통증(아픈 것)을 느낀다.</div>
+                    </div>
+                    <div class="answer-input-wrapper">
+                        <div class="options-grid">
+                            <label class="option-btn"><span class="option-score">0점</span><span class="option-label">없음</span><input type="radio" name="q5i" value="0" required></label>
+                            <label class="option-btn"><span class="option-score">1점</span><span class="option-label">주 1회 미만</span><input type="radio" name="q5i" value="1"></label>
+                            <label class="option-btn"><span class="option-score">2점</span><span class="option-label">주 1~2회</span><input type="radio" name="q5i" value="2"></label>
+                            <label class="option-btn"><span class="option-score">3점</span><span class="option-label">주 3회 이상</span><input type="radio" name="q5i" value="3"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5-j -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">Q5-j</span>
+                        <div class="question-text">기타 다른 이유로 잠을 설치는 경우가 있다.</div>
+                    </div>
+                    <div class="answer-input-wrapper">
+                        <div class="options-grid">
+                            <label class="option-btn"><span class="option-score">0점</span><span class="option-label">없음</span><input type="radio" name="q5j" value="0" required></label>
+                            <label class="option-btn"><span class="option-score">1점</span><span class="option-label">주 1회 미만</span><input type="radio" name="q5j" value="1"></label>
+                            <label class="option-btn"><span class="option-score">2점</span><span class="option-label">주 1~2회</span><input type="radio" name="q5j" value="2"></label>
+                            <label class="option-btn"><span class="option-score">3점</span><span class="option-label">주 3회 이상</span><input type="radio" name="q5j" value="3"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: 전반적 평가 및 기타 문항 -->
+            <div id="section-3" class="survey-section">
+                <div class="section-title">
+                    <span>3단계. 전반적 평가 및 주간 활동 문항</span>
+                </div>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.95rem;">
+                    전반적인 수면 만족도와 낮 동안의 활동 장애 여부를 점검하는 문항입니다.
+                </p>
+
+                <!-- Q6 -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">Q6</span>
+                        <div class="question-text">지난 한 달 동안, 수면의 질을 전반적으로 어떻게 평가합니까?</div>
+                    </div>
+                    <div class="answer-input-wrapper">
+                        <div class="options-grid">
+                            <label class="option-btn"><span class="option-score">0점</span><span class="option-label">매우 좋음</span><input type="radio" name="q6" value="0" required></label>
+                            <label class="option-btn"><span class="option-score">1점</span><span class="option-label">좋음</span><input type="radio" name="q6" value="1"></label>
+                            <label class="option-btn"><span class="option-score">2점</span><span class="option-label">나쁨</span><input type="radio" name="q6" value="2"></label>
+                            <label class="option-btn"><span class="option-score">3점</span><span class="option-label">매우 나쁨</span><input type="radio" name="q6" value="3"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q7 -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">Q7</span>
+                        <div class="question-text">지난 한 달 동안, 잠을 자기 위해 약물(의사 처방, 일반 약, 영양제 등)을 먹은 적이 얼마나 자주 있습니까?</div>
+                    </div>
+                    <div class="answer-input-wrapper">
+                        <div class="options-grid">
+                            <label class="option-btn"><span class="option-score">0점</span><span class="option-label">없음</span><input type="radio" name="q7" value="0" required></label>
+                            <label class="option-btn"><span class="option-score">1점</span><span class="option-label">주 1회 미만</span><input type="radio" name="q7" value="1"></label>
+                            <label class="option-btn"><span class="option-score">2점</span><span class="option-label">주 1~2회</span><input type="radio" name="q7" value="2"></label>
+                            <label class="option-btn"><span class="option-score">3점</span><span class="option-label">주 3회 이상</span><input type="radio" name="q7" value="3"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q8 -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">Q8</span>
+                        <div class="question-text">지난 한 달 동안, 운전을 하거나 식사를 하거나 사회 활동을 하는 동안 졸음을 참기 힘들었던 적이 얼마나 자주 있습니까?</div>
+                    </div>
+                    <div class="answer-input-wrapper">
+                        <div class="options-grid">
+                            <label class="option-btn"><span class="option-score">0점</span><span class="option-label">없음</span><input type="radio" name="q8" value="0" required></label>
+                            <label class="option-btn"><span class="option-score">1점</span><span class="option-label">주 1회 미만</span><input type="radio" name="q8" value="1"></label>
+                            <label class="option-btn"><span class="option-score">2점</span><span class="option-label">주 1~2회</span><input type="radio" name="q8" value="2"></label>
+                            <label class="option-btn"><span class="option-score">3점</span><span class="option-label">주 3회 이상</span><input type="radio" name="q8" value="3"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q9 -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">Q9</span>
+                        <div class="question-text">지난 한 달 동안, 일을 하거나 의욕을 가지고 무언가를 추진하는 데 얼마나 지장이 있었습니까?</div>
+                    </div>
+                    <div class="answer-input-wrapper">
+                        <div class="options-grid">
+                            <label class="option-btn"><span class="option-score">0점</span><span class="option-label">전혀 없음</span><input type="radio" name="q9" value="0" required></label>
+                            <label class="option-btn"><span class="option-score">1점</span><span class="option-label">약간 있었음</span><input type="radio" name="q9" value="1"></label>
+                            <label class="option-btn"><span class="option-score">2점</span><span class="option-label">어느 정도 있었음</span><input type="radio" name="q9" value="2"></label>
+                            <label class="option-btn"><span class="option-score">3점</span><span class="option-label">매우 심했음</span><input type="radio" name="q9" value="3"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="button-row">
+                <button type="button" id="btn-prev" class="btn btn-secondary" style="visibility: hidden;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    이전 단계
+                </button>
+                <button type="button" id="btn-next" class="btn">
+                    다음 단계
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        </form>
+
+        <!-- Results View -->
+        <div id="results-view" class="view glass-card">
+            <div class="results-header">
+                <h2><span id="res-user-name" style="color: var(--accent-blue);">홍길동</span> 님의 수면 건강 진단 결과</h2>
+                <p style="color: var(--text-secondary); margin-top: 0.5rem;" id="res-date">검사 일자: 2026. 05. 23</p>
+            </div>
+
+            <div class="results-grid">
+                <!-- Gauge block -->
+                <div class="score-card">
+                    <h3>종합 PSQI 점수</h3>
+                    <div class="gauge-container">
+                        <svg class="gauge-svg" width="200" height="200">
+                            <defs>
+                                <linearGradient id="gauge-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#38bdf8" />
+                                    <stop offset="50%" stop-color="#6366f1" />
+                                    <stop offset="100%" stop-color="#f43f5e" />
+                                </linearGradient>
+                            </defs>
+                            <circle class="gauge-track" cx="100" cy="100" r="90" />
+                            <circle id="gauge-fill" class="gauge-fill" cx="100" cy="100" r="90" />
+                        </svg>
+                        <div class="gauge-content">
+                            <div id="global-score-val" class="gauge-value">0</div>
+                            <div class="gauge-max">/ 21 점</div>
+                        </div>
+                    </div>
+                    <div id="sleep-status-badge" class="result-status status-good">Good Sleeper</div>
+                    <p id="sleep-status-desc" class="result-desc">수면의 질이 좋은 편입니다.</p>
+                </div>
+
+                <!-- Components breakdown block -->
+                <div class="components-card">
+                    <h3>7개 영역별 점수 (각 0~3점)</h3>
+                    
+                    <div class="component-item">
+                        <div class="component-meta">
+                            <span class="component-name">C1: 주관적 수면의 질</span>
+                            <span id="c1-score-val" class="component-score">0점</span>
+                        </div>
+                        <div class="component-bar-container">
+                            <div id="c1-bar" class="component-bar score-0"></div>
+                        </div>
+                    </div>
+
+                    <div class="component-item">
+                        <div class="component-meta">
+                            <span class="component-name">C2: 수면 잠복기 (입면 시간)</span>
+                            <span id="c2-score-val" class="component-score">0점</span>
+                        </div>
+                        <div class="component-bar-container">
+                            <div id="c2-bar" class="component-bar score-0"></div>
+                        </div>
+                    </div>
+
+                    <div class="component-item">
+                        <div class="component-meta">
+                            <span class="component-name">C3: 수면 기간 (실제 수면)</span>
+                            <span id="c3-score-val" class="component-score">0점</span>
+                        </div>
+                        <div class="component-bar-container">
+                            <div id="c3-bar" class="component-bar score-0"></div>
+                        </div>
+                    </div>
+
+                    <div class="component-item">
+                        <div class="component-meta">
+                            <span class="component-name">C4: 습관적 수면 효율</span>
+                            <span id="c4-score-val" class="component-score">0점</span>
+                        </div>
+                        <div class="component-bar-container">
+                            <div id="c4-bar" class="component-bar score-0"></div>
+                        </div>
+                    </div>
+
+                    <div class="component-item">
+                        <div class="component-meta">
+                            <span class="component-name">C5: 수면 방해 요소</span>
+                            <span id="c5-score-val" class="component-score">0점</span>
+                        </div>
+                        <div class="component-bar-container">
+                            <div id="c5-bar" class="component-bar score-0"></div>
+                        </div>
+                    </div>
+
+                    <div class="component-item">
+                        <div class="component-meta">
+                            <span class="component-name">C6: 수면제 약물 사용</span>
+                            <span id="c6-score-val" class="component-score">0점</span>
+                        </div>
+                        <div class="component-bar-container">
+                            <div id="c6-bar" class="component-bar score-0"></div>
+                        </div>
+                    </div>
+
+                    <div class="component-item">
+                        <div class="component-meta">
+                            <span class="component-name">C7: 주간 기능 장애</span>
+                            <span id="c7-score-val" class="component-score">0점</span>
+                        </div>
+                        <div class="component-bar-container">
+                            <div id="c7-bar" class="component-bar score-0"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Severity Scale & Detailed Explanation (New Cards) -->
+            <div class="glass-card" style="margin-top: 1rem; margin-bottom: 2rem;">
+                <div class="section-title">
+                    <span>수면 장애 중증도 분석</span>
+                </div>
+                
+                <div class="severity-scale-container">
+                    <div class="severity-scale-header">
+                        <span class="scale-header-title">든ː잠 글로벌 수면 위기 스케일 (PSQI 기준)</span>
+                        <span class="normal-range-info">정상 범위: <strong>5점 이하</strong></span>
+                    </div>
+                    <div class="severity-bar-wrapper">
+                        <div class="severity-bar">
+                            <div class="severity-segment normal" style="flex: 5.5;" title="정상 (0~5점)"></div>
+                            <div class="severity-segment warning-seg" style="flex: 5;" title="경도-중등도 (6~10점)"></div>
+                            <div class="severity-segment severe" style="flex: 5;" title="심함 (11~15점)"></div>
+                            <div class="severity-segment critical" style="flex: 6;" title="매우 심각 (16~21점)"></div>
+                            
+                            <!-- Floating Marker indicating the score -->
+                            <div id="severity-marker" class="severity-marker" style="left: 0%;">
+                                <span id="severity-marker-val">0</span>
+                                <div class="severity-marker-pin"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="severity-labels">
+                        <span>정상<br>(0-5점)</span>
+                        <span>경도-중등도<br>(6-10점)</span>
+                        <span>심함<br>(11-15점)</span>
+                        <span>매우 심각<br>(16-21점)</span>
+                    </div>
+                </div>
+
+                <div class="explanation-box" style="margin-top: 2.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 1.5rem;">
+                    <h4 id="explanation-title" style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.75rem; color: #a855f7;"></h4>
+                    <p id="explanation-text" style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem;"></p>
+                    
+                    <div class="guideline-box" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 1.5rem;">
+                        <h5 style="font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <span>💡</span> 든ː잠이 제안하는 한방 수면 위생 가이드
+                        </h5>
+                        <ul id="guideline-list" style="list-style-type: none; font-size: 0.9rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.5rem; padding-left: 0.5rem;">
+                            <!-- Filled dynamically -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Response Summary Table (Meets requirement: "내가 적은 문항까지 같이 체크가 되는") -->
+            <div class="detailed-table-container">
+                <h3>나의 답변 상세 기록</h3>
+                <table class="response-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%;">번호</th>
+                            <th style="width: 50%;">문항 내용</th>
+                            <th style="width: 25%;">나의 답변</th>
+                            <th style="width: 15%; text-align: center;">점수</th>
+                        </tr>
+                    </thead>
+                    <tbody id="response-table-body">
+                        <!-- Filled dynamically by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Quick actions & Social actions -->
+            <div class="actions-container" style="flex-wrap: wrap;">
+                <a href="http://pf.kakao.com/_kdxdxan/chat" target="_blank" class="btn" style="background: #FEE500; color: #191919; font-weight: 700; box-shadow: 0 4px 15px rgba(254, 229, 0, 0.3);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 3.185-9 7.11 0 2.507 1.642 4.718 4.11 5.922-.17.585-.612 2.115-.7 2.453-.11.41.144.405.3.303.123-.08 1.954-1.282 2.73-1.8.847.234 1.745.36 2.66.36 4.97 0 9-3.184 9-7.11C21 6.185 16.97 3 12 3z"/></svg>
+                    카톡 무료 상담하기
+                </a>
+                <button type="button" id="btn-share" class="btn btn-secondary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v15"/></svg>
+                    친구에게 공유하기
+                </button>
+                <button type="button" id="btn-print" class="btn btn-secondary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                    보고서 인쇄 / PDF 저장
+                </button>
+                <button type="button" id="btn-restart" class="btn btn-secondary">
+                    다시 테스트하기
+                </button>
+            </div>
+
+            <!-- Disclaimer -->
+            <p class="disclaimer">
+                본 자가진단(PSQI) 결과는 수면 양상을 평가하기 위한 보조 도구로써 임상적 진단을 내리지 않습니다. 수면 문제가 지속되거나 일상 생활에 심한 지장을 줄 경우 반드시 정신건강의학과나 수면 전문의 등 전문가의 진료를 받으시길 권장합니다.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Views
+            const welcomeView = document.getElementById('welcome-view');
+            const surveyView = document.getElementById('survey-view');
+            const resultsView = document.getElementById('results-view');
+
+            // Controls
+            const btnStart = document.getElementById('btn-start');
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+            const btnPrint = document.getElementById('btn-print');
+            const btnShare = document.getElementById('btn-share');
+            const btnRestart = document.getElementById('btn-restart');
+            
+            // User name
+            const userNameInput = document.getElementById('user-name');
+            let userName = '홍길동';
+
+            // Survey Sections & Progress
+            const sections = [
+                document.getElementById('section-1'),
+                document.getElementById('section-2'),
+                document.getElementById('section-3')
+            ];
+            let currentSectionIdx = 0;
+
+            // Questions Data for result rendering
+            const questionsData = [
+                { id: 'q1', type: 'time', num: '1', text: '지난 한 달 동안, 밤에 주로 몇 시에 잠자리에 들었습니까?' },
+                { id: 'q2', type: 'numeric', num: '2', text: '지난 한 달 동안, 밤에 잠들기까지 몇 분이나 걸렸습니까?' },
+                { id: 'q3', type: 'time', num: '3', text: '지난 한 달 동안, 아침에 주로 몇 시에 깼습니까?' },
+                { id: 'q4', type: 'numeric', num: '4', text: '지난 한 달 동안, 밤에 실제로 잔 시간은 몇 시간입니까?' },
+                { id: 'q5a', type: 'radio', num: '5-a', text: '30분 이내에 잠들 수 없다.', name: 'q5a' },
+                { id: 'q5b', type: 'radio', num: '5-b', text: '한밤중이나 새벽에 깬다.', name: 'q5b' },
+                { id: 'q5c', type: 'radio', num: '5-c', text: '화장실에 가기 위해 깨야 한다.', name: 'q5c' },
+                { id: 'q5d', type: 'radio', num: '5-d', text: '숨을 편하게 쉴 수 없다.', name: 'q5d' },
+                { id: 'q5e', type: 'radio', num: '5-e', text: '소리를 지르거나 심하게 기침을 한다.', name: 'q5e' },
+                { id: 'q5f', type: 'radio', num: '5-f', text: '추위를 너무 느낀다.', name: 'q5f' },
+                { id: 'q5g', type: 'radio', num: '5-g', text: '더위를 너무 느낀다.', name: 'q5g' },
+                { id: 'q5h', type: 'radio', num: '5-h', text: '나쁜 꿈(악몽)을 꾼다.', name: 'q5h' },
+                { id: 'q5i', type: 'radio', num: '5-i', text: '통증(아픈 것)을 느낀다.', name: 'q5i' },
+                { id: 'q5j', type: 'radio', num: '5-j', text: '기타 다른 이유로 잠을 설치는 경우가 있다.', name: 'q5j' },
+                { id: 'q6', type: 'radio', num: '6', text: '지난 한 달 동안, 수면의 질을 전반적으로 어떻게 평가합니까?', name: 'q6', options: ['매우 좋음', '좋음', '나쁨', '매우 나쁨'] },
+                { id: 'q7', type: 'radio', num: '7', text: '지난 한 달 동안, 잠을 하기 위해 약물(의사 처방, 일반 약, 영양제 등)을 먹은 적이 얼마나 자주 있습니까?', name: 'q7' },
+                { id: 'q8', type: 'radio', num: '8', text: '지난 한 달 동안, 운전을 하거나 식사를 하거나 사회 활동을 하는 동안 졸음을 참기 힘들었던 적이 얼마나 자주 있습니까?', name: 'q8' },
+                { id: 'q9', type: 'radio', num: '9', text: '지난 한 달 동안, 일을 하거나 의욕을 가지고 무언가를 추진하는 데 얼마나 지장이 있었습니까?', name: 'q9', options: ['전혀 없음', '약간 있었음', '어느 정도 있었음', '매우 심했음'] }
+            ];
+
+            // Options mapping for general radio buttons (0 to 3 points)
+            const defaultRadioOptions = ['없음 (전혀 없음)', '주 1회 미만', '주 1~2회', '주 3회 이상'];
+
+            // Handle Radio Option button selection (Styling toggle)
+            document.querySelectorAll('.option-btn input[type="radio"]').forEach(radio => {
+                // Initial state set if any is checked
+                if (radio.checked) {
+                    radio.parentElement.classList.add('selected');
+                }
+
+                radio.addEventListener('change', (e) => {
+                    const name = radio.getAttribute('name');
+                    // Remove 'selected' class from all options in this group
+                    document.querySelectorAll(`input[name="${name}"]`).forEach(sibling => {
+                        sibling.parentElement.classList.remove('selected');
+                    });
+                    // Add 'selected' class to current clicked option label
+                    if (radio.checked) {
+                        radio.parentElement.classList.add('selected');
+                    }
+                });
+            });
+
+            // Start Button Clicked
+            btnStart.addEventListener('click', () => {
+                const val = userNameInput.value.trim();
+                if (!val) {
+                    alert('성함을 입력해 주세요!');
+                    userNameInput.focus();
+                    return;
+                }
+                userName = val;
+                
+                // Transition views
+                welcomeView.classList.remove('active');
+                surveyView.classList.add('active');
+                
+                currentSectionIdx = 0;
+                updateSectionVisibility();
+            });
+
+            // Prev Button Clicked
+            btnPrev.addEventListener('click', () => {
+                if (currentSectionIdx > 0) {
+                    currentSectionIdx--;
+                    updateSectionVisibility();
+                }
+            });
+
+            // Next Button Clicked
+            btnNext.addEventListener('click', () => {
+                // Validate inputs in the current section
+                if (!validateCurrentSection()) {
+                    return;
+                }
+
+                if (currentSectionIdx < sections.length - 1) {
+                    currentSectionIdx++;
+                    updateSectionVisibility();
+                } else {
+                    // Last section, calculate and show results
+                    showResults();
+                }
+            });
+
+            // Share Button Clicked
+            btnShare.addEventListener('click', () => {
+                const shareUrl = window.location.href;
+                if (navigator.share) {
+                    navigator.share({
+                        title: '든ː잠 수면 상태 테스트 결과 (PSQI)',
+                        text: `${userName}님의 든ː잠 수면 정밀 진단 결과입니다. 여러분도 테스트해 보세요!`,
+                        url: shareUrl
+                    }).catch(console.error);
+                } else {
+                    navigator.clipboard.writeText(shareUrl).then(() => {
+                        alert('테스트 링크가 클립보드에 복사되었습니다! 친구들에게 공유해 보세요.');
+                    }).catch(err => {
+                        console.error('클립보드 복사 실패:', err);
+                        alert(`주소를 복사해 주세요: ${shareUrl}`);
+                    });
+                }
+            });
+
+            // Print Button Clicked
+            btnPrint.addEventListener('click', () => {
+                // Set printing values
+                document.getElementById('print-user-name').textContent = userName;
+                const now = new Date();
+                const formattedDate = `${now.getFullYear()}년 ${String(now.getMonth() + 1).padStart(2, '0')}월 ${String(now.getDate()).padStart(2, '0')}일`;
+                document.getElementById('print-test-date').textContent = formattedDate;
+
+                window.print();
+            });
+
+            // Restart Button Clicked
+            btnRestart.addEventListener('click', () => {
+                // Reset form
+                surveyView.reset();
+                document.querySelectorAll('.option-btn').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                userNameInput.value = '';
+
+                // Transition views
+                resultsView.classList.remove('active');
+                welcomeView.classList.add('active');
+            });
+
+            // Update section visibility, progress bar, navigation buttons
+            function updateSectionVisibility() {
+                sections.forEach((sec, idx) => {
+                    if (idx === currentSectionIdx) {
+                        sec.classList.add('active');
+                    } else {
+                        sec.classList.remove('active');
+                    }
+                });
+
+                // Update progress bar
+                const totalSections = sections.length;
+                const progressPercent = Math.round((currentSectionIdx / (totalSections - 1)) * 100);
+                document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+                document.getElementById('progress-percent').textContent = `${progressPercent}%`;
+
+                // Update progress step text
+                const stepLabels = [
+                    '1단계: 주관식 수면 습관',
+                    '2단계: 수면 방해 요소 (Q5)',
+                    '3단계: 전반적 평가 및 주간 활동'
+                ];
+                document.getElementById('progress-step-text').textContent = stepLabels[currentSectionIdx];
+
+                // Back button visibility
+                if (currentSectionIdx === 0) {
+                    btnPrev.style.visibility = 'hidden';
+                } else {
+                    btnPrev.style.visibility = 'visible';
+                }
+
+                // Next button label
+                if (currentSectionIdx === totalSections - 1) {
+                    btnNext.innerHTML = `
+                        결과 확인하기
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    `;
+                } else {
+                    btnNext.innerHTML = `
+                        다음 단계
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    `;
+                }
+
+                // Scroll to top of card smoothly
+                surveyView.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            // Validate current section
+            function validateCurrentSection() {
+                if (currentSectionIdx === 0) {
+                    const q1H = document.getElementById('q1-hour').value;
+                    const q1M = document.getElementById('q1-minute').value;
+                    const q2V = document.getElementById('q2-value').value;
+                    const q3H = document.getElementById('q3-hour').value;
+                    const q3M = document.getElementById('q3-minute').value;
+                    const q4V = document.getElementById('q4-value').value;
+
+                    if (q1H === '' || q1M === '') {
+                        alert('Q1 취침 시간을 입력해 주세요.');
+                        return false;
+                    }
+                    if (q2V === '' || Number(q2V) < 0) {
+                        alert('Q2 잠들기까지 걸리는 시간(분)을 올바르게 입력해 주세요.');
+                        return false;
+                    }
+                    if (q3H === '' || q3M === '') {
+                        alert('Q3 기상 시간을 입력해 주세요.');
+                        return false;
+                    }
+                    if (q4V === '' || Number(q4V) <= 0 || Number(q4V) > 24) {
+                        alert('Q4 실제 수면 시간(시간)을 0.1시간에서 24시간 사이로 입력해 주세요.');
+                        return false;
+                    }
+                } 
+                else if (currentSectionIdx === 1) {
+                    // Radio elements for Q5a to Q5j
+                    const q5keys = ['q5a', 'q5b', 'q5c', 'q5d', 'q5e', 'q5f', 'q5g', 'q5h', 'q5i', 'q5j'];
+                    for (let key of q5keys) {
+                        const checkedRadio = document.querySelector(`input[name="${key}"]:checked`);
+                        if (!checkedRadio) {
+                            alert('2단계의 모든 질문에 답변해 주세요.');
+                            const unselectedCard = document.querySelector(`input[name="${key}"]`).closest('.question-card');
+                            unselectedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            return false;
+                        }
+                    }
+                } 
+                else if (currentSectionIdx === 2) {
+                    // Radio elements for Q6 to Q9
+                    const qKeys = ['q6', 'q7', 'q8', 'q9'];
+                    for (let key of qKeys) {
+                        const checkedRadio = document.querySelector(`input[name="${key}"]:checked`);
+                        if (!checkedRadio) {
+                            alert('3단계의 모든 질문에 답변해 주세요.');
+                            const unselectedCard = document.querySelector(`input[name="${key}"]`).closest('.question-card');
+                            unselectedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+
+            // Perform PSQI scoring and render results
+            function showResults() {
+                // Collect user values
+                const q1H = parseInt(document.getElementById('q1-hour').value);
+                const q1M = parseInt(document.getElementById('q1-minute').value);
+                const q2V = parseInt(document.getElementById('q2-value').value);
+                const q3H = parseInt(document.getElementById('q3-hour').value);
+                const q3M = parseInt(document.getElementById('q3-minute').value);
+                const q4V = parseFloat(document.getElementById('q4-value').value);
+
+                const getRadioVal = (name) => parseInt(document.querySelector(`input[name="${name}"]:checked`).value);
+
+                const q5a = getRadioVal('q5a');
+                const q5b = getRadioVal('q5b');
+                const q5c = getRadioVal('q5c');
+                const q5d = getRadioVal('q5d');
+                const q5e = getRadioVal('q5e');
+                const q5f = getRadioVal('q5f');
+                const q5g = getRadioVal('q5g');
+                const q5h = getRadioVal('q5h');
+                const q5i = getRadioVal('q5i');
+                const q5j = getRadioVal('q5j');
+
+                const q6 = getRadioVal('q6');
+                const q7 = getRadioVal('q7');
+                const q8 = getRadioVal('q8');
+                const q9 = getRadioVal('q9');
+
+                // -- Calculation Logic --
+                
+                // C1: Subjective Sleep Quality
+                const c1 = q6;
+
+                // C2: Sleep Latency
+                let q2Score = 0;
+                if (q2V <= 15) q2Score = 0;
+                else if (q2V <= 30) q2Score = 1;
+                else if (q2V <= 60) q2Score = 2;
+                else q2Score = 3;
+                
+                const c2Sum = q2Score + q5a;
+                let c2 = 0;
+                if (c2Sum === 0) c2 = 0;
+                else if (c2Sum <= 2) c2 = 1;
+                else if (c2Sum <= 4) c2 = 2;
+                else c2 = 3;
+
+                // C3: Sleep Duration
+                let c3 = 0;
+                if (q4V >= 7) c3 = 0;
+                else if (q4V >= 6) c3 = 1;
+                else if (q4V >= 5) c3 = 2;
+                else c3 = 3;
+
+                // C4: Habitual Sleep Efficiency
+                const bedMinutes = q1H * 60 + q1M;
+                const wakeMinutes = q3H * 60 + q3M;
+                let hoursInBed = 0;
+                if (wakeMinutes <= bedMinutes) {
+                    hoursInBed = ((1440 - bedMinutes) + wakeMinutes) / 60;
+                } else {
+                    hoursInBed = (wakeMinutes - bedMinutes) / 60;
+                }
+                
+                let efficiency = 0;
+                if (hoursInBed > 0) {
+                    efficiency = (q4V / hoursInBed) * 100;
+                }
+                if (efficiency > 100) efficiency = 100;
+
+                let c4 = 0;
+                if (efficiency >= 85) c4 = 0;
+                else if (efficiency >= 75) c4 = 1;
+                else if (efficiency >= 65) c4 = 2;
+                else c4 = 3;
+
+                // C5: Sleep Disturbances
+                const c5Sum = q5b + q5c + q5d + q5e + q5f + q5g + q5h + q5i + q5j;
+                let c5 = 0;
+                if (c5Sum === 0) c5 = 0;
+                else if (c5Sum <= 9) c5 = 1;
+                else if (c5Sum <= 18) c5 = 2;
+                else c5 = 3;
+
+                // C6: Sleep Medication
+                const c6 = q7;
+
+                // C7: Daytime Dysfunction
+                const c7Sum = q8 + q9;
+                let c7 = 0;
+                if (c7Sum === 0) c7 = 0;
+                else if (c7Sum <= 2) c7 = 1;
+                else if (c7Sum <= 4) c7 = 2;
+                else c7 = 3;
+
+                // Global Score
+                const globalScore = c1 + c2 + c3 + c4 + c5 + c6 + c7;
+
+                // -- Update UI --
+                
+                // Display user metadata
+                document.getElementById('res-user-name').textContent = userName;
+                const now = new Date();
+                const formattedDate = `검사 일자: ${now.getFullYear()}년 ${String(now.getMonth() + 1).padStart(2, '0')}월 ${String(now.getDate()).padStart(2, '0')}일`;
+                document.getElementById('res-date').textContent = formattedDate;
+
+                // Global score & badge
+                document.getElementById('global-score-val').textContent = globalScore;
+                const statusBadge = document.getElementById('sleep-status-badge');
+                const statusDesc = document.getElementById('sleep-status-desc');
+                
+                // Severity scale marker placement
+                const markerPercent = (globalScore / 21) * 100;
+                const marker = document.getElementById('severity-marker');
+                const markerVal = document.getElementById('severity-marker-val');
+                marker.style.left = `${markerPercent}%`;
+                markerVal.textContent = `${globalScore}점`;
+
+                // Detailed Explanation and Guidelines based on score
+                let expTitle = '';
+                let expText = '';
+                let guidelines = [];
+                
+                if (globalScore <= 5) {
+                    statusBadge.textContent = '안심 단계 (정상)';
+                    statusBadge.className = 'result-status status-good';
+                    statusDesc.textContent = '수면의 질이 좋은 편입니다. (정상 범위)';
+                    
+                    expTitle = `안심 단계 • 건강한 수면 상태 (${globalScore}점)`;
+                    expText = `귀하의 종합 수면 위험 점수는 <strong>${globalScore}점</strong>으로 정상적인 범위에 속합니다. 건강한 수면 패턴과 생체 리듬을 잘 유지하고 계십니다. 양질의 수면은 신체 회복, 정서 조절, 집중력 증진에 필수적인 역할을 합니다. 특별한 수면 관련 질환의 징후는 나타나지 않으나, 스트레스나 수면 환경의 변화가 있을 때 수면 위생을 유지할 수 있도록 꾸준히 관리해 주는 것이 좋습니다.`;
+                    guidelines = [
+                        "규칙적인 시간에 취침하고 기상하여 자연스러운 바이오리듬을 주말에도 유지해 주세요.",
+                        "침실은 항상 어둡고 조용하며 서늘한 온도(18~22°C)를 조성하여 쾌적한 잠자리를 만듭니다.",
+                        "잠들기 1시간 전에는 방의 조도를 낮추고, 청색광이 강하게 방출되는 스마트폰, 태블릿 및 TV 사용을 제한하세요."
+                    ];
+                } else if (globalScore <= 10) {
+                    statusBadge.textContent = '주의 단계';
+                    statusBadge.className = 'result-status status-poor';
+                    statusBadge.style.background = 'rgba(245, 158, 11, 0.15)';
+                    statusBadge.style.color = '#f59e0b';
+                    statusBadge.style.borderColor = 'rgba(245, 158, 11, 0.3)';
+                    statusDesc.textContent = '수면의 질이 저하되어 있습니다. (경도-중등도 수면 저하)';
+                    
+                    expTitle = `주의 단계 • 가벼운 수면 문제 상태 (${globalScore}점) - 든ː잠 1단계 추천`;
+                    expText = `귀하의 종합 수면 위험 점수는 <strong>${globalScore}점</strong>으로, 정상 범위(5점 이하)를 벗어나 수면의 질이 다소 저하된 상태입니다. 수면 유도(입면) 장애, 중간의 가벼운 잠 깸, 혹은 아침에 일어났을 때 개운하지 못함 등의 증상이 관찰될 수 있습니다. 과도한 누적 스트레스나 불규칙한 생활 습관, 늦은 시간의 자극 요인이 있는지 점검하고 <strong>'든ː잠 1단계'</strong> 케어로 수면 생체 리듬을 개선하는 것을 추천해 드립니다.`;
+                    guidelines = [
+                        "오후 2시 이후에는 커피, 홍차, 에너지 음료 등 카페인이 포함된 식음료 섭취를 삼가세요.",
+                        "낮 시간 동안 하루 30분 이상 햇빛을 쬐며 산책을 하면 숙면을 촉진하는 멜라토닌 호르몬 분비가 원활해집니다.",
+                        "잠자리에 들기 전 미지근한 물로 가볍게 샤워하여 몸의 긴장을 이완시키고 자연스럽게 심부 체온을 내려 숙면 상태로 유도하세요."
+                    ];
+                } else if (globalScore <= 15) {
+                    statusBadge.textContent = '관리 요망 단계 (심함)';
+                    statusBadge.className = 'result-status status-poor';
+                    statusBadge.style.background = 'rgba(244, 63, 94, 0.15)';
+                    statusBadge.style.color = '#f43f5e';
+                    statusBadge.style.borderColor = 'rgba(244, 63, 94, 0.3)';
+                    statusDesc.textContent = '수면의 질이 크게 저하되어 있습니다. (심한 수면 장애)';
+                    
+                    expTitle = `관리 요망 단계 • 심각한 수면 문제 상태 (${globalScore}점) - 든ː잠 2단계 추천`;
+                    expText = `귀하의 종합 수면 위험 점수는 <strong>${globalScore}점</strong>으로, 유의미한 수준의 수면 결핍 또는 장애 요인이 지속적으로 발생하고 있습니다. 이로 인해 주간 활동 중 참기 힘든 피로와 졸음을 유발하고 추진력 저하, 집중력 감퇴 같은 일상 속 주간 장애를 겪을 확률이 높습니다. 불량한 수면 환경의 구조적인 개선과 의도적인 수면 습관 교정이 필요하며, <strong>'든ː잠 2단계'</strong> 솔루션으로 수면 패턴의 빠른 회복을 권장해 드립니다.`;
+                    guidelines = [
+                        "침대 위에 누운 채로 독서를 하거나 스마트폰을 보는 버릇을 버리고, 침대는 오로지 '잠을 자는 공간'으로만 뇌에 학습시키세요.",
+                        "밤에 잠을 잘 자지 못했더라도 아침에는 매일 정해진 같은 시간에 깨어 일어남으로써 생체 시계를 일정하게 리셋해 주세요.",
+                        "알코올은 입면을 돕는 것처럼 착각을 주지만, 수면 후반기에 잦은 각성을 만들어 전체적인 수면 구조를 완전히 무너뜨리므로 취침 전 음주는 절대 금물입니다."
+                    ];
+                } else {
+                    statusBadge.textContent = '관리 요망 단계 (위험)';
+                    statusBadge.className = 'result-status status-poor';
+                    statusBadge.style.background = 'rgba(244, 63, 94, 0.25)';
+                    statusBadge.style.color = '#e11d48';
+                    statusBadge.style.borderColor = 'rgba(244, 63, 94, 0.5)';
+                    statusDesc.textContent = '수면 건강에 매우 심각한 경고 신호가 감지되었습니다. (전문의 상담 권장)';
+                    
+                    expTitle = `매우 심각한 임상적 수면 장애 (${globalScore}점) - 든ː잠 2단계 & 전문의 상담 권장`;
+                    expText = `귀하의 종합 수면 위험 점수는 <strong>${globalScore}점</strong>으로, 자가진단 범주에서 위험도가 매우 심각한 단계입니다. 만성적 불면, 생체 시계의 심한 붕괴 또는 수면 유발 신체 장애(코골이, 호흡 곤란 등)가 강하게 의심됩니다. 이 수준의 장애는 피로 누적을 넘어 장기적으로 고혈압, 당뇨 등의 대사 질환 및 심혈관 위험을 증가시킬 수 있어 한방 연구소의 <strong>'든ː잠 2단계'</strong> 솔루션 및 정밀 의료 진단이 동시에 요구됩니다.`;
+                    guidelines = [
+                        "수면 전문 의료기관(수면 클리닉이나 정신건강의학과)을 방문하셔서 수면다원검사 등 정밀 진단을 받으시는 것을 강력히 권장합니다.",
+                        "코골이, 수면 무호흡, 거친 숨소리, 야간 다리 떨림이나 잠꼬대 등 수면 중 신체적 증상이 동반되는지 수면 파트너에게 반드시 확인해 보세요.",
+                        "의사와의 원활한 진단을 돕기 위해 매일 언제 누워서 언제 잠들었고 몇 번 깼는지 적는 '수면 일지'를 미리 일주일간 기록해 두세요."
+                    ];
+                }
+                
+                document.getElementById('explanation-title').innerHTML = expTitle;
+                document.getElementById('explanation-text').innerHTML = expText;
+                
+                const guideList = document.getElementById('guideline-list');
+                guideList.innerHTML = '';
+                guidelines.forEach(g => {
+                    const li = document.createElement('li');
+                    li.textContent = g;
+                    guideList.appendChild(li);
+                });
+
+                // Animated Gauge Fill
+                const maxOffset = 565.48; // Circumference
+                const strokeDashoffset = maxOffset - (maxOffset * globalScore / 21);
+                const gaugeFill = document.getElementById('gauge-fill');
+                
+                gaugeFill.style.strokeDashoffset = maxOffset;
+                setTimeout(() => {
+                    gaugeFill.style.strokeDashoffset = strokeDashoffset;
+                }, 100);
+
+                // Component Scores UI
+                const setComponentUI = (id, score) => {
+                    const scoreVal = document.getElementById(`${id}-score-val`);
+                    const bar = document.getElementById(`${id}-bar`);
+                    
+                    scoreVal.textContent = `${score}점`;
+                    
+                    bar.className = 'component-bar';
+                    bar.classList.add(`score-${score}`);
+                };
+
+                setComponentUI('c1', c1);
+                setComponentUI('c2', c2);
+                setComponentUI('c3', c3);
+                setComponentUI('c4', c4);
+                setComponentUI('c5', c5);
+                setComponentUI('c6', c6);
+                setComponentUI('c7', c7);
+
+                // Generate response summary table rows (Meets "내가 적은 문항까지 같이 체크가 되는" requirement)
+                const tableBody = document.getElementById('response-table-body');
+                tableBody.innerHTML = ''; // Clear
+
+                questionsData.forEach(q => {
+                    let userValStr = '';
+                    let scoreText = '-';
+                    let numericScore = 0;
+                    let displayRowAlert = false;
+
+                    if (q.id === 'q1') {
+                        userValStr = `${String(q1H).padStart(2, '0')}시 ${String(q1M).padStart(2, '0')}분`;
+                        scoreText = '영역 C4 반영';
+                    } else if (q.id === 'q2') {
+                        userValStr = `${q2V}분`;
+                        numericScore = q2Score;
+                        scoreText = `${numericScore}점`;
+                        displayRowAlert = numericScore >= 2;
+                    } else if (q.id === 'q3') {
+                        userValStr = `${String(q3H).padStart(2, '0')}시 ${String(q3M).padStart(2, '0')}분`;
+                        scoreText = '영역 C4 반영';
+                    } else if (q.id === 'q4') {
+                        userValStr = `${q4V}시간`;
+                        numericScore = c3;
+                        scoreText = `${numericScore}점 (C3)`;
+                        displayRowAlert = numericScore >= 2;
+                    } else {
+                        // Radio questions (q5a-j, q6, q7, q8, q9)
+                        const val = getRadioVal(q.id);
+                        numericScore = val;
+                        scoreText = `${numericScore}점`;
+                        displayRowAlert = numericScore >= 2;
+
+                        if (q.id === 'q6') {
+                            userValStr = q.options[val];
+                        } else if (q.id === 'q9') {
+                            userValStr = q.options[val];
+                        } else {
+                            userValStr = defaultRadioOptions[val];
+                        }
+                    }
+
+                    const tr = document.createElement('tr');
+                    if (displayRowAlert) {
+                        tr.classList.add('poor-score-row');
+                    }
+
+                    let scoreBadgeClass = 'score-0-bg';
+                    if (scoreText.includes('점')) {
+                        scoreBadgeClass = `score-${numericScore}-bg`;
+                    }
+
+                    tr.innerHTML = `
+                        <td><strong>${q.num}</strong></td>
+                        <td>${q.text}</td>
+                        <td><strong>${userValStr}</strong></td>
+                        <td class="center">
+                            <span class="badge-score ${scoreText.includes('점') ? scoreBadgeClass : ''}">${scoreText}</span>
+                        </td>
+                    `;
+                    tableBody.appendChild(tr);
+                });
+
+                // Add special summary calculations as a custom row at the end
+                const trC4 = document.createElement('tr');
+                trC4.innerHTML = `
+                    <td><strong>분석</strong></td>
+                    <td>수면 효율 계산 결과: 침대에 누워있던 시간: <strong>${hoursInBed.toFixed(1)}시간</strong> 중 실제 잠든 시간 <strong>${q4V}시간</strong></td>
+                    <td>효율: <strong>${efficiency.toFixed(1)}%</strong></td>
+                    <td class="center"><span class="badge-score score-${c4}-bg">${c4}점 (C4)</span></td>
+                `;
+                if (c4 >= 2) trC4.classList.add('poor-score-row');
+                tableBody.appendChild(trC4);
+
+                // Transition views
+                surveyView.classList.remove('active');
+                resultsView.classList.add('active');
+
+                // Scroll to top of results smoothly
+                resultsView.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         });
-      }
-
-      function calculateResult() {
-        let total = 0;
-        for (let i = 1; i <= 10; i++) {
-          const checked = quizOverlay.querySelector(`input[name="sq${i}"]:checked`);
-          if (checked) total += parseInt(checked.value);
-        }
-
-        const badge = document.getElementById('sqr-badge');
-        const title = document.getElementById('sqr-title');
-        const desc = document.getElementById('sqr-desc');
-        const score = document.getElementById('sqr-score');
-
-        score.textContent = total;
-        badge.className = 'slim-quiz-result-badge';
-        // Reset colors
-        badge.style.background = '';
-        badge.style.color = '';
-
-        if (total <= 2) {
-          badge.style.background = 'rgba(34,197,94,0.15)';
-          badge.style.color = '#4ade80';
-          badge.textContent = '안심 단계';
-          title.textContent = '건강한 수면 상태';
-          desc.textContent = '잠에 대해서는 걱정이 없군요!\n지금 컨디션 잘 유지하셔서 건강한 수면 생활을 하세요!';
-        } else if (total <= 6) {
-          badge.style.background = 'rgba(251,146,60,0.15)';
-          badge.style.color = '#fb923c';
-          badge.textContent = '주의 단계';
-          title.textContent = '가벼운 수면 문제 상태';
-          desc.textContent = '잠이 건강에 영향을 줄 수 있는 단계입니다.\n든ː잠 1단계로 수면의 질을 좀 더 높여 보세요!';
-        } else {
-          badge.style.background = 'rgba(239,68,68,0.15)';
-          badge.style.color = '#f87171';
-          badge.textContent = '관리 요망 단계';
-          title.textContent = '심각한 수면 문제 상태';
-          desc.textContent = '잠 때문에 건강을 해칠 수 있는 단계입니다. 수면상태를 개선 하는 것이 건강에 가장 중요한 문제일 것 같아요.\n든ː잠 2단계로 수면 리듬 개선에 도움을 받아보시길 권해드립니다!';
-        }
-
-        showQuizStep('result');
-      }
-
-      // Retry
-      const retryBtn = document.getElementById('sqr-retry');
-      if (retryBtn) {
-        retryBtn.addEventListener('click', () => resetQuiz());
-      }
-    });
-
-    function shareQuiz(url) {
-      if (navigator.share) {
-        navigator.share({
-          title: '든ː잠 수면 상태 테스트',
-          url: url
-        }).catch(console.error);
-      } else {
-        navigator.clipboard.writeText(url).then(() => {
-          alert('설문조사 링크가 복사되었습니다!');
-        }).catch(err => {
-          console.error('클립보드 복사 실패:', err);
-        });
-      }
-    }
-  </script>
+    </script>
 </body>
 </html>
