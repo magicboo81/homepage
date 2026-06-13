@@ -1250,30 +1250,52 @@
                         <span class="question-number">Q1</span>
                         <div class="question-text">지난 한 달 동안, 밤에 주로 몇 시에 잠자리에 들었습니까?</div>
                     </div>
-                    <div class="answer-input-wrapper">
-                        <div class="time-inputs">
-                            <div class="time-select-group">
-                                <select id="q1-hour" class="time-select" required>
-                                    <option value="" disabled selected>시</option>
-                                    <script>
-                                        for(let i=0; i<24; i++) {
-                                            document.write(`<option value="${i}">${String(i).padStart(2, '0')}</option>`);
-                                        }
-                                    </script>
-                                </select>
-                                <span class="input-suffix">시</span>
-                            </div>
-                            <div class="time-select-group">
-                                <select id="q1-minute" class="time-select" required>
-                                    <option value="" disabled selected>분</option>
-                                    <script>
-                                        for(let i=0; i<60; i+=5) {
-                                            document.write(`<option value="${i}">${String(i).padStart(2, '0')}</option>`);
-                                        }
-                                    </script>
-                                </select>
-                                <span class="input-suffix">분</span>
-                            </div>
+                    <div class="answer-input-wrapper" style="padding-left: 0; margin-top: 1rem;">
+                        <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
+                            <label class="option-btn">
+                                <input type="radio" name="q1-choice" value="22:00" required>
+                                <span class="option-label">저녁 10:00</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q1-choice" value="22:30">
+                                <span class="option-label">저녁 10:30</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q1-choice" value="23:00">
+                                <span class="option-label">저녁 11:00</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q1-choice" value="23:30">
+                                <span class="option-label">저녁 11:30</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q1-choice" value="00:00">
+                                <span class="option-label">밤 12:00</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q1-choice" value="00:30">
+                                <span class="option-label">새벽 12:30</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q1-choice" value="01:00">
+                                <span class="option-label">새벽 1:00</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q1-choice" value="01:30">
+                                <span class="option-label">새벽 1:30</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q1-choice" value="02:00">
+                                <span class="option-label">새벽 2:00</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q1-choice" value="02:30">
+                                <span class="option-label">새벽 2:30</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q1-choice" value="03:00">
+                                <span class="option-label">새벽 3:00</span>
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -1284,10 +1306,24 @@
                         <span class="question-number">Q2</span>
                         <div class="question-text">지난 한 달 동안, 밤에 잠들기까지 몇 분이나 걸렸습니까?</div>
                     </div>
-                    <div class="answer-input-wrapper">
-                        <div class="time-inputs">
-                            <input type="number" id="q2-value" class="numeric-input" min="0" max="600" placeholder="0" required>
-                            <span class="input-suffix">분</span>
+                    <div class="answer-input-wrapper" style="padding-left: 0; margin-top: 1rem;">
+                        <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
+                            <label class="option-btn">
+                                <input type="radio" name="q2-choice" value="30" required>
+                                <span class="option-label">30분</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q2-choice" value="60">
+                                <span class="option-label">1시간</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q2-choice" value="90">
+                                <span class="option-label">1시간 30분</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q2-choice" value="120">
+                                <span class="option-label">2시간 이상</span>
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -1298,30 +1334,64 @@
                         <span class="question-number">Q3</span>
                         <div class="question-text">지난 한 달 동안, 아침에 주로 몇 시에 깼습니까?</div>
                     </div>
-                    <div class="answer-input-wrapper">
-                        <div class="time-inputs">
-                            <div class="time-select-group">
-                                <select id="q3-hour" class="time-select" required>
-                                    <option value="" disabled selected>시</option>
-                                    <script>
-                                        for(let i=0; i<24; i++) {
-                                            document.write(`<option value="${i}">${String(i).padStart(2, '0')}</option>`);
-                                        }
-                                    </script>
-                                </select>
-                                <span class="input-suffix">시</span>
-                            </div>
-                            <div class="time-select-group">
-                                <select id="q3-minute" class="time-select" required>
-                                    <option value="" disabled selected>분</option>
-                                    <script>
-                                        for(let i=0; i<60; i+=5) {
-                                            document.write(`<option value="${i}">${String(i).padStart(2, '0')}</option>`);
-                                        }
-                                    </script>
-                                </select>
-                                <span class="input-suffix">분</span>
-                            </div>
+                    <div class="answer-input-wrapper" style="padding-left: 0; margin-top: 1rem;">
+                        <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
+                            <label class="option-btn">
+                                <input type="radio" name="q3-choice" value="05:00" required>
+                                <span class="option-label">새벽 5:00</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q3-choice" value="05:30">
+                                <span class="option-label">새벽 5:30</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q3-choice" value="06:00">
+                                <span class="option-label">아침 6:00</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q3-choice" value="06:30">
+                                <span class="option-label">아침 6:30</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q3-choice" value="07:00">
+                                <span class="option-label">아침 7:00</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q3-choice" value="07:30">
+                                <span class="option-label">아침 7:30</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q3-choice" value="08:00">
+                                <span class="option-label">아침 8:00</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q3-choice" value="08:30">
+                                <span class="option-label">아침 8:30</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q3-choice" value="09:00">
+                                <span class="option-label">아침 9:00</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q3-choice" value="09:30">
+                                <span class="option-label">아침 9:30</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q3-choice" value="10:00">
+                                <span class="option-label">아침 10:00</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q3-choice" value="10:30">
+                                <span class="option-label">아침 10:30</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q3-choice" value="11:00">
+                                <span class="option-label">아침 11:00</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q3-choice" value="11:30">
+                                <span class="option-label">아침 11:30</span>
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -1333,10 +1403,40 @@
                         <div class="question-text">지난 한 달 동안, 밤에 실제로 잔 시간은 몇 시간입니까?</div>
                         <span class="question-subtext" style="display: block; width: 100%; font-size: 0.85rem;">(침대에 단순히 누워있던 시간과 다를 수 있음)</span>
                     </div>
-                    <div class="answer-input-wrapper">
-                        <div class="time-inputs">
-                            <input type="number" id="q4-value" class="numeric-input" min="0.1" max="24" step="0.1" placeholder="7.0" required>
-                            <span class="input-suffix">시간</span>
+                    <div class="answer-input-wrapper" style="padding-left: 0; margin-top: 1rem;">
+                        <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
+                            <label class="option-btn">
+                                <input type="radio" name="q4-choice" value="1" required>
+                                <span class="option-label">1시간</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q4-choice" value="2">
+                                <span class="option-label">2시간</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q4-choice" value="3">
+                                <span class="option-label">3시간</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q4-choice" value="4">
+                                <span class="option-label">4시간</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q4-choice" value="5">
+                                <span class="option-label">5시간</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q4-choice" value="6">
+                                <span class="option-label">6시간</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q4-choice" value="7">
+                                <span class="option-label">7시간</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="q4-choice" value="8">
+                                <span class="option-label">8시간</span>
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -2031,27 +2131,25 @@
             // Validate current section
             function validateCurrentSection() {
                 if (currentSectionIdx === 0) {
-                    const q1H = document.getElementById('q1-hour').value;
-                    const q1M = document.getElementById('q1-minute').value;
-                    const q2V = document.getElementById('q2-value').value;
-                    const q3H = document.getElementById('q3-hour').value;
-                    const q3M = document.getElementById('q3-minute').value;
-                    const q4V = document.getElementById('q4-value').value;
+                    const q1Checked = document.querySelector('input[name="q1-choice"]:checked');
+                    const q2Checked = document.querySelector('input[name="q2-choice"]:checked');
+                    const q3Checked = document.querySelector('input[name="q3-choice"]:checked');
+                    const q4Checked = document.querySelector('input[name="q4-choice"]:checked');
 
-                    if (q1H === '' || q1M === '') {
-                        alert('Q1 취침 시간을 입력해 주세요.');
+                    if (!q1Checked) {
+                        alert('Q1 취침 시간을 선택해 주세요.');
                         return false;
                     }
-                    if (q2V === '' || Number(q2V) < 0) {
-                        alert('Q2 잠들기까지 걸리는 시간(분)을 올바르게 입력해 주세요.');
+                    if (!q2Checked) {
+                        alert('Q2 잠들기까지 걸리는 시간을 선택해 주세요.');
                         return false;
                     }
-                    if (q3H === '' || q3M === '') {
-                        alert('Q3 기상 시간을 입력해 주세요.');
+                    if (!q3Checked) {
+                        alert('Q3 기상 시간을 선택해 주세요.');
                         return false;
                     }
-                    if (q4V === '' || Number(q4V) <= 0 || Number(q4V) > 24) {
-                        alert('Q4 실제 수면 시간(시간)을 0.1시간에서 24시간 사이로 입력해 주세요.');
+                    if (!q4Checked) {
+                        alert('Q4 실제 수면 시간을 선택해 주세요.');
                         return false;
                     }
                 } 
@@ -2087,12 +2185,17 @@
             // Perform PSQI scoring and render results
             function showResults() {
                 // Collect user values
-                const q1H = parseInt(document.getElementById('q1-hour').value);
-                const q1M = parseInt(document.getElementById('q1-minute').value);
-                const q2V = parseInt(document.getElementById('q2-value').value);
-                const q3H = parseInt(document.getElementById('q3-hour').value);
-                const q3M = parseInt(document.getElementById('q3-minute').value);
-                const q4V = parseFloat(document.getElementById('q4-value').value);
+                const q1Val = document.querySelector('input[name="q1-choice"]:checked').value.split(':');
+                const q1H = parseInt(q1Val[0]);
+                const q1M = parseInt(q1Val[1]);
+                
+                const q2V = parseInt(document.querySelector('input[name="q2-choice"]:checked').value);
+                
+                const q3Val = document.querySelector('input[name="q3-choice"]:checked').value.split(':');
+                const q3H = parseInt(q3Val[0]);
+                const q3M = parseInt(q3Val[1]);
+                
+                const q4V = parseFloat(document.querySelector('input[name="q4-choice"]:checked').value);
 
                 const getRadioVal = (name) => parseInt(document.querySelector(`input[name="${name}"]:checked`).value);
 
