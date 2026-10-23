@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>네이버 앱 연결 중...</title>
+    <script>
+        window.onload = function() {
+            // 네이버 앱 호출 스킴 (영수증 리뷰 팝업 직행)
+            var targetUrl = "https%3A%2F%2Fm.place.naver.com%2Fmy%2Fcheckin%3FclickLocation%3Dreceipt";
+            var appScheme = "naversearchapp://inappbrowser?url=" + targetUrl + "&target=new&version=6";
+            
+            // 일반 웹 fallback 주소 (앱 미설치 시 이동)
+            var fallbackUrl = "https://m.place.naver.com%2Fmy%2Fcheckin%3FclickLocation%3Dreceipt";
+
+            // 네이버 앱 실행 시도
+            location.href = appScheme;
+
+            // 앱이 설치되어 있지 않거나 열리지 않을 경우 웹 페이지로 이동
+            setTimeout(function() {
+                location.href = fallbackUrl;
+            }, 1000);
+        };
+    </script>
+</head>
+<body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #fdfdfd;">
+    <div style="text-align: center; padding: 20px;">
+        <p style="font-size: 16px; color: #222; font-weight: bold; margin-bottom: 8px;">네이버 앱으로 이동하고 있습니다...</p>
+        <p style="font-size: 13px; color: #666; margin: 0;">잠시만 기다려 주세요.</p>
+    </div>
+</head>
+</html>
