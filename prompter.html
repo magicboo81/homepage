@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>스마트 유튜브 대본 프롬프터 (Standalone Teleprompter)</title>
+    <meta name="description" content="단일 HTML 파일로 실행되는 음성 인식 & 자동 스크롤 유튜브 프롬프터">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;600;700;900&family=Inter:wght@400;600;700&family=Noto+Sans+KR:wght@400;600;700;900&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ==========================================================================
+           Standalone Teleprompter Stylesheet
+           ========================================================================== */
+
+        :root {
+            --bg-dark: #090d16;
+            --bg-card: rgba(22, 28, 45, 0.85);
+            --border-color: rgba(255, 255, 255, 0.12);
+            
+            --accent-primary: #6366f1;
+            --accent-primary-hover: #4f46e5;
+            --accent-secondary: #ec4899;
+            --accent-success: #10b981;
+            
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            
+            --prompter-bg: #000000;
+            --prompter-text: #ffffff;
+            --prompter-highlight: #10b981;
+            --prompter-guide-color: rgba(99, 102, 241, 0.4);
+
+            --font-sans: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-heading: 'Outfit', 'Noto Sans KR', sans-serif;
+            
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --radius-full: 9999px;
+            
+            --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        body.theme-light {
+            --bg-dark: #f1f5f9;
+            --bg-card: rgba(255, 255, 255, 0.9);
+            --border-color: rgba(0, 0, 0, 0.1);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --prompter-bg: #ffffff;
+            --prompter-text: #090d16;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: var(--font-sans);
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            overflow: hidden;
+            line-height: 1.5;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .card-glass {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-glass);
+        }
+
+        /* Header */
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 28px;
+            background: rgba(9, 13, 22, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 20;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            font-size: 1.4rem;
+            color: var(--accent-primary);
+        }
+
+        .logo-text {
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 1.3rem;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .badge {
+            background: rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: var(--radius-full);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Buttons */
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+            padding: 8px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .btn-ghost:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary) 0%, #4338ca 100%);
+            color: white;
+            padding: 14px 28px;
+            border-radius: var(--radius-md);
+            font-size: 1.1rem;
+            font-weight: 700;
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+        }
+
+        .btn-sm {
+            font-size: 0.85rem;
+            padding: 6px 12px;
+        }
+
+        .btn-large {
+            width: 100%;
+        }
+
+        /* Main Content Views */
+        .main-content {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .view-panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            display: flex;
+        }
+
+        .view-panel.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Setup View */
+        #setupView {
+            padding: 24px 32px;
+            overflow-y: auto;
+        }
+
+        .panel-layout {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 24px;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            height: 100%;
+        }
+
+        .editor-section, .settings-section {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-title h2, .settings-section h2 {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .script-stats {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        #scriptInput {
+            flex: 1;
+            width: 100%;
+            min-height: 380px;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 18px;
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            font-size: 1.1rem;
+            line-height: 1.7;
+            resize: none;
+            outline: none;
+        }
+
+        #scriptInput:focus {
+            border-color: var(--accent-primary);
+        }
+
+        .editor-tools {
+            display: flex;
+            gap: 10px;
+        }
+
+        .setting-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .setting-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .label-with-val {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .value-badge {
+            background: rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+            font-size: 0.8rem;
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+
+        .segmented-control {
+            display: flex;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            gap: 4px;
+        }
+
+        .segmented-control input[type="radio"] {
+            display: none;
+        }
+
+        .segment-btn {
+            flex: 1;
+            text-align: center;
+            padding: 10px 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .segmented-control input[type="radio"]:checked + .segment-btn {
+            background: var(--accent-primary);
+            color: white;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+        }
+
+        .mode-options {
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .mode-options.active {
+            display: flex;
+        }
+
+        .voice-status-box {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 12px;
+            border-radius: var(--radius-md);
+        }
+
+        .voice-status-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            color: var(--accent-success);
+            margin-bottom: 4px;
+        }
+
+        .voice-tip {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.15);
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent-primary);
+            cursor: pointer;
+        }
+
+        .select-input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 10px 14px;
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .divider {
+            border: none;
+            height: 1px;
+            background: var(--border-color);
+            margin: 4px 0;
+        }
+
+        .checkbox-group {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .custom-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .toggle-switch input {
+            display: none;
+        }
+
+        .toggle-switch .slider {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            transition: background-color 0.2s;
+        }
+
+        .toggle-switch .slider::before {
+            content: "";
+            position: absolute;
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.2s;
+        }
+
+        .toggle-switch input:checked + .slider {
+            background-color: var(--accent-primary);
+        }
+
+        .toggle-switch input:checked + .slider::before {
+            transform: translateX(20px);
+        }
+
+        .action-bar {
+            margin-top: auto;
+            padding-top: 8px;
+        }
+
+        /* Prompter View */
+        #prompterView {
+            background-color: var(--prompter-bg);
+            color: var(--prompter-text);
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        #prompterView.mirror-horizontal #prompterScrollArea {
+            transform: scaleX(-1);
+        }
+
+        #prompterView.mirror-vertical #prompterScrollArea {
+            transform: scaleY(-1);
+        }
+
+        .focus-guide-line {
+            position: absolute;
+            top: 35%;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--prompter-guide-color);
+            box-shadow: 0 0 12px var(--prompter-guide-color);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .focus-guide-line::before, .focus-guide-line::after {
+            content: '';
+            position: absolute;
+            top: -6px;
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+        }
+
+        .focus-guide-line::before {
+            left: 10px;
+            border-left: 12px solid var(--accent-primary);
+        }
+
+        .focus-guide-line::after {
+            right: 10px;
+            border-right: 12px solid var(--accent-primary);
+        }
+
+        .prompter-scroll-area {
+            width: 100%;
+            height: 100%;
+            overflow-y: scroll;
+            scroll-behavior: smooth;
+            padding: 0 10vw;
+            box-sizing: border-box;
+            scrollbar-width: none;
+        }
+
+        .prompter-scroll-area::-webkit-scrollbar {
+            display: none;
+        }
+
+        .prompter-text-content {
+            padding-top: 35vh;
+            padding-bottom: 60vh;
+            text-align: center;
+            word-break: keep-all;
+            user-select: none;
+        }
+
+        .prompter-paragraph {
+            margin-bottom: 1.5em;
+        }
+
+        .prompter-word {
+            display: inline-block;
+            padding: 2px 4px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .prompter-word.active-word {
+            background-color: var(--prompter-highlight);
+            color: #000000;
+            font-weight: bold;
+            transform: scale(1.08);
+            box-shadow: 0 0 16px rgba(16, 185, 129, 0.8);
+        }
+
+        .prompter-word.passed-word {
+            opacity: 0.5;
+        }
+
+        .countdown-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .countdown-overlay.hidden {
+            display: none;
+        }
+
+        #countdownNumber {
+            font-family: var(--font-heading);
+            font-size: 12rem;
+            font-weight: 900;
+            color: var(--accent-primary);
+        }
+
+        .voice-transcript-box {
+            position: absolute;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(16, 185, 129, 0.25);
+            border: 1px solid rgba(16, 185, 129, 0.5);
+            backdrop-filter: blur(12px);
+            color: white;
+            padding: 8px 24px;
+            border-radius: var(--radius-full);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 30;
+        }
+
+        .voice-transcript-box.hidden {
+            display: none;
+        }
+
+        .floating-controls {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 20px;
+            border-radius: var(--radius-full);
+            z-index: 50;
+            opacity: 0.3;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .floating-controls:hover {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-4px);
+        }
+
+        .ctrl-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+            color: white;
+            font-size: 1.1rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .ctrl-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .ctrl-main {
+            width: 54px;
+            height: 54px;
+            background: var(--accent-primary);
+            font-size: 1.3rem;
+        }
+
+        .ctrl-divider {
+            width: 1px;
+            height: 24px;
+            background: var(--border-color);
+            margin: 0 4px;
+        }
+
+        .ctrl-speed-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+        }
+
+        .ctrl-btn-sm {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            font-size: 0.8rem;
+        }
+
+        .ctrl-val-display {
+            font-size: 0.85rem;
+            font-weight: 700;
+            width: 26px;
+            text-align: center;
+        }
+
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
+
+        .modal-backdrop.hidden {
+            display: none;
+        }
+
+        .modal-card {
+            width: 90%;
+            max-width: 480px;
+            padding: 24px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .shortcut-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .shortcut-list li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.95rem;
+        }
+
+        kbd {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid var(--border-color);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: monospace;
+            color: var(--accent-primary);
+        }
+
+        @media (max-width: 900px) {
+            .panel-layout { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body class="theme-dark">
+    <div id="app" class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">
+                <i class="fa-solid fa-display logo-icon"></i>
+                <span class="logo-text">AI Teleprompter</span>
+                <span class="badge">Single File</span>
+            </div>
+            <div class="header-actions">
+                <button id="btnOpenGuide" class="btn-ghost" title="단축키 안내">
+                    <i class="fa-solid fa-keyboard"></i> 단축키
+                </button>
+                <button id="btnToggleTheme" class="btn-ghost" title="테마 변경">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Area -->
+        <main class="main-content">
+            <!-- Setup Panel -->
+            <section id="setupView" class="view-panel active">
+                <div class="panel-layout">
+                    <!-- Script Input -->
+                    <div class="editor-section card-glass">
+                        <div class="section-title">
+                            <h2><i class="fa-solid fa-pen-to-square"></i> 대본 입력</h2>
+                            <div class="script-stats">
+                                <span id="charCount">0 자</span> | 
+                                <span id="wordCount">0 단어</span> | 
+                                <span id="estimatedTime">예상 0분</span>
+                            </div>
+                        </div>
+                        <textarea id="scriptInput" placeholder="여기에 유튜브 대본을 입력하거나 붙여넣으세요..."></textarea>
+                        <div class="editor-tools">
+                            <button id="btnLoadSample" class="btn-secondary btn-sm">
+                                <i class="fa-solid fa-file-lines"></i> 샘플 대본 불러오기
+                            </button>
+                            <button id="btnClearScript" class="btn-secondary btn-sm">
+                                <i class="fa-solid fa-trash"></i> 지우기
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Settings -->
+                    <div class="settings-section card-glass">
+                        <h2><i class="fa-solid fa-sliders"></i> 프롬프터 설정</h2>
+
+                        <div class="setting-group">
+                            <label class="setting-label">스크롤 방식 선택</label>
+                            <div class="segmented-control">
+                                <input type="radio" id="modeAuto" name="scrollMode" value="auto" checked>
+                                <label for="modeAuto" class="segment-btn">
+                                    <i class="fa-solid fa-clock"></i> 일정 속도 (Auto-scroll)
+                                </label>
+                                <input type="radio" id="modeVoice" name="scrollMode" value="voice">
+                                <label for="modeVoice" class="segment-btn">
+                                    <i class="fa-solid fa-microphone"></i> 음성 인식 (Voice Sync)
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Auto options -->
+                        <div id="autoScrollOptions" class="mode-options active">
+                            <div class="setting-group">
+                                <div class="label-with-val">
+                                    <label for="scrollSpeed">스크롤 속도</label>
+                                    <span id="speedValueDisplay" class="value-badge">30</span>
+                                </div>
+                                <input type="range" id="scrollSpeed" min="5" max="100" value="30">
+                            </div>
+                        </div>
+
+                        <!-- Voice options -->
+                        <div id="voiceSyncOptions" class="mode-options">
+                            <div class="voice-status-box">
+                                <div class="voice-status-header">
+                                    <i class="fa-solid fa-microphone-slash" id="micStatusIcon"></i>
+                                    <span id="micStatusText">음성 인식 준비됨</span>
+                                </div>
+                                <p class="voice-tip">
+                                    마이크로 읽는 단어를 추적하여 스크롤합니다. (인터넷 연결 시 동작)
+                                </p>
+                            </div>
+                            <div class="setting-group">
+                                <label for="voiceLangSelect">인식 언어</label>
+                                <select id="voiceLangSelect" class="select-input">
+                                    <option value="ko-KR" selected>한국어 (Korean)</option>
+                                    <option value="en-US">영어 (English - US)</option>
+                                    <option value="ja-JP">일본어 (Japanese)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <hr class="divider">
+
+                        <!-- Typography -->
+                        <div class="setting-group">
+                            <div class="label-with-val">
+                                <label for="fontSizeInput">글자 크기 (Font Size)</label>
+                                <span id="fontSizeDisplay" class="value-badge">48px</span>
+                            </div>
+                            <input type="range" id="fontSizeInput" min="24" max="120" value="48">
+                        </div>
+
+                        <div class="setting-group">
+                            <label for="fontFamilySelect">폰트 선택</label>
+                            <select id="fontFamilySelect" class="select-input">
+                                <option value="'Noto Sans KR', sans-serif" selected>노토 산스 (Noto Sans)</option>
+                                <option value="'Gothic A1', sans-serif">고딕 A1 (Gothic A1)</option>
+                                <option value="'Outfit', sans-serif">Outfit (영문)</option>
+                                <option value="'Inter', sans-serif">Inter</option>
+                                <option value="sans-serif">기본 고딕 (Sans-Serif)</option>
+                            </select>
+                        </div>
+
+                        <div class="setting-group">
+                            <div class="label-with-val">
+                                <label for="lineHeightInput">줄 간격 (Line Height)</label>
+                                <span id="lineHeightDisplay" class="value-badge">1.8</span>
+                            </div>
+                            <input type="range" id="lineHeightInput" min="1.2" max="2.5" step="0.1" value="1.8">
+                        </div>
+
+                        <div class="setting-group checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="radio" id="mirrorOff" name="mirrorMode" value="none" checked>
+                                <span>정상 화면</span>
+                            </label>
+                            <label class="custom-checkbox">
+                                <input type="radio" id="mirrorHorizontal" name="mirrorMode" value="horizontal">
+                                <span>좌우 반전 (미러 뷰)</span>
+                            </label>
+                            <label class="custom-checkbox">
+                                <input type="radio" id="mirrorVertical" name="mirrorMode" value="vertical">
+                                <span>상하 반전</span>
+                            </label>
+                        </div>
+
+                        <div class="setting-group">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="chkShowGuide" checked>
+                                <span class="slider"></span>
+                                <span class="toggle-label">시선 포커스 가이드라인 표시</span>
+                            </label>
+                        </div>
+
+                        <div class="action-bar">
+                            <button id="btnStartPrompter" class="btn-primary btn-large">
+                                <i class="fa-solid fa-play"></i> 프롬프터 시작하기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Prompter Display -->
+            <section id="prompterView" class="view-panel">
+                <div id="focusGuide" class="focus-guide-line"></div>
+                <div id="prompterScrollArea" class="prompter-scroll-area">
+                    <div id="prompterTextContent" class="prompter-text-content"></div>
+                </div>
+
+                <div id="countdownOverlay" class="countdown-overlay hidden">
+                    <span id="countdownNumber">3</span>
+                </div>
+
+                <div id="voiceTranscriptBox" class="voice-transcript-box hidden">
+                    <i class="fa-solid fa-wave-square" style="color:var(--accent-success);"></i>
+                    <span style="font-weight:600; color:var(--accent-success);">인식된 음성:</span>
+                    <span id="liveTranscriptText">...</span>
+                </div>
+
+                <div id="prompterControls" class="floating-controls card-glass">
+                    <button id="btnControlExit" class="ctrl-btn" title="설정으로 돌아가기 (Esc)"><i class="fa-solid fa-arrow-left"></i></button>
+                    <button id="btnControlPlayPause" class="ctrl-btn ctrl-main" title="재생 / 일시정지 (Space)"><i class="fa-solid fa-play" id="playPauseIcon"></i></button>
+                    <button id="btnControlReset" class="ctrl-btn" title="처음으로 리셋"><i class="fa-solid fa-rotate-left"></i></button>
+                    <div class="ctrl-divider"></div>
+                    <div class="ctrl-speed-group" id="ctrlSpeedContainer">
+                        <button id="btnSpeedDown" class="ctrl-btn-sm"><i class="fa-solid fa-minus"></i></button>
+                        <span id="ctrlSpeedVal" class="ctrl-val-display">30</span>
+                        <button id="btnSpeedUp" class="ctrl-btn-sm"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                    <div class="ctrl-divider"></div>
+                    <button id="btnControlMirror" class="ctrl-btn" title="좌우 반전 (M)"><i class="fa-solid fa-right-left"></i></button>
+                    <button id="btnControlFullscreen" class="ctrl-btn" title="전체화면 (F)"><i class="fa-solid fa-expand"></i></button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Shortcuts Modal -->
+        <div id="guideModal" class="modal-backdrop hidden">
+            <div class="modal-card card-glass">
+                <div class="modal-header">
+                    <h3><i class="fa-solid fa-keyboard"></i> 키보드 단축키 안내</h3>
+                    <button id="btnCloseModal" style="background:transparent; color:white; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="shortcut-list">
+                        <li><kbd>Space</kbd> <span>재생 / 일시정지</span></li>
+                        <li><kbd>Esc</kbd> <span>설정 화면으로 돌아가기</span></li>
+                        <li><kbd>↑</kbd> / <kbd>↓</kbd> <span>스크롤 속도 조절</span></li>
+                        <li><kbd>M</kbd> <span>좌우 거울(Mirror) 모드</span></li>
+                        <li><kbd>F</kbd> <span>전체화면</span></li>
+                        <li><kbd>R</kbd> <span>처음으로 위치 리셋</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application JavaScript Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const state = {
+                scriptText: '',
+                scrollMode: 'auto',
+                scrollSpeed: 30,
+                fontSize: 48,
+                fontFamily: "'Noto Sans KR', sans-serif",
+                lineHeight: 1.8,
+                mirrorMode: 'none',
+                showGuide: true,
+                voiceLang: 'ko-KR',
+                isPlaying: false,
+                theme: 'dark',
+                wordsList: [],
+                currentWordIndex: 0,
+                recognition: null,
+                isSpeechSupported: false
+            };
+
+            const SAMPLE_SCRIPT = `안녕하세요 여러분! 오늘 영상에서는 유튜브 대본을 편하게 읽을 수 있는 프롬프터 사용법을 소개해 드립니다.
+
+카메라를 똑바로 바라보면서 자연스럽고 자신감 넘치는 목소리로 스피치를 진행해 보세요.
+
+일정 속도로 움직이는 자동 스크롤 기능과 마이크로 목소리를 인식해 말하는 속도에 맞춰주는 음성 동기화 기능이 준비되어 있습니다.
+
+원하는 글자 크기, 폰트 스타일, 거울 반전 모드까지 마음대로 설정할 수 있습니다. 
+
+자, 그럼 촬영을 시작해 볼까요? 구독과 좋아요 부탁드립니다!`;
+
+            // DOM Elements
+            const setupView = document.getElementById('setupView');
+            const prompterView = document.getElementById('prompterView');
+            const scriptInput = document.getElementById('scriptInput');
+            const charCount = document.getElementById('charCount');
+            const wordCount = document.getElementById('wordCount');
+            const estimatedTime = document.getElementById('estimatedTime');
+            
+            const btnLoadSample = document.getElementById('btnLoadSample');
+            const btnClearScript = document.getElementById('btnClearScript');
+            const btnStartPrompter = document.getElementById('btnStartPrompter');
+            const btnOpenGuide = document.getElementById('btnOpenGuide');
+            const btnCloseModal = document.getElementById('btnCloseModal');
+            const guideModal = document.getElementById('guideModal');
+            const btnToggleTheme = document.getElementById('btnToggleTheme');
+
+            const modeAuto = document.getElementById('modeAuto');
+            const modeVoice = document.getElementById('modeVoice');
+            const autoScrollOptions = document.getElementById('autoScrollOptions');
+            const voiceSyncOptions = document.getElementById('voiceSyncOptions');
+            const scrollSpeedInput = document.getElementById('scrollSpeed');
+            const speedValueDisplay = document.getElementById('speedValueDisplay');
+            const fontSizeInput = document.getElementById('fontSizeInput');
+            const fontSizeDisplay = document.getElementById('fontSizeDisplay');
+            const fontFamilySelect = document.getElementById('fontFamilySelect');
+            const lineHeightInput = document.getElementById('lineHeightInput');
+            const lineHeightDisplay = document.getElementById('lineHeightDisplay');
+            const voiceLangSelect = document.getElementById('voiceLangSelect');
+            const chkShowGuide = document.getElementById('chkShowGuide');
+            const micStatusIcon = document.getElementById('micStatusIcon');
+            const micStatusText = document.getElementById('micStatusText');
+
+            const prompterScrollArea = document.getElementById('prompterScrollArea');
+            const prompterTextContent = document.getElementById('prompterTextContent');
+            const focusGuide = document.getElementById('focusGuide');
+            const countdownOverlay = document.getElementById('countdownOverlay');
+            const countdownNumber = document.getElementById('countdownNumber');
+            const voiceTranscriptBox = document.getElementById('voiceTranscriptBox');
+            const liveTranscriptText = document.getElementById('liveTranscriptText');
+            const playPauseIcon = document.getElementById('playPauseIcon');
+
+            const btnControlExit = document.getElementById('btnControlExit');
+            const btnControlPlayPause = document.getElementById('btnControlPlayPause');
+            const btnControlReset = document.getElementById('btnControlReset');
+            const btnSpeedDown = document.getElementById('btnSpeedDown');
+            const btnSpeedUp = document.getElementById('btnSpeedUp');
+            const ctrlSpeedVal = document.getElementById('ctrlSpeedVal');
+            const ctrlSpeedContainer = document.getElementById('ctrlSpeedContainer');
+            const btnControlMirror = document.getElementById('btnControlMirror');
+            const btnControlFullscreen = document.getElementById('btnControlFullscreen');
+
+            // Speech Recognition Setup
+            function initSpeechRecognition() {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (SpeechRecognition) {
+                    state.isSpeechSupported = true;
+                    state.recognition = new SpeechRecognition();
+                    state.recognition.continuous = true;
+                    state.recognition.interimResults = true;
+                    state.recognition.lang = state.voiceLang;
+
+                    state.recognition.onstart = () => {
+                        micStatusIcon.className = "fa-solid fa-microphone";
+                        micStatusIcon.style.color = "var(--accent-success)";
+                        micStatusText.textContent = "마이크 수신 중... (음성 인식 활성화)";
+                    };
+
+                    state.recognition.onresult = (event) => {
+                        let interimTranscript = '';
+                        for (let i = event.resultIndex; i < event.results.length; ++i) {
+                            interimTranscript += event.results[i][0].transcript;
+                        }
+                        if (interimTranscript.trim()) {
+                            liveTranscriptText.textContent = interimTranscript;
+                            matchAndScrollSpeech(interimTranscript);
+                        }
+                    };
+
+                    state.recognition.onerror = (event) => {
+                        if (event.error === 'not-allowed') {
+                            micStatusText.textContent = "마이크 접근 권한 필요 (브라우저 마이크 승인 필요)";
+                        }
+                    };
+
+                    state.recognition.onend = () => {
+                        if (state.isPlaying && state.scrollMode === 'voice') {
+                            try { state.recognition.start(); } catch (e) {}
+                        } else {
+                            micStatusIcon.className = "fa-solid fa-microphone-slash";
+                            micStatusIcon.style.color = "var(--text-muted)";
+                            micStatusText.textContent = "음성 인식 대기 중";
+                        }
+                    };
+                } else {
+                    state.isSpeechSupported = false;
+                    micStatusText.textContent = "현재 브라우저는 Web Speech API를 지원하지 않습니다. (Chrome 권장)";
+                    modeVoice.disabled = true;
+                }
+            }
+
+            function matchAndScrollSpeech(transcript) {
+                if (!state.wordsList.length) return;
+                const spokenTokens = transcript.trim().toLowerCase().split(/\s+/);
+                const lastSpokenWord = spokenTokens[spokenTokens.length - 1].replace(/[^a-zA-Z0-9가-힣]/g, '');
+
+                if (!lastSpokenWord) return;
+
+                const searchStart = Math.max(0, state.currentWordIndex - 5);
+                const searchEnd = Math.min(state.wordsList.length, state.currentWordIndex + 30);
+                let bestMatch = -1;
+
+                for (let i = searchStart; i < searchEnd; i++) {
+                    const cleanWord = state.wordsList[i].cleanText;
+                    if (cleanWord.includes(lastSpokenWord) || lastSpokenWord.includes(cleanWord)) {
+                        bestMatch = i;
+                        break;
+                    }
+                }
+
+                if (bestMatch !== -1 && bestMatch !== state.currentWordIndex) {
+                    highlightAndScrollToWord(bestMatch);
+                }
+            }
+
+            function highlightAndScrollToWord(index) {
+                state.currentWordIndex = index;
+                const targetObj = state.wordsList[index];
+                if (!targetObj || !targetObj.element) return;
+
+                state.wordsList.forEach((w, idx) => {
+                    if (idx < index) w.element.className = 'prompter-word passed-word';
+                    else if (idx === index) w.element.className = 'prompter-word active-word';
+                    else w.element.className = 'prompter-word';
+                });
+
+                const wordElem = targetObj.element;
+                const scrollAreaRect = prompterScrollArea.getBoundingClientRect();
+                const wordRect = wordElem.getBoundingClientRect();
+                const focusLineY = scrollAreaRect.top + (scrollAreaRect.height * 0.35);
+                const diffY = wordRect.top - focusLineY;
+
+                prompterScrollArea.scrollBy({ top: diffY, behavior: 'smooth' });
+            }
+
+            function updateScriptStats() {
+                const text = scriptInput.value;
+                state.scriptText = text;
+                const chars = text.length;
+                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                const estMinutes = Math.max(1, Math.ceil(chars / 300));
+
+                charCount.textContent = `${chars.toLocaleString()} 자`;
+                wordCount.textContent = `${words.toLocaleString()} 단어`;
+                estimatedTime.textContent = `예상 ${estMinutes}분`;
+            }
+
+            function renderPrompterText() {
+                prompterTextContent.innerHTML = '';
+                state.wordsList = [];
+                let globalWordIdx = 0;
+
+                if (!state.scriptText.trim()) {
+                    prompterTextContent.innerHTML = '<p class="prompter-paragraph">대본 내용을 입력하세요.</p>';
+                    return;
+                }
+
+                const paragraphs = state.scriptText.split(/\n+/);
+                paragraphs.forEach(paraText => {
+                    if (!paraText.trim()) return;
+                    const pElem = document.createElement('p');
+                    pElem.className = 'prompter-paragraph';
+
+                    const tokens = paraText.trim().split(/(\s+)/);
+                    tokens.forEach(token => {
+                        if (token.trim().length === 0) {
+                            pElem.appendChild(document.createTextNode(token));
+                        } else {
+                            const span = document.createElement('span');
+                            span.className = 'prompter-word';
+                            span.textContent = token;
+                            span.dataset.wordIndex = globalWordIdx;
+
+                            const cleanText = token.replace(/[^a-zA-Z0-9가-힣]/g, '').toLowerCase();
+                            state.wordsList.push({
+                                index: globalWordIdx,
+                                text: token,
+                                cleanText: cleanText,
+                                element: span
+                            });
+                            pElem.appendChild(span);
+                            globalWordIdx++;
+                        }
+                    });
+                    prompterTextContent.appendChild(pElem);
+                });
+
+                applyPrompterStyles();
+            }
+
+            function applyPrompterStyles() {
+                prompterTextContent.style.fontSize = `${state.fontSize}px`;
+                prompterTextContent.style.fontFamily = state.fontFamily;
+                prompterTextContent.style.lineHeight = state.lineHeight;
+
+                focusGuide.style.display = state.showGuide ? 'block' : 'none';
+
+                prompterView.classList.remove('mirror-horizontal', 'mirror-vertical');
+                if (state.mirrorMode === 'horizontal') prompterView.classList.add('mirror-horizontal');
+                else if (state.mirrorMode === 'vertical') prompterView.classList.add('mirror-vertical');
+            }
+
+            // Auto Scroll Loop
+            let lastAnimTime = 0;
+            let animFrameId = null;
+
+            function autoScrollLoop(timestamp) {
+                if (!state.isPlaying || state.scrollMode !== 'auto') return;
+
+                if (!lastAnimTime) lastAnimTime = timestamp;
+                const deltaTime = (timestamp - lastAnimTime) / 1000;
+                lastAnimTime = timestamp;
+
+                const pixelsPerSec = state.scrollSpeed * 1.8;
+                prompterScrollArea.scrollTop += pixelsPerSec * deltaTime;
+
+                const maxScroll = prompterScrollArea.scrollHeight - prompterScrollArea.clientHeight;
+                if (prompterScrollArea.scrollTop >= maxScroll - 5) {
+                    pausePrompter();
+                    return;
+                }
+
+                animFrameId = requestAnimationFrame(autoScrollLoop);
+            }
+
+            function startAutoScroll() {
+                lastAnimTime = 0;
+                animFrameId = requestAnimationFrame(autoScrollLoop);
+            }
+
+            function stopAutoScroll() {
+                if (animFrameId) {
+                    cancelAnimationFrame(animFrameId);
+                    animFrameId = null;
+                }
+            }
+
+            function startPrompterSequence() {
+                renderPrompterText();
+                setupView.classList.remove('active');
+                prompterView.classList.add('active');
+
+                prompterScrollArea.scrollTop = 0;
+                state.currentWordIndex = 0;
+
+                if (state.scrollMode === 'voice') {
+                    voiceTranscriptBox.classList.remove('hidden');
+                    ctrlSpeedContainer.style.display = 'none';
+                } else {
+                    voiceTranscriptBox.classList.add('hidden');
+                    ctrlSpeedContainer.style.display = 'flex';
+                }
+
+                countdownOverlay.classList.remove('hidden');
+                let count = 3;
+                countdownNumber.textContent = count;
+
+                const timer = setInterval(() => {
+                    count--;
+                    if (count > 0) {
+                        countdownNumber.textContent = count;
+                    } else {
+                        clearInterval(timer);
+                        countdownOverlay.classList.add('hidden');
+                        playPrompter();
+                    }
+                }, 800);
+            }
+
+            function playPrompter() {
+                state.isPlaying = true;
+                playPauseIcon.className = "fa-solid fa-pause";
+
+                if (state.scrollMode === 'auto') {
+                    startAutoScroll();
+                } else if (state.scrollMode === 'voice') {
+                    if (state.isSpeechSupported && state.recognition) {
+                        try { state.recognition.start(); } catch (e) {}
+                    }
+                }
+            }
+
+            function pausePrompter() {
+                state.isPlaying = false;
+                playPauseIcon.className = "fa-solid fa-play";
+
+                if (state.scrollMode === 'auto') {
+                    stopAutoScroll();
+                } else if (state.scrollMode === 'voice') {
+                    if (state.isSpeechSupported && state.recognition) {
+                        try { state.recognition.stop(); } catch (e) {}
+                    }
+                }
+            }
+
+            function togglePlayPause() {
+                if (state.isPlaying) pausePrompter();
+                else playPrompter();
+            }
+
+            function resetPrompter() {
+                pausePrompter();
+                prompterScrollArea.scrollTop = 0;
+                state.currentWordIndex = 0;
+                state.wordsList.forEach(w => w.element.className = 'prompter-word');
+            }
+
+            function exitPrompter() {
+                pausePrompter();
+                prompterView.classList.remove('active');
+                setupView.classList.add('active');
+                if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+            }
+
+            function toggleFullscreen() {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(() => {});
+                } else {
+                    document.exitFullscreen();
+                }
+            }
+
+            // Event Setup
+            scriptInput.addEventListener('input', updateScriptStats);
+
+            btnLoadSample.addEventListener('click', () => {
+                scriptInput.value = SAMPLE_SCRIPT;
+                updateScriptStats();
+            });
+
+            btnClearScript.addEventListener('click', () => {
+                scriptInput.value = '';
+                updateScriptStats();
+            });
+
+            document.querySelectorAll('input[name="scrollMode"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    state.scrollMode = e.target.value;
+                    if (state.scrollMode === 'auto') {
+                        autoScrollOptions.classList.add('active');
+                        voiceSyncOptions.classList.remove('active');
+                    } else {
+                        autoScrollOptions.classList.remove('active');
+                        voiceSyncOptions.classList.add('active');
+                    }
+                });
+            });
+
+            scrollSpeedInput.addEventListener('input', (e) => {
+                state.scrollSpeed = parseInt(e.target.value, 10);
+                speedValueDisplay.textContent = state.scrollSpeed;
+                ctrlSpeedVal.textContent = state.scrollSpeed;
+            });
+
+            btnSpeedUp.addEventListener('click', () => {
+                state.scrollSpeed = Math.min(100, state.scrollSpeed + 5);
+                scrollSpeedInput.value = state.scrollSpeed;
+                speedValueDisplay.textContent = state.scrollSpeed;
+                ctrlSpeedVal.textContent = state.scrollSpeed;
+            });
+
+            btnSpeedDown.addEventListener('click', () => {
+                state.scrollSpeed = Math.max(5, state.scrollSpeed - 5);
+                scrollSpeedInput.value = state.scrollSpeed;
+                speedValueDisplay.textContent = state.scrollSpeed;
+                ctrlSpeedVal.textContent = state.scrollSpeed;
+            });
+
+            fontSizeInput.addEventListener('input', (e) => {
+                state.fontSize = parseInt(e.target.value, 10);
+                fontSizeDisplay.textContent = `${state.fontSize}px`;
+                applyPrompterStyles();
+            });
+
+            fontFamilySelect.addEventListener('change', (e) => {
+                state.fontFamily = e.target.value;
+                applyPrompterStyles();
+            });
+
+            lineHeightInput.addEventListener('input', (e) => {
+                state.lineHeight = parseFloat(e.target.value);
+                lineHeightDisplay.textContent = state.lineHeight;
+                applyPrompterStyles();
+            });
+
+            document.querySelectorAll('input[name="mirrorMode"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    state.mirrorMode = e.target.value;
+                    applyPrompterStyles();
+                });
+            });
+
+            chkShowGuide.addEventListener('change', (e) => {
+                state.showGuide = e.target.checked;
+                applyPrompterStyles();
+            });
+
+            voiceLangSelect.addEventListener('change', (e) => {
+                state.voiceLang = e.target.value;
+                if (state.recognition) state.recognition.lang = state.voiceLang;
+            });
+
+            btnStartPrompter.addEventListener('click', startPrompterSequence);
+            btnControlPlayPause.addEventListener('click', togglePlayPause);
+            btnControlReset.addEventListener('click', resetPrompter);
+            btnControlExit.addEventListener('click', exitPrompter);
+            btnControlMirror.addEventListener('click', () => {
+                state.mirrorMode = state.mirrorMode === 'horizontal' ? 'none' : 'horizontal';
+                const r = document.querySelector(`input[name="mirrorMode"][value="${state.mirrorMode}"]`);
+                if (r) r.checked = true;
+                applyPrompterStyles();
+            });
+            btnControlFullscreen.addEventListener('click', toggleFullscreen);
+
+            btnOpenGuide.addEventListener('click', () => guideModal.classList.remove('hidden'));
+            btnCloseModal.addEventListener('click', () => guideModal.classList.add('hidden'));
+
+            btnToggleTheme.addEventListener('click', () => {
+                state.theme = state.theme === 'dark' ? 'light' : 'dark';
+                document.body.className = `theme-${state.theme}`;
+                btnToggleTheme.innerHTML = state.theme === 'dark' ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (document.activeElement === scriptInput && prompterView.classList.contains('active') === false) return;
+                if (prompterView.classList.contains('active')) {
+                    if (e.code === 'Space') { e.preventDefault(); togglePlayPause(); }
+                    else if (e.code === 'Escape') { e.preventDefault(); exitPrompter(); }
+                    else if (e.code === 'ArrowUp') { e.preventDefault(); btnSpeedUp.click(); }
+                    else if (e.code === 'ArrowDown') { e.preventDefault(); btnSpeedDown.click(); }
+                    else if (e.key.toLowerCase() === 'm') { e.preventDefault(); btnControlMirror.click(); }
+                    else if (e.key.toLowerCase() === 'f') { e.preventDefault(); toggleFullscreen(); }
+                    else if (e.key.toLowerCase() === 'r') { e.preventDefault(); resetPrompter(); }
+                }
+            });
+
+            initSpeechRecognition();
+            scriptInput.value = SAMPLE_SCRIPT;
+            updateScriptStats();
+        });
+    </script>
+</body>
+</html>
