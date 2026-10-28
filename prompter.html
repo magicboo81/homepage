@@ -554,10 +554,11 @@
         .prompter-scroll-area {
             width: 100%;
             height: 100%;
+            min-height: 0;
+            flex: 1 1 auto;
             overflow-y: scroll;
-            /* JS advances scrollTop frame by frame; smooth scrolling conflicts on mobile. */
+            /* JS advances scrollTop directly; avoid native smooth-scroll animation. */
             scroll-behavior: auto;
-            -webkit-overflow-scrolling: touch;
             padding: 0 10vw;
             box-sizing: border-box;
             scrollbar-width: none;
@@ -1269,39 +1270,39 @@
                 else if (state.mirrorMode === 'vertical') prompterView.classList.add('mirror-vertical');
             }
 
-            // Auto Scroll Loop
-            let lastAnimTime = 0;
-            let animFrameId = null;
+            // Time-based interval scroll is steady on touch browsers and background tab resumes.
+            let autoScrollTimerId = null;
+            let lastScrollTime = 0;
 
-            function autoScrollLoop(timestamp) {
+            function autoScrollTick() {
                 if (!state.isPlaying || state.scrollMode !== 'auto') return;
 
-                if (!lastAnimTime) lastAnimTime = timestamp;
-                const deltaTime = (timestamp - lastAnimTime) / 1000;
-                lastAnimTime = timestamp;
+                const now = performance.now();
+                const deltaTime = lastScrollTime ? Math.min((now - lastScrollTime) / 1000, 0.1) : 0.05;
+                lastScrollTime = now;
 
-                const pixelsPerSec = state.scrollSpeed * 1.8;
-                prompterScrollArea.scrollTop += pixelsPerSec * deltaTime;
+                const maxScroll = Math.max(0, prompterScrollArea.scrollHeight - prompterScrollArea.clientHeight);
+                const nextTop = Math.min(maxScroll, prompterScrollArea.scrollTop + state.scrollSpeed * 1.8 * deltaTime);
+                prompterScrollArea.scrollTop = nextTop;
 
-                const maxScroll = prompterScrollArea.scrollHeight - prompterScrollArea.clientHeight;
-                if (prompterScrollArea.scrollTop >= maxScroll - 5) {
+                if (nextTop >= maxScroll - 1) {
                     pausePrompter();
-                    return;
                 }
-
-                animFrameId = requestAnimationFrame(autoScrollLoop);
             }
 
             function startAutoScroll() {
-                lastAnimTime = 0;
-                animFrameId = requestAnimationFrame(autoScrollLoop);
+                stopAutoScroll();
+                lastScrollTime = 0;
+                autoScrollTick();
+                autoScrollTimerId = window.setInterval(autoScrollTick, 50);
             }
 
             function stopAutoScroll() {
-                if (animFrameId) {
-                    cancelAnimationFrame(animFrameId);
-                    animFrameId = null;
+                if (autoScrollTimerId !== null) {
+                    window.clearInterval(autoScrollTimerId);
+                    autoScrollTimerId = null;
                 }
+                lastScrollTime = 0;
             }
 
             function startPrompterSequence() {
@@ -1402,13 +1403,25 @@
                 }
 
                 // Fullscreen must be requested directly from a user gesture on mobile.
-                if (document.documentElement.requestFullscreen) {
-                    document.documentElement.requestFullscreen().then(syncFullscreenState).catch(() => {
+                const requestFullscreen = document.documentElement.requestFullscreen
+                    || document.documentElement.webkitRequestFullscreen;
+                if (requestFullscreen) {
+                    try {
+                        const result = requestFullscreen.call(document.documentElement);
+                        if (result && typeof result.then === 'function') {
+                            result.then(syncFullscreenState).catch(() => {
+                                document.body.classList.toggle('immersive-mode');
+                                syncFullscreenState();
+                            });
+                        } else {
+                            syncFullscreenState();
+                        }
+                    } catch (error) {
                         document.body.classList.toggle('immersive-mode');
                         syncFullscreenState();
-                    });
+                    }
                 } else {
-                    // CSS immersive fallback for browsers that do not expose Fullscreen API.
+                    // CSS fallback hides this page's header; browser chrome needs native fullscreen/PWA.
                     document.body.classList.toggle('immersive-mode');
                     syncFullscreenState();
                 }
